@@ -1,48 +1,49 @@
 @import url('http://fonts.googleapis.com/css?family=Pacifico|Open+Sans:300,400,600');
-.accordionTree * {
+.accordionTree {
+  * {
   box-sizing: border-box;
   font-family: 'Open Sans', sans-serif;
   font-weight: 300;
 }
-.accordionTree a {
+a {
   text-decoration: none;
   color: inherit;
 }
-.accordionTree p {
+p {
   font-size: 1.1em;
   margin: 1em 0;
 }
-.accordionTree .description {
+.description {
   margin: 1em auto 2.25em;
 }
-.accordionTree body {
+body {
   width: 40%;
   min-width: 300px;
   max-width: 400px;
   margin: 1.5em auto;
   color: #333;
 }
-.accordionTree h1 {
+h1 {
   font-family: 'Pacifico', cursive;
   font-weight: 400;
   font-size: 2.5em;
 }
-.accordionTree ul {
+ul {
   list-style: none;
   padding: 0;
 }
-.accordionTree ul .inner {
+ul .inner {
   padding-left: 1em;
   overflow: hidden;
   display: none;
 }
-.accordionTree ul .inner.show {
+ul .inner.show {
   /*display: block;*/
 }
-.accordionTree ul li {
+ul li {
   margin: .5em 0;
 }
-.accordionTree ul li a.toggle {
+ul li a.toggle {
   width: 100%;
   display: block;
   background: rgba(0, 0, 0, 0.78);
@@ -51,22 +52,7 @@
   border-radius: 0.15em;
   transition: background .3s ease;
 }
-.accordionTree ul li a.toggle:hover {
+ul li a.toggle:hover {
   background: rgba(0, 0, 0, 0.9);
 }
-
-#sidebar-left .md-whiteframe-z2 {
-  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
-}
-#sidebar-left .layout-padding > * {
-  padding: 6px;
-}
-@media screen and (min-width: 600px) md-sidenav {
-  #sidebar-left {
-    max-width: 270px;
-  }
-}
-#sidebar-left md-toolbar:not(.md-menu-toolbar) {
-  background-color: white;
-  color: black;
 }

@@ -23,7 +23,9 @@ gulp.task('vendorsjs', function () {
         'node_modules/angular-ui-router/release/angular-ui-router.js',
         'node_modules/angular-aria/angular-aria.min.js',
         'node_modules/angular-animate/angular-animate.min.js',
-        'node_modules/angular-material/angular-material.min.js'
+        'node_modules/angular-material/angular-material.min.js',
+        'node_modules/angular-material-icons/angular-material-icons.js',
+        'node_modules/angular-breadcrumb/release/angular-breadcrumb.min.js'
 
       ])
         .pipe(concat('vendors.min.js'))
@@ -38,7 +40,8 @@ gulp.task('vendorscss', function () {
         'node_modules/bootstrap/dist/css/bootstrap.min.css',
         'node_modules/angular/angular-csp.css',
         "node_modules/angular-ui-bootstrap/dist/ui-bootstrap-csp.css",
-        'node_modules/angular-material/angular-material.css'
+        'node_modules/angular-material/angular-material.css',
+        'node_modules/angular-material-icons/angular-material-icons.min.js'
       ])
         .pipe(concat('vendors.min.css'))
         .pipe(gulp.dest('dist/css'));
@@ -82,10 +85,9 @@ gulp.task('fixjs', function () {
 gulp.task('scripts', function() {
   return gulp.src([
     'app/**/modules/*.js',
+    'app/index.js',
     'app/**/*.js'
   ])
-  .pipe(jsValidate())
-    .on('error', onError)
     .pipe(jshint({ }))
     .pipe(jshint.reporter('default'))
     .pipe(sourcemaps.init())
@@ -99,7 +101,8 @@ gulp.task('scripts', function() {
 gulp.task('less', function(){
     return gulp.src(['app/**/*.less'])
         .pipe(less())
-        .pipe(rename('all.css'))
+        .on('error', onError)
+           .pipe(concat('all.css'))
         .pipe(gulp.dest('dist/css'));
 });
 
@@ -107,7 +110,7 @@ gulp.task('watch', function () {
     gulp.watch([
         'app/**/*.js',
         'app/**/*.less'
-    ], ['scripts','less']);
+    ], ['scripts','less']).on('error', onError);
 });
 
 gulp.task('default', ['vendors', 'scripts','less']);

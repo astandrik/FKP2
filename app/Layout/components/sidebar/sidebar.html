@@ -4,7 +4,15 @@
         md-is-locked-open="true"
         md-disable-backdrop
         md-whiteframe="4">
-      <md-toolbar class="md-theme-indigo">
-        <h1 class="md-toolbar-tools">Sidenav Left</h1>
-      </md-toolbar>      
+        <md-list flex layout="column" layout-align="space-around stretch">
+          <md-toolbar class="md-whiteframe-1dp" layout-padding layout="column">
+            <span style="font-size:15px;text-align:center">Федеральная космическая программа 2016-2025</span>
+          </md-toolbar>
+          <md-list-item ng-repeat="dir in directories" flex layout="column" layout-align="center stretch">
+              <md-button ng-href="{{getHref(dir.state)}}" layout="column">
+              <ng-md-icon icon={{::dir.icon}} size=30 layout="column" layout-align="center center"></ng-md-icon>
+                <span >{{::dir.name}}</span>
+              </md-button>
+          </md-list-item>
+        </md-list>
 </md-sidenav>
