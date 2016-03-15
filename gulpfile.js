@@ -13,6 +13,7 @@ var fixmyjs = require("gulp-fixmyjs");
 var babel = require('gulp-babel');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
+var buffer = require('vinyl-buffer');
 
 
 gulp.task('vendorsjs', function () {
@@ -85,30 +86,15 @@ gulp.task('fixjs', function () {
 
 });
 
-gulp.task('scripts', function() {
-  return gulp.src([
-    'app/**/modules/*.js',
-    'build/bundle.js',
-    'app/**/*.js',
-    '!app/index.js',
-    '!app/router.js'
-  ])
-    .pipe(jshint({ esversion: 6 }))
-    .pipe(jshint.reporter('default'))
-    .pipe(sourcemaps.init())
-    .pipe(babel({
-       presets: ["es2015"]
-    }))
-   .pipe(ngAnnotate())
-   .on('error', onError)
-   .pipe(sourcemaps.write())
-   .pipe(gulp.dest('dist/libs'))
-});
 
 gulp.task('browserify', function() {
-  return browserify('app/index.js')
+  return browserify({entries:'app/index.js',  debug: true})
+        .transform("babelify", {presets: ["es2015"]})
         .bundle()
         .pipe(source('all.js'))
+        .pipe(buffer())
+        .pipe(sourcemaps.init({ loadMaps: true }))
+        .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest('dist/libs/'));
 })
 

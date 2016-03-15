@@ -1,5 +1,6 @@
 var utils = require('./utils.js');
-module.exports = angular.module('demos').directive('accordionTree', function() {
+
+angular.module('demos').directive('accordionTree', ()=> {
     return {
         replace: true,
         scope: {
@@ -7,7 +8,7 @@ module.exports = angular.module('demos').directive('accordionTree', function() {
         },
         compile: function(templateElement, templateAttrs) {
             templateAttrs.timeout === undefined ? 400 : parseint(templateAttrs.timeout);
-            var data = templateAttrs.data;
+            var data = window.testTree;
             var html = '<div  class="accordionTree">  <ul class="accordion">';
             var elements = [];
             if (!data) {
