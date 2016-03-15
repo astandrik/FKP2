@@ -29,7 +29,9 @@ gulp.task('vendorsjs', function () {
         'node_modules/angular-animate/angular-animate.min.js',
         'node_modules/angular-material/angular-material.min.js',
         'node_modules/angular-material-icons/angular-material-icons.js',
-        'node_modules/angular-breadcrumb/release/angular-breadcrumb.min.js'
+        'node_modules/angular-breadcrumb/release/angular-breadcrumb.min.js',
+        'node_modules/angular-dialog-service/dist/dialogs.min.js',
+        'node_modules/angular-sanitize/angular-sanitize.min.js'
       ])
         .pipe(concat('vendors.min.js'))
         .pipe(gulp.dest('dist/libs'));
@@ -44,7 +46,7 @@ gulp.task('vendorscss', function () {
         'node_modules/angular/angular-csp.css',
         "node_modules/angular-ui-bootstrap/dist/ui-bootstrap-csp.css",
         'node_modules/angular-material/angular-material.css',
-        'node_modules/angular-material-icons/angular-material-icons.min.js'
+        'node_modules/angular-dialog-service/dist/dialogs.min.css'
       ])
         .pipe(concat('vendors.min.css'))
         .pipe(gulp.dest('dist/css'));
@@ -91,7 +93,9 @@ gulp.task('browserify', function() {
   return browserify({entries:'app/index.js',  debug: true})
         .transform("babelify", {presets: ["es2015"]})
         .bundle()
+        .on('error', onError)
         .pipe(source('all.js'))
+        .on('error', onError)
         .pipe(buffer())
         .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(sourcemaps.write('./'))

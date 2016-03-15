@@ -4,7 +4,7 @@
     id: 1,
     children: [
       {
-        name: 'Дочерний проект1',
+        name: 'Дочерний проектn1',
         id:2,
         children: [
           {
