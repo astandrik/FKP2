@@ -1,4 +1,5 @@
 var DesignController = require('./Design/DesignController')
+
 module.exports = {
   homeRoute: {
     url: '/FKP',
@@ -12,11 +13,13 @@ module.exports = {
   designRoute:{
     url: '/Design',
     views: {
-      'content@': { templateUrl: 'app/Design/design-page.html' }
+      'content@': {
+         templateUrl: 'app/Design/design-page.html',
+         controller: DesignController
+    }
     },
     ncyBreadcrumb: {
         label: 'Дизайн-страница'
-    },
-    controller: DesignController
+    }
   }
 };
