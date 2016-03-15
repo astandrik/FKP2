@@ -10,6 +10,9 @@ var ngAnnotate = require('gulp-ng-annotate');
 var rename = require('gulp-rename');
 var sourcemaps = require('gulp-sourcemaps');
 var fixmyjs = require("gulp-fixmyjs");
+var babel = require('gulp-babel');
+var browserify = require('browserify');
+var source = require('vinyl-source-stream');
 
 
 gulp.task('vendorsjs', function () {
@@ -26,7 +29,6 @@ gulp.task('vendorsjs', function () {
         'node_modules/angular-material/angular-material.min.js',
         'node_modules/angular-material-icons/angular-material-icons.js',
         'node_modules/angular-breadcrumb/release/angular-breadcrumb.min.js'
-
       ])
         .pipe(concat('vendors.min.js'))
         .pipe(gulp.dest('dist/libs'));
@@ -49,6 +51,7 @@ gulp.task('vendorscss', function () {
 
 gulp.task('vendors', ['vendorscss', 'vendorsjs'], function () {
 });
+
 
 function onError(err) {
     console.log(err);
@@ -85,18 +88,29 @@ gulp.task('fixjs', function () {
 gulp.task('scripts', function() {
   return gulp.src([
     'app/**/modules/*.js',
-    'app/index.js',
-    'app/**/*.js'
+    'build/bundle.js',
+    'app/**/*.js',
+    '!app/index.js',
+    '!app/router.js'
   ])
-    .pipe(jshint({ }))
+    .pipe(jshint({ esversion: 6 }))
     .pipe(jshint.reporter('default'))
     .pipe(sourcemaps.init())
-   .pipe(concat('all.js'))
+    .pipe(babel({
+       presets: ["es2015"]
+    }))
    .pipe(ngAnnotate())
    .on('error', onError)
    .pipe(sourcemaps.write())
    .pipe(gulp.dest('dist/libs'))
 });
+
+gulp.task('browserify', function() {
+  return browserify('app/index.js')
+        .bundle()
+        .pipe(source('all.js'))
+        .pipe(gulp.dest('dist/libs/'));
+})
 
 gulp.task('less', function(){
     return gulp.src(['app/**/*.less'])
@@ -110,7 +124,7 @@ gulp.task('watch', function () {
     gulp.watch([
         'app/**/*.js',
         'app/**/*.less'
-    ], ['scripts','less']).on('error', onError);
+    ], ['default']).on('error', onError);
 });
 
-gulp.task('default', ['vendors', 'scripts','less']);
+gulp.task('default', ['vendors','browserify','less']);

@@ -1,4 +1,2 @@
-(function () {
-  angular.module('layout').controller(function () {
-  });
-}());
+module.exports = angular.module('layout').controller('LayoutController',function () {
+});
