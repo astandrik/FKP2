@@ -9,7 +9,7 @@ var app = angular.module('app', [
     'ncy-angular-breadcrumb',
     'layout',
     'demos'
-]);
+]); 
 app.config([
     '$urlRouterProvider',
     '$stateProvider',
