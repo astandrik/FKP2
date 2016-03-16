@@ -1,6 +1,6 @@
 var utils = require('./utils.js');
 
-angular.module('demos').directive('accordionTree', ()=> {
+module.exports = ()=> {
     return {
         replace: true,
         scope: {
@@ -38,4 +38,4 @@ angular.module('demos').directive('accordionTree', ()=> {
 
         }
     };
-});
+};

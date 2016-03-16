@@ -1,4 +1,4 @@
-angular.module('layout').directive('sidebar', function() {
+module.exports = function() {
     return {
         templateUrl: 'app/Layout/components/sidebar/sidebar.html',
         replace: true,
@@ -27,4 +27,4 @@ angular.module('layout').directive('sidebar', function() {
             $scope.directories = directories;
         }
     };
-});
+}

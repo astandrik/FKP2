@@ -1,5 +1,4 @@
-
-angular.module('demos').controller('popupController',function($scope,$uibModalInstance,data){
+module.exports = function($scope,$uibModalInstance,data){
 		$scope.data = data;
 
 		//-- Methods --//
@@ -13,4 +12,3 @@ angular.module('demos').controller('popupController',function($scope,$uibModalIn
       $uibModalInstance.close($scope.data);
     };
   }
-);

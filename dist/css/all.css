@@ -55,6 +55,23 @@
   background: rgba(0, 0, 0, 0.9);
 }
 
+.popup1 .btn1 {
+  color: #312e2e;
+  background-color: rgba(255, 222, 121, 0.96);
+  border-radius: 10px 0 0 10px;
+  font-size: 16px;
+}
+.popup1 .modal-footer {
+  padding: 7px;
+}
+.popup1 .modal-header {
+  padding: 7px;
+}
+.popup1 .custom-header {
+  padding: 5px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
 #sidebar-left .md-whiteframe-z2 {
   box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
 }

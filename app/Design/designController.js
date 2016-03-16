@@ -4,5 +4,5 @@ function DesignController($scope, dialogs) {
   {
     var dlg = dialogs.create('app/components/popup/popup.html','popupController',{},{size: 'sm',animation: true});
   }
-}
+}  
 module.exports = DesignController;

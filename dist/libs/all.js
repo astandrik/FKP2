@@ -1,21 +1,18 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
-DesignController.$inject = ['$scope'];
-function DesignController($scope) {
+function DesignController($scope, dialogs) {
   $scope.treeData = window.testTree;
+  $scope.create_popup = function () {
+    var dlg = dialogs.create('app/components/popup/popup.html', 'popupController', {}, { size: 'sm', animation: true });
+  };
 }
 module.exports = DesignController;
 
 },{}],2:[function(require,module,exports){
 'use strict';
 
-angular.module('layout').controller('LayoutController', function () {});
-
-},{}],3:[function(require,module,exports){
-'use strict';
-
-angular.module('layout').directive('sidebar', function () {
+module.exports = function () {
     return {
         templateUrl: 'app/Layout/components/sidebar/sidebar.html',
         replace: true,
@@ -44,21 +41,23 @@ angular.module('layout').directive('sidebar', function () {
             $scope.directories = directories;
         }
     };
-});
+};
 
-},{}],4:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
 'use strict';
 
-angular.module('layout', []);
-require('./LayoutController.js');
-require('./components/sidebar/sidebar.js');
+var sidebarDirective = require('./components/sidebar/sidebar.js');
 
-},{"./LayoutController.js":2,"./components/sidebar/sidebar.js":3}],5:[function(require,module,exports){
+var currentModule = angular.module('layout', []);
+
+currentModule.directive('sidebar', sidebarDirective);
+
+},{"./components/sidebar/sidebar.js":2}],4:[function(require,module,exports){
 'use strict';
 
 var utils = require('./utils.js');
 
-angular.module('demos').directive('accordionTree', function () {
+module.exports = function () {
     return {
         replace: true,
         scope: {
@@ -94,9 +93,9 @@ angular.module('demos').directive('accordionTree', function () {
         },
         controller: function controller($scope) {}
     };
-});
+};
 
-},{"./utils.js":6}],6:[function(require,module,exports){
+},{"./utils.js":5}],5:[function(require,module,exports){
 'use strict';
 
 var utils = function () {
@@ -124,14 +123,18 @@ var utils = function () {
 
 module.exports = utils;
 
-},{}],7:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 'use strict';
 
-angular.module('demos', []);
+var currentModule = angular.module('demos', []);
 
-require('./accordion/accordion.js');
+var accordionDirective = require('./accordion/accordion.js');
+var popupController = require('./popup/popupController.js');
 
-},{"./accordion/accordion.js":5}],8:[function(require,module,exports){
+currentModule.directive('accordionTree', accordionDirective);
+currentModule.controller('popupController', popupController);
+
+},{"./accordion/accordion.js":4,"./popup/popupController.js":8}],7:[function(require,module,exports){
 'use strict';
 
 var icons = {
@@ -139,6 +142,23 @@ var icons = {
 };
 
 module.exports = icons;
+
+},{}],8:[function(require,module,exports){
+"use strict";
+
+module.exports = function ($scope, $uibModalInstance, data) {
+		$scope.data = data;
+
+		//-- Methods --//
+
+		$scope.done = function () {
+				$uibModalInstance.close($scope.data);
+		}; // end done
+
+		$scope.close = function () {
+				$uibModalInstance.close($scope.data);
+		};
+};
 
 },{}],9:[function(require,module,exports){
 'use strict';
@@ -148,7 +168,7 @@ var layout = require('./Layout/layout.js');
 var demos = require('./components/demos.js');
 var icons = require('./components/icons/icons.js');
 
-var app = angular.module('app', ['ui.router', 'ui.bootstrap', 'ngMaterial', 'ngMdIcons', 'ncy-angular-breadcrumb', 'layout', 'demos']);
+var app = angular.module('app', ['ui.router', 'ui.bootstrap', 'ngMaterial', 'ngMdIcons', 'ncy-angular-breadcrumb', 'ngSanitize', 'dialogs.main', 'layout', 'demos']);
 app.config(['$urlRouterProvider', '$stateProvider', 'ngMdIconServiceProvider', function ($urlRouterProvider, $stateProvider, ngMdIconServiceProvider) {
     ngMdIconServiceProvider.addShape('wheelChair', icons.wheelChair);
     $urlRouterProvider.otherwise('/FKP/Design');
@@ -160,7 +180,7 @@ app.run(function ($rootScope, $state) {
     $rootScope.getHref = $state.href.bind($state);
 });
 
-},{"./Layout/layout.js":4,"./components/demos.js":7,"./components/icons/icons.js":8,"./router.js":10}],10:[function(require,module,exports){
+},{"./Layout/layout.js":3,"./components/demos.js":6,"./components/icons/icons.js":7,"./router.js":10}],10:[function(require,module,exports){
 'use strict';
 
 var DesignController = require('./Design/DesignController');
