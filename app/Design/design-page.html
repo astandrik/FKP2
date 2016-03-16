@@ -1,3 +1,20 @@
+<div layout="column" flex>
+	<h2>Дерево</h2>
+	<accordion-tree data=treeData></accordion-tree>
+  <h2>Поп-ап</h2>
+	<div>
+		<button type="button" class="btn btn-default" ng-click="create_popup()">PopUp</button>
+	</div>
 
-<accordion-tree data=treeData></accordion-tree>
-<button type="button" class="btn btn-default" ng-click="create_popup()">PopUp</button>
+	<div layout="column" style="max-height:400px;min-height:400px">
+		<h2>Сплиттер</h2>
+		<split>
+			<div size="30">
+		<accordion-tree data=treeData></accordion-tree>
+			</div>
+			<div size="70">
+		<div>Test</div>
+			</div>
+		</split>
+	</div>
+</div>

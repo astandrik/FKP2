@@ -1,8 +1,7 @@
 var utils = require('./utils.js');
 
-module.exports = ()=> {
+module.exports = function() {
     return {
-        replace: true,
         scope: {
             data: "="
         },
@@ -18,7 +17,7 @@ module.exports = ()=> {
               data.forEach(function(item) {
                   elements.push(utils.buildNode(item));
               });
-              templateElement.html(html + elements.join('') + '</ul></div>');
+              templateElement.replaceWith(html + elements.join('') + '</ul></div>');
               $('.toggle').click(function(e) {
                   e.preventDefault();
                   var $this = $(this);

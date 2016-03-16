@@ -59,7 +59,6 @@ var utils = require('./utils.js');
 
 module.exports = function () {
     return {
-        replace: true,
         scope: {
             data: "="
         },
@@ -75,7 +74,7 @@ module.exports = function () {
                 data.forEach(function (item) {
                     elements.push(utils.buildNode(item));
                 });
-                templateElement.html(html + elements.join('') + '</ul></div>');
+                templateElement.replaceWith(html + elements.join('') + '</ul></div>');
                 $('.toggle').click(function (e) {
                     e.preventDefault();
                     var $this = $(this);
@@ -130,11 +129,13 @@ var currentModule = angular.module('demos', []);
 
 var accordionDirective = require('./accordion/accordion.js');
 var popupController = require('./popup/popupController.js');
+var splitDirective = require('./split/split.js');
 
 currentModule.directive('accordionTree', accordionDirective);
 currentModule.controller('popupController', popupController);
+currentModule.directive('split', splitDirective);
 
-},{"./accordion/accordion.js":4,"./popup/popupController.js":8}],7:[function(require,module,exports){
+},{"./accordion/accordion.js":4,"./popup/popupController.js":8,"./split/split.js":9}],7:[function(require,module,exports){
 'use strict';
 
 var icons = {
@@ -163,6 +164,42 @@ module.exports = function ($scope, $uibModalInstance, data) {
 },{}],9:[function(require,module,exports){
 'use strict';
 
+function compile(templateElement, templateAttrs) {
+  templateElement.attr('flex', '');
+  var left = $(templateElement.children()[0]);
+  var right = $(templateElement.children()[1]);
+  var leftSize, rightSize;
+  var rightContents = right.html();
+  leftSize = left.attr('size');
+  rightSize = right.attr('size');
+
+  if (!leftSize) {
+    throw 'left split element must have attribute "size"';
+  }
+  if (!rightSize) {
+    throw 'right split element must have attribute "size"';
+  }
+  left.attr('flex', leftSize);
+  left.removeAttr('size');
+  left.attr('layout-padding', '');
+  right.replaceWith('<md-content flex layout-padding>' + rightContents + '</md-content>');
+  right.attr('flex', rightSize);
+  right.removeAttr('size');
+
+  templateElement.attr('layout', 'row');
+}
+
+module.exports = function () {
+  return {
+    scope: false,
+    restrict: 'E',
+    compile: compile
+  };
+};
+
+},{}],10:[function(require,module,exports){
+'use strict';
+
 var routes = require('./router.js');
 var layout = require('./Layout/layout.js');
 var demos = require('./components/demos.js');
@@ -180,7 +217,7 @@ app.run(function ($rootScope, $state) {
     $rootScope.getHref = $state.href.bind($state);
 });
 
-},{"./Layout/layout.js":3,"./components/demos.js":6,"./components/icons/icons.js":7,"./router.js":10}],10:[function(require,module,exports){
+},{"./Layout/layout.js":3,"./components/demos.js":6,"./components/icons/icons.js":7,"./router.js":11}],11:[function(require,module,exports){
 'use strict';
 
 var DesignController = require('./Design/DesignController');
@@ -209,7 +246,7 @@ module.exports = {
   }
 };
 
-},{"./Design/DesignController":1}]},{},[9])
+},{"./Design/DesignController":1}]},{},[10])
 
 
 //# sourceMappingURL=all.js.map

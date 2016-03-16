@@ -4,6 +4,9 @@
   font-family: 'Open Sans', sans-serif;
   font-weight: 300;
 }
+.accordionTree ul.accordion > li:first-child {
+  margin-top: 0;
+}
 .accordionTree a {
   text-decoration: none;
   color: inherit;
@@ -70,6 +73,16 @@
 .popup1 .custom-header {
   padding: 5px;
   border-bottom: 1px solid #e5e5e5;
+}
+
+split {
+  border: 1px solid #ccc;
+}
+split md-content {
+  border-left: 1px solid #ccc;
+}
+split > div {
+  overflow: auto;
 }
 
 #sidebar-left .md-whiteframe-z2 {

@@ -8,11 +8,14 @@
  <div flex layout="row">
     <div class="layout-row" ui-view="sidebar"></div>
 
-    <md-content layout-padding flex>
+    <md-content layout="column" layout-padding flex>
+
       <md-toolbar class="md-whiteframe-1dp" layout-padding layout="column" style="background-color: white;color: black;box-shadow:none">
         <div ncy-breadcrumb></div>
       </md-toolbar>
-      <div ui-view="content"></div>
+
+      <div flex ui-view="content" layout="column"></div>
+
     </md-content>
  </div>
   <script src="vendors.min.js" ></script>
