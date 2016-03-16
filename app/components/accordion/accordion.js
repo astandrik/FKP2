@@ -5,11 +5,17 @@ function bindToggleEvents() {
       e.preventDefault();
       var $this = $(this);
       if ($this.next().hasClass('show')) {
-          $this.next().slideUp(500, function() {
+          if($this.next().length) {
+                $this.find('ng-md-icon>svg').removeClass('show');
+          }
+          $this.next().slideUp(200, function() {
               $this.next().removeClass('show');
           });
       } else {
-          $this.next().slideDown(500, function() {
+          if($this.next().length) {
+              $this.find('ng-md-icon>svg').addClass('show');
+          }
+          $this.next().slideDown(200, function() {
               $this.next().addClass('show');
           });
       }

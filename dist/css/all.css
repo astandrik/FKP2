@@ -51,14 +51,25 @@
 }
 .accordionTree ul li a.toggle {
   width: 100%;
-  background: rgba(0, 0, 0, 0.78);
-  color: #fefefe;
+  background: #FFFFFF;
+  color: black;
   padding: .75em;
+  border: 1px solid black;
   border-radius: 0.15em;
+  text-decoration: none;
+  -webkit-transition: background .3s ease;
   transition: background .3s ease;
 }
 .accordionTree ul li a.toggle:hover {
-  background: rgba(0, 0, 0, 0.9);
+  background: #D6D6D6;
+}
+.accordionTree ng-md-icon > svg {
+  -webkit-transition: all 0.1s ease;
+  transition: all 0.1s ease;
+}
+.accordionTree ng-md-icon > svg.show {
+  -webkit-transform: rotate(90deg);
+          transform: rotate(90deg);
 }
 
 .popup1 {
@@ -94,12 +105,21 @@
 
 split {
   border: 1px solid #ccc;
-}
-split md-content {
-  border-left: 1px solid #ccc;
+  min-height: 0px;
 }
 split > div {
-  overflow: auto;
+  overflow-y: scroll;
+}
+split > div::-webkit-scrollbar {
+  width: 12px;
+}
+split > div::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+}
+split > div::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
 }
 
 #sidebar-left .md-whiteframe-z2 {

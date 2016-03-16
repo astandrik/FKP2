@@ -14,6 +14,7 @@ var babel = require('gulp-babel');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
+var autoprefixer = require('gulp-autoprefixer');
 
 
 gulp.task('vendorsjs', function () {
@@ -107,6 +108,7 @@ gulp.task('less', function(){
         .pipe(less())
         .on('error', onError)
            .pipe(concat('all.css'))
+           .pipe(autoprefixer())
         .pipe(gulp.dest('dist/css'));
 });
 

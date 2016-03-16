@@ -48,13 +48,24 @@
   }
   ul li a.toggle {
     width: 100%;
-    background: rgba(0, 0, 0, 0.78);
-    color: #fefefe;
+    background: #FFFFFF;
+    color: black;
     padding: .75em;
+    border: 1px solid black;
     border-radius: 0.15em;
+    text-decoration: none;
     transition: background .3s ease;
   }
   ul li a.toggle:hover {
-    background: rgba(0, 0, 0, 0.9);
+    background: #D6D6D6;
+  }
+
+
+  ng-md-icon>svg {
+    transition: all 0.1s ease;
+  }
+
+  ng-md-icon > svg.show  {
+        transform: rotate(90deg);
   }
 }

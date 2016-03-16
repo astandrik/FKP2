@@ -1,13 +1,16 @@
 <div layout="column" flex>
+<div class="treeContainer" flex="1">
 	<h2>Дерево</h2>
 	<accordion-tree data=treeData></accordion-tree>
-
+</div>
+<div class="popUpContainer"flex="1">
   <h2>Поп-ап</h2>
 	<div>
 		<button type="button" class="btn btn-default" ng-click="create_popup()">PopUp</button>
 	</div>
+</div>
 
-	<div layout="column" style="max-height:400px;min-height:400px">
+	<div flex="1" class="splitterContainer" layout="column" style="max-height:400px;min-height:400px">
 		<h2>Сплиттер</h2>
 		<split>
 			<div size="30">
@@ -19,7 +22,7 @@
 		</split>
 	</div>
 
-<div layout="column" flex class="projectCard">
+<div  flex="1" layout="column" flex class="projectCard">
 		<h1> Название проекта </h1>
 
 <div class="btn-group btn-group-justified">
