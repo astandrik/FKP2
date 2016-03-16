@@ -1,22 +1,24 @@
 <div class="popup1">
 <div class="custom-header" layout=row  layout-align="space-between center">
   <div></div>
-  <h4 class="modal-title" >
-  	Название организации
-  </h4>
+    <h4 class="modal-title" >
+    {{data.name}}
+    </h4>
   <ng-md-icon icon="clear" ng-click="close()" layout="column"  layout-align="center center"></ng-md-icon>
 </div>
-	<div class="modal-body" layout-padding>
-    <div>
-      	<label class="control-label" for="course">Ответственный:</label>
-    </div>
-    <div>
-        <label class="control-label" for="course">Телефон:</label>
-    </div>
-	</div>
-
-	<div class="modal-footer" >
-
-	<button type="button" class="btn btn-default btn1" ng-click="done()" >Перейти</button>
+<div class="modal-body" layout-padding>
+  <div layout="row">
+    <div flex="50" class="table-title"><span> Ответственный:</span>  </div>
+    <div flex="50"> <span>{{data.responsible}}</span> </div>
+  </div>
+  <div layout="row">
+    <div class="table-title" flex="50"><span> Телефон: </span> </div>
+    <div flex="50"><span> {{data.tel}}</span> </div>
+  </div>
+</div>
+<div class="modal-footer" >
+ <div layout="row" layout-align="end start">
+   <lable class="footer-lable">Подробнее</lable>
+   <ng-md-icon icon="forward" ng-click="done()" layout="column"  layout-align="center center"></ng-md-icon>
 </div>
 </div>

@@ -1,10 +1,11 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-'use strict';
+"use strict";
 
 function DesignController($scope, dialogs) {
   $scope.treeData = window.testTree;
   $scope.create_popup = function () {
-    var dlg = dialogs.create('app/components/popup/popup.html', 'popupController', {}, { size: 'sm', animation: true });
+    var data = { name: "МЧС", responsible: "Иванов И.И.", tel: "222-33-22" };
+    var dlg = dialogs.create('app/components/popup/popup.html', 'popupController', data, { size: 'sm', animation: true });
   };
 }
 module.exports = DesignController;
@@ -55,9 +56,25 @@ currentModule.directive('sidebar', sidebarDirective);
 },{"./components/sidebar/sidebar.js":2}],4:[function(require,module,exports){
 'use strict';
 
-var utils = require('./utils.js');
+var treeBuilder = require('./treeBuilder.js');
 
-module.exports = function () {
+function bindToggleEvents() {
+    $('.toggle').click(function (e) {
+        e.preventDefault();
+        var $this = $(this);
+        if ($this.next().hasClass('show')) {
+            $this.next().slideUp(500, function () {
+                $this.next().removeClass('show');
+            });
+        } else {
+            $this.next().slideDown(500, function () {
+                $this.next().addClass('show');
+            });
+        }
+    });
+}
+
+module.exports = function ($compile) {
     return {
         scope: {
             data: "="
@@ -66,61 +83,51 @@ module.exports = function () {
             return function ($scope) {
                 templateAttrs.timeout === undefined ? 400 : parseint(templateAttrs.timeout);
                 var data = $scope.data;
+                $scope.h = 'p';
                 var html = '<div  class="accordionTree">  <ul class="accordion">';
                 var elements = [];
                 if (!data) {
                     throw "define data attribute for tree";
                 }
                 data.forEach(function (item) {
-                    elements.push(utils.buildNode(item));
+                    elements.push(treeBuilder.buildNode(item));
                 });
-                templateElement.replaceWith(html + elements.join('') + '</ul></div>');
-                $('.toggle').click(function (e) {
-                    e.preventDefault();
-                    var $this = $(this);
-                    if ($this.next().hasClass('show')) {
-                        $this.next().slideUp(500, function () {
-                            $this.next().removeClass('show');
-                        });
-                    } else {
-                        $this.next().slideDown(500, function () {
-                            $this.next().addClass('show');
-                        });
-                    }
-                });
+                var treeHtml = html + elements.join('') + '</ul></div>';
+                templateElement.replaceWith($compile(treeHtml)($scope));
+
+                bindToggleEvents();
             };
         },
         controller: function controller($scope) {}
     };
 };
 
-},{"./utils.js":5}],5:[function(require,module,exports){
+},{"./treeBuilder.js":5}],5:[function(require,module,exports){
 'use strict';
 
-var utils = function () {
-  var elem = {
-    elementHtml: function elementHtml(element, nested) {
-      nested = nested === undefined ? '' : nested;
-      return '<li> <a class="toggle" href="javascript:void(0);">' + element.name + '</a>' + nested + '</li>';
-    },
-    buildNode: function buildNode(root) {
-      var inner = '';
-      if (root.children) {
-        inner = '<ul class="inner">';
-        root.children.forEach(function (item) {
-          inner += elem.buildNode(item);
-        });
-        inner += '</ul>';
-      } else {
-        return elem.elementHtml(root);
-      }
-      return elem.elementHtml(root, inner);
-    }
+function foo() {
+  var self = this;
+  this.elementHtml = function (element, nested) {
+    nested = nested === undefined ? '' : nested;
+    return '<li><a layout="row" layout-align="space-between center" class="toggle" href="javascript:void(0);"><span>' + element.name + '</span><ng-md-icon size=30 layout="column" layout-align="center center" icon="keyboard_arrow_right"></ng-md-icon></a>' + nested + '</li>';
   };
-  return elem;
-}();
+  this.buildNode = function (root) {
+    var inner = '';
+    if (root.children) {
+      inner = '<ul class="inner">';
+      root.children.forEach(function (item) {
+        inner += self.buildNode(item);
+      });
+      inner += '</ul>';
+    } else {
+      return self.elementHtml(root);
+    }
+    return self.elementHtml(root, inner);
+  };
+  return this;
+};
 
-module.exports = utils;
+module.exports = new foo();
 
 },{}],6:[function(require,module,exports){
 'use strict';
