@@ -1,6 +1,20 @@
 var DesignController = require('./Design/DesignController')
 
+function createRoute(url, bindView, name) {
+  return {
+    url: url,
+    views: {
+      bindView
+    },
+    ncyBreadcrumb : {
+      label: name
+    }
+  }
+}
+
 module.exports = {
+  createRoute: createRoute,
+  routes : {
   homeRoute: {
     url: '/FKP',
     views: {
@@ -22,4 +36,5 @@ module.exports = {
         label: 'Дизайн-страница'
     }
   }
+}
 };

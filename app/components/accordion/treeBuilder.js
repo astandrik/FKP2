@@ -1,9 +1,9 @@
-function foo() {
+function buildTree() {
     var self = this;
     this.elementHtml = function (element, nested) {
       nested = nested === undefined? '' : nested;
       return '<li><a layout="row" layout-align="space-between center" class="toggle" href="javascript:void(0);"><span>' +
-       element.name + '</span><ng-md-icon size=30 layout="column" layout-align="center center" icon="keyboard_arrow_right"></ng-md-icon></a>'+nested +'</li>'
+       element.name + '</span><ng-md-icon class="toggleOpen" size=30 layout="column" layout-align="center center" icon="keyboard_arrow_right"></ng-md-icon></a>'+nested +'</li>'
     };
     this.buildNode = function (root) {
       var inner = '';
@@ -20,5 +20,30 @@ function foo() {
     };
     return this;
 };
-
-module.exports = new foo();
+function bindToggleEvents() {
+  $('.toggle').click(function(e) {
+      var $this = $(this);
+      $('.toggle').removeClass('selected');
+      $this.addClass('selected');
+  });
+  $('.toggleOpen').click(function(e) {
+      e.preventDefault();
+      var $this = $(this).parent();
+      if ($this.next().hasClass('show')) {
+          if($this.next().length) {
+                $this.find('ng-md-icon>svg').removeClass('show');
+          }
+          $this.next().slideUp(200, function() {
+              $this.next().removeClass('show');
+          });
+      } else {
+          if($this.next().length) {
+              $this.find('ng-md-icon>svg').addClass('show');
+          }
+          $this.next().slideDown(200, function() {
+              $this.next().addClass('show');
+          });
+      }
+  });
+}
+module.exports = {treeHtml: new buildTree(), bind: bindToggleEvents};

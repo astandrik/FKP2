@@ -63,6 +63,9 @@
 .accordionTree ul li a.toggle:hover {
   background: #D6D6D6;
 }
+.accordionTree ul li a.selected {
+  background: #D6D6D6;
+}
 .accordionTree ng-md-icon > svg {
   -webkit-transition: all 0.1s ease;
   transition: all 0.1s ease;
