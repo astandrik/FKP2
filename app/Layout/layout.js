@@ -1,4 +1,4 @@
-var sidebarDirective = require('./components/sidebar/sidebar.js');
+var sidebarDirective = require('./sidebar/sidebar.js');
 
 var currentModule = angular.module('layout', []);
 

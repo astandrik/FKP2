@@ -10,7 +10,7 @@ module.exports = function($compile,$accordion, $state) {
         function(templateElement, templateAttrs) {
             return {
                 pre: function($scope) {
-                $accordion.getTree($scope.data.url).then((response) => {                  
+                $accordion.getTree($scope.data.url).then((response) => {
                   templateAttrs.timeout === undefined ? 400 : parseint(templateAttrs.timeout);
                   var html = '<div  class="accordionTree">  <ul class="accordion">';
                   var elements = [];

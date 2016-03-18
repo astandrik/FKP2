@@ -1,6 +1,6 @@
 module.exports = function() {
     return {
-        templateUrl: 'app/Layout/components/sidebar/sidebar.html',
+        templateUrl: 'app/Layout/sidebar/sidebar.html',
         replace: true,
         controller: function($scope) {
             var directories = [{
@@ -9,7 +9,8 @@ module.exports = function() {
                 state: 'home.design'
             }, {
                 name: 'Структура программы',
-                icon: 'business_center'
+                icon: 'business_center',
+                state: 'home.projectStructure'
             }, {
                 name: 'Космические комплексы',
                 icon: 'brightness_5'

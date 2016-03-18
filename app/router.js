@@ -1,40 +1,58 @@
-var DesignController = require('./Design/DesignController')
+var DesignController = require('./Design/designController');
+var ProjectController = require('./Project/projectController');
 
-function createRoute(url, bindView, name) {
-  return {
-    url: url,
-    views: {
-      bindView
-    },
-    ncyBreadcrumb : {
-      label: name
-    }
-  }
-}
 
-module.exports = {
-  createRoute: createRoute,
-  routes : {
-  homeRoute: {
-    url: '/FKP',
-    views: {
-      'sidebar': {template: '<sidebar></sidebar>'}
-    },
-    ncyBreadcrumb: {
-        label: 'ФКП'
+angular.module('router',[]).provider('$router',function() {
+
+  this.$get =new function() {
+    var self = this;
+    self.createRoute = function(url, bindView, name) {
+      return {
+        url: url,
+        views: {
+          bindView
+        },
+        ncyBreadcrumb : {
+          label: name
+        }
       }
-  },
-  designRoute:{
-    url: '/Design',
-    views: {
-      'content@': {
-         templateUrl: 'app/Design/design-page.html',
-         controller: DesignController
-       }
+    };
+    self.routes ={
+    'home': {
+      url: '/FKP',
+      views: {
+        'sidebar': {template: '<sidebar></sidebar>'}
+      },
+      ncyBreadcrumb: {
+          label: 'ФКП'
+        }
     },
-    ncyBreadcrumb: {
-        label: 'Дизайн-страница'
+    'home.design':{
+      url: '/Design',
+      views: {
+        'content@': {
+           templateUrl: 'app/Design/design-page.html',
+           controller: DesignController
+         }
+      },
+      ncyBreadcrumb: {
+          label: 'Дизайн-страница'
+      }
+    },
+    'home.projectStructure': {
+      url: '/ProjectStructure',
+      views: {
+        'content@': {
+          templateUrl: 'app/Project/project-page.html',
+          controller: ProjectController
+        }
+      },
+      ncyBreadcrumb: {
+          label: 'Структура программы'
+      }
     }
+  };
+  return this;
   }
-}
-};
+
+});

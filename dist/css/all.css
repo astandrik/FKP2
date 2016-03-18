@@ -1,5 +1,39 @@
+.projectCard .size {
+  font-size: 24px;
+  padding: 30px 0 75px 0;
+  color: #d76e00;
+}
 .projectCard .header-name {
   padding: 30px 0 0 100px;
+  font-weight: bold;
+}
+.projectCard .info-name {
+  padding: 30px 0 0 50px;
+}
+.projectCard .btn-text {
+  font-weight: bold;
+}
+.projectCard .btn-default {
+  border-color: black;
+}
+.projectCard .btn-default:focus {
+  background-color: #66d9ff;
+}
+.projectCard .btn1 {
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+}
+.projectCard li.active {
+  border-top: 2px solid #66d9ff;
+}
+.projectCard li > a {
+  color: black;
+}
+
+.breadcrumb > li + li:before {
+  content: "\2192" !important;
+}
+.breadcrumb {
+  margin-bottom: 0!important;
 }
 
 @import url('http://fonts.googleapis.com/css?family=Pacifico|Open+Sans:300,400,600');
@@ -77,6 +111,9 @@
 
 .popup1 {
   background-color: #ffb833;
+}
+.popup1 .size {
+  font-size: 24px;
 }
 .popup1 .btn1 {
   color: #312e2e;
