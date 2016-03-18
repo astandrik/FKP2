@@ -1,39 +1,15 @@
-.projectCard .size {
-  font-size: 24px;
-  padding: 30px 0 75px 0;
-  color: #d76e00;
-}
-.projectCard .header-name {
-  padding: 30px 0 0 100px;
-  font-weight: bold;
-}
-.projectCard .info-name {
-  padding: 30px 0 0 50px;
-}
-.projectCard .btn-text {
-  font-weight: bold;
-}
-.projectCard .btn-default {
-  border-color: black;
-}
-.projectCard .btn-default:focus {
-  background-color: #66d9ff;
-}
-.projectCard .btn1 {
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
-}
-.projectCard li.active {
-  border-top: 2px solid #66d9ff;
-}
-.projectCard li > a {
-  color: black;
-}
-
 .breadcrumb > li + li:before {
   content: "\2192" !important;
 }
 .breadcrumb {
   margin-bottom: 0!important;
+}
+md-sidenav {
+  max-width: 200px!important;
+}
+
+.space-header-name {
+  padding: 3% 0 0 12.3%;
 }
 
 @import url('http://fonts.googleapis.com/css?family=Pacifico|Open+Sans:300,400,600');
@@ -176,4 +152,42 @@ split > div::-webkit-scrollbar-thumb {
 #sidebar-left md-toolbar:not(.md-menu-toolbar) {
   background-color: white;
   color: black;
+}
+
+.projectCard .size {
+  font-size: 24px;
+  padding: 0 0 20px 0;
+  color: #d76e00;
+}
+.projectCard .header-name {
+  padding: 3% 0 0 3.92%;
+  font-weight: bold;
+}
+.projectCard .info-name {
+  padding: 3% 0 0 2%;
+}
+.projectCard .btn-text {
+  font-weight: bold;
+}
+.projectCard .btn-default {
+  border-color: black;
+}
+.projectCard .btn-default:focus {
+  background-color: #66d9ff;
+}
+.projectCard .btn1 {
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+}
+.projectCard li.active {
+  border-top: 2px solid #66d9ff;
+}
+.projectCard li > a {
+  color: black;
+}
+.projectCard .space-header-name {
+  padding: 2% 0 0 12.3%;
+  font-weight: bold;
+}
+.projectCard .space-info-name {
+  padding: 2% 0 0 10%;
 }

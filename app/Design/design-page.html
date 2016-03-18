@@ -10,7 +10,7 @@
 	</div>
 </div>
 
-	<div flex="1" class="splitterContainer" layout="column" style="max-height:400px;min-height:400px">
+	<div flex="1" class="splitterContainer demo-container" layout="column" style="max-height:600px;min-height:600px">
 		<h2>Сплиттер</h2>
 		<split>
 			<div size="30">
@@ -21,5 +21,95 @@
 			</div>
 		</split>
 	</div>
-<project-card></project-card>
+
+<div flex="1" style="max-height:600px;min-height:600px">
+<project-card ></project-card>
+</div>
+
+<div flex="1" style="max-height:600px;min-height:600px">
+<div  flex="1" layout="column"  class="projectCard">
+	<span class="size"> КА Арктика-М </span>
+
+		<uib-tabset  active="activeJustified" justified="true">
+		  <uib-tab index="5" heading="Общие сведения" class="btn1">
+
+		    <md-content flex layout-padding>
+		      <div layout="row">
+		        <div flex="20" class="space-header-name">Направление </div>
+		        <div flex="80" class="space-info-name">	ОКР </div>
+		      </div>
+		      <div layout="row">
+		        <div flex="20" class="space-header-name">Заказчики </div>
+		        <div flex="80" class="space-info-name">	<a ng-click="create_popup()"> МЧС России, </a> Минтранс России,Росгидромет  </div>
+		      </div>
+		      <div layout="row">
+		        <div flex="20" class="space-header-name">Головной исполнитель </div>
+		        <div flex="80" class="space-info-name">ИСС</div>
+		      </div>
+					<div layout="row">
+		        <div flex="20" class="space-header-name">Оператор </div>
+		        <div flex="80" class="space-info-name">	Спутниковая система "Голд" </div>
+		      </div>
+		    </md-content>
+		  </uib-tab>
+		  <uib-tab index="6" heading="Описание" class="btn1">
+
+				<md-content flex layout-padding>
+					<div layout="row">
+						<div flex="20" class="space-header-name">Характеристики изделия</div>
+						<div flex="80" class="space-info-name"></div>
+					</div>
+					<div layout="row">
+						<div flex="20" class="space-header-name">Наземная инфраструктура </div>
+						<div flex="80" class="space-info-name"></div>
+					</div>
+					<div layout="row">
+						<div flex="20" class="space-header-name">Количество стартов </div>
+						<div flex="80" class="space-info-name"></div>
+					</div>
+					<div layout="row">
+						<div flex="20" class="space-header-name">Документы</div>
+						<div flex="80" class="space-info-name"></div>
+					</div>
+				</md-content>
+			</uib-tab>
+
+		  <uib-tab index="7" heading="Связанные проекты" class="btn1">Обновляется ...</uib-tab>
+		</uib-tabset>
+	</div>
+	</div>
+
+	<div flex="1" style="max-height:600px;min-height:600px">
+	<div  flex="1" layout="column"  class="projectCard">
+		<span class="size"> МЧС России </span>
+
+			<uib-tabset  active="activeJustified" justified="true">
+			  <uib-tab index="8" heading="Общие сведения" class="btn1">
+						<div flex="1" class="space-header-name"> Описание: </div>
+			  </uib-tab>
+			  <uib-tab index="9" heading="Контактные данные" class="btn1">
+					<md-content flex layout-padding>
+			      <div layout="row">
+			        <div flex="20" class="space-header-name">Ответственное лицо </div>
+			        <div flex="80" class="space-info-name">	Иванов И.И. </div>
+			      </div>
+			      <div layout="row">
+			        <div flex="20" class="space-header-name">Телефон </div>
+			        <div flex="80" class="space-info-name">+7(495)-222-33-22</div>
+			      </div>
+			      <div layout="row">
+			        <div flex="20" class="space-header-name">Электронная почта </div>
+			        <div flex="80" class="space-info-name">mchs@gmail.com</div>
+			      </div>
+						<div layout="row">
+			        <div flex="20" class="space-header-name">Адрес</div>
+			        <div flex="80" class="space-info-name">	г.Москва, ул.Тверская, 59 </div>
+			      </div>
+			    </md-content>
+				</uib-tab>
+				<uib-tab index="10" heading="Связанные проекты" class="btn1">Обновляется ...</uib-tab>
+			</uib-tabset>
+
+		</div>
+		</div>
 </div>

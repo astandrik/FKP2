@@ -68,13 +68,16 @@ module.exports = function () {
 };
 
 },{}],5:[function(require,module,exports){
-'use strict';
+"use strict";
 
-function ProjectController($scope) {
+function ProjectController($scope, dialogs) {
   $scope.treeData = {};
   $scope.treeData.url = 'testData/data.json';
+  $scope.create_popup = function () {
+    var data = { name: "МЧС", responsible: "Иванов И.И.", tel: "222-33-22" };
+    var dlg = dialogs.create('app/components/popup/popup.html', 'popupController', data, { size: 'sm', animation: true });
+  };
 }
-
 module.exports = ProjectController;
 
 },{}],6:[function(require,module,exports){
