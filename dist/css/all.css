@@ -1,3 +1,7 @@
+.space-header-name {
+  padding: 3% 0 0 12.3%;
+}
+
 .breadcrumb > li + li:before {
   content: "\2192" !important;
 }
@@ -6,10 +10,6 @@
 }
 md-sidenav {
   max-width: 200px!important;
-}
-
-.space-header-name {
-  padding: 3% 0 0 12.3%;
 }
 
 @import url('http://fonts.googleapis.com/css?family=Pacifico|Open+Sans:300,400,600');

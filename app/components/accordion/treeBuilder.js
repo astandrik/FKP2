@@ -2,11 +2,11 @@ function buildTree() {
     var self = this;
     this.elementHtml = function (element, nested) {
       nested = nested === undefined? '' : nested;
-      return '<li><a layout="row" layout-align="space-between center" class="toggle" href="javascript:void(0);"><span>' +
+      return '<li><a layout="row" layout-align="space-between center" class="toggle" ng-href=" {{getHref(getCurrentEntityState(), {id: '+element.id+'})}}"><span>' +
        element.name + '</span><ng-md-icon class="toggleOpen" size=30 layout="column" layout-align="center center" icon="keyboard_arrow_right"></ng-md-icon></a>'+nested +'</li>'
     };
     this.buildNode = function (root) {
-      var inner = '';
+      var inner = ''; 
       if(root.children) {
         inner = '<ul class="inner">';
         root.children.forEach(function(item) {

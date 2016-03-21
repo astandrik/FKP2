@@ -10,6 +10,12 @@ module.exports = function($compile,$accordion, $state) {
         function(templateElement, templateAttrs) {
             return {
                 pre: function($scope) {
+                $scope.getHref = $scope.$parent.getHref;
+                $scope.getCurrentState = $scope.$parent.getCurrentState;
+                $scope.getCurrentEntityState = function() {
+                  var state = $scope.getCurrentState();
+                  return state.indexOf('treeEntity') > -1 ? state : state + '.treeEntity';
+                };
                 $accordion.getTree($scope.data.url).then((response) => {
                   templateAttrs.timeout === undefined ? 400 : parseint(templateAttrs.timeout);
                   var html = '<div  class="accordionTree">  <ul class="accordion">';

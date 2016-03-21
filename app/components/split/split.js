@@ -12,8 +12,7 @@ function compile(templateElement, templateAttrs) {
     throw('right split element must have attribute "size"');
   }
   left.attr('flex', leftSize);
-  left.removeAttr('size');
-  left.attr('layout-padding', '');
+  left.removeAttr('size');  
   right.replaceWith('<md-content flex layout-padding>' + rightContents + '</md-content>');
   right.attr('flex', rightSize);
   right.removeAttr('size');

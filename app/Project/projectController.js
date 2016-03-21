@@ -1,4 +1,4 @@
-function ProjectController($scope, dialogs) {
+function ProjectController($scope, dialogs,  $projectFactory) {
   $scope.treeData = {};
   $scope.treeData.url = 'testData/data.json';
   $scope.create_popup = function()

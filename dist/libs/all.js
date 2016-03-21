@@ -68,9 +68,22 @@ module.exports = function () {
 };
 
 },{}],5:[function(require,module,exports){
+'use strict';
+
+var projectCard = require('./card/projectCardDirective.js');
+var projectFactory = require('./projectFactory.js');
+var projectController = require('./projectController.js');
+
+var currentModule = angular.module('project', []);
+
+currentModule.controller('projectController', projectController);
+currentModule.directive('projectCard', projectCard);
+currentModule.factory('$projectFactory', projectFactory);
+
+},{"./card/projectCardDirective.js":4,"./projectController.js":6,"./projectFactory.js":7}],6:[function(require,module,exports){
 "use strict";
 
-function ProjectController($scope, dialogs) {
+function ProjectController($scope, dialogs, $projectFactory) {
   $scope.treeData = {};
   $scope.treeData.url = 'testData/data.json';
   $scope.create_popup = function () {
@@ -80,7 +93,18 @@ function ProjectController($scope, dialogs) {
 }
 module.exports = ProjectController;
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
+'use strict';
+
+module.exports = function projectFactory($http) {
+  return {
+    getById: function getById(id) {
+      return $http.get('testData/project.json');
+    }
+  };
+};
+
+},{}],8:[function(require,module,exports){
 'use strict';
 
 var icons = {
@@ -90,7 +114,7 @@ var icons = {
 
 module.exports = icons;
 
-},{}],7:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict';
 
 var accordionDirective = require('./accordionDirective.js');
@@ -101,7 +125,7 @@ var currentModule = angular.module('accordion', []);
 currentModule.directive('accordionTree', accordionDirective);
 currentModule.service('$accordion', accordionService);
 
-},{"./accordionDirective.js":8,"./accordionService.js":9}],8:[function(require,module,exports){
+},{"./accordionDirective.js":10,"./accordionService.js":11}],10:[function(require,module,exports){
 'use strict';
 
 var treeBuilder = require('./treeBuilder.js').treeHtml;
@@ -115,6 +139,12 @@ module.exports = function ($compile, $accordion, $state) {
         compile: function compile(templateElement, templateAttrs) {
             return {
                 pre: function pre($scope) {
+                    $scope.getHref = $scope.$parent.getHref;
+                    $scope.getCurrentState = $scope.$parent.getCurrentState;
+                    $scope.getCurrentEntityState = function () {
+                        var state = $scope.getCurrentState();
+                        return state.indexOf('treeEntity') > -1 ? state : state + '.treeEntity';
+                    };
                     $accordion.getTree($scope.data.url).then(function (response) {
                         templateAttrs.timeout === undefined ? 400 : parseint(templateAttrs.timeout);
                         var html = '<div  class="accordionTree">  <ul class="accordion">';
@@ -136,7 +166,7 @@ module.exports = function ($compile, $accordion, $state) {
     };
 };
 
-},{"./treeBuilder.js":10}],9:[function(require,module,exports){
+},{"./treeBuilder.js":12}],11:[function(require,module,exports){
 "use strict";
 
 module.exports = function ($http) {
@@ -145,14 +175,14 @@ module.exports = function ($http) {
   };
 };
 
-},{}],10:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 'use strict';
 
 function buildTree() {
     var self = this;
     this.elementHtml = function (element, nested) {
         nested = nested === undefined ? '' : nested;
-        return '<li><a layout="row" layout-align="space-between center" class="toggle" href="javascript:void(0);"><span>' + element.name + '</span><ng-md-icon class="toggleOpen" size=30 layout="column" layout-align="center center" icon="keyboard_arrow_right"></ng-md-icon></a>' + nested + '</li>';
+        return '<li><a layout="row" layout-align="space-between center" class="toggle" ng-href=" {{getHref(getCurrentEntityState(), {id: ' + element.id + '})}}"><span>' + element.name + '</span><ng-md-icon class="toggleOpen" size=30 layout="column" layout-align="center center" icon="keyboard_arrow_right"></ng-md-icon></a>' + nested + '</li>';
     };
     this.buildNode = function (root) {
         var inner = '';
@@ -197,7 +227,7 @@ function bindToggleEvents() {
 }
 module.exports = { treeHtml: new buildTree(), bind: bindToggleEvents };
 
-},{}],11:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 'use strict';
 
 require('./accordion/accordion.js');
@@ -212,7 +242,7 @@ currentModule.controller('popupController', popupController);
 currentModule.directive('split', splitDirective);
 currentModule.directive('projectCard', projectCard);
 
-},{"../Project/card/projectCardDirective.js":4,"./accordion/accordion.js":7,"./popup/popupController.js":12,"./split/split.js":13}],12:[function(require,module,exports){
+},{"../Project/card/projectCardDirective.js":4,"./accordion/accordion.js":9,"./popup/popupController.js":14,"./split/split.js":15}],14:[function(require,module,exports){
 "use strict";
 
 module.exports = function ($scope, $uibModalInstance, data) {
@@ -229,7 +259,7 @@ module.exports = function ($scope, $uibModalInstance, data) {
 		};
 };
 
-},{}],13:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 'use strict';
 
 function compile(templateElement, templateAttrs) {
@@ -249,7 +279,6 @@ function compile(templateElement, templateAttrs) {
   }
   left.attr('flex', leftSize);
   left.removeAttr('size');
-  left.attr('layout-padding', '');
   right.replaceWith('<md-content flex layout-padding>' + rightContents + '</md-content>');
   right.attr('flex', rightSize);
   right.removeAttr('size');
@@ -265,47 +294,52 @@ module.exports = function () {
   };
 };
 
-},{}],14:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 'use strict';
 
 require('./router.js');
+require('./Project/project.js');
 var layout = require('./Layout/layout.js');
 var demos = require('./components/demos.js');
 var icons = require('./components/Icons/icons.js');
 
-var app = angular.module('app', ['ui.router', 'ui.bootstrap', 'ngMaterial', 'ngMdIcons', 'ncy-angular-breadcrumb', 'ngSanitize', 'dialogs.main', 'layout', 'demos', 'router']);
+var app = angular.module('app', ['ui.router', 'ui.bootstrap', 'ngMaterial', 'ngMdIcons', 'ncy-angular-breadcrumb', 'ngSanitize', 'dialogs.main', 'layout', 'demos', 'router', 'project']);
 app.config(['$urlRouterProvider', '$stateProvider', 'ngMdIconServiceProvider', '$routerProvider', function ($urlRouterProvider, $stateProvider, ngMdIconServiceProvider, $routerProvider) {
-  for (var e in icons) {
-    ngMdIconServiceProvider.addShape(e, icons[e]);
-  }
-  $urlRouterProvider.otherwise('/FKP/Design');
-  for (var e in $routerProvider.$get.routes) {
-    $stateProvider.state(e, $routerProvider.$get.routes[e]);
-  }
+    for (var e in icons) {
+        ngMdIconServiceProvider.addShape(e, icons[e]);
+    }
+    //$urlRouterProvider.otherwise('/FKP/Design');
+    for (var e in $routerProvider.$get.routes) {
+        $stateProvider.state(e, $routerProvider.$get.routes[e]);
+    }
 }]);
 app.run(function ($rootScope, $state) {
-  $rootScope.$state = $state;
-  // or
-  $rootScope.getHref = $state.href.bind($state);
-});
+    $rootScope.$state = $state;
 
-app.provider('runtimeStates', function runtimeStates($stateProvider) {
-  // runtime dependencies for the service can be injected here, at the provider.$get() function.
-  this.$get = function ($q, $timeout, $state) {
-    // for example
-    return {
-      addState: function addState(name, state) {
-        $stateProvider.state(name, state);
-      }
+    $rootScope.getHref = $state.href.bind($state);
+    $rootScope.getCurrentState = function () {
+        return $state.current.name;
     };
-  };
+    $rootScope.getCurrentHref = function () {
+        return $rootScope.getHref($rootScope.getCurrentState());
+    };
+    $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, options) {});
+    $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
+        debugger;
+    });
+
+    $rootScope.$on('$stateNotFound', function (event, unfoundState, fromState, fromParams) {
+        console.log(unfoundState.to); // "lazy.state"
+        console.log(unfoundState.toParams); // {a:1, b:2}
+        console.log(unfoundState.options); // {inherit:false} + default options
+        debugger;
+    });
 });
 
-},{"./Layout/layout.js":2,"./components/Icons/icons.js":6,"./components/demos.js":11,"./router.js":15}],15:[function(require,module,exports){
+},{"./Layout/layout.js":2,"./Project/project.js":5,"./components/Icons/icons.js":8,"./components/demos.js":13,"./router.js":17}],17:[function(require,module,exports){
 'use strict';
 
 var DesignController = require('./Design/designController');
-var ProjectController = require('./Project/projectController');
 
 angular.module('router', []).provider('$router', function () {
 
@@ -349,11 +383,33 @@ angular.module('router', []).provider('$router', function () {
         views: {
           'content@': {
             templateUrl: 'app/Project/project-page.html',
-            controller: ProjectController
+            controller: 'projectController'
           }
         },
         ncyBreadcrumb: {
           label: 'Структура программы'
+        }
+      },
+      'home.projectStructure.treeEntity': {
+        url: '/treeEntity?id',
+        views: {
+          'projectInfo': {
+            templateUrl: 'app/Project/card/project-card.html',
+            controller: function controller($scope, project) {
+              $scope.project = project;
+            },
+            resolve: {
+              project: function project($http, $projectFactory, $stateParams) {
+                var id = $stateParams.id;
+                return $projectFactory.getById(id).then(function (data) {
+                  return data.data;
+                });
+              }
+            }
+          }
+        },
+        ncyBreadcrumb: {
+          label: 'Проект {{project.code}}'
         }
       }
     };
@@ -361,7 +417,7 @@ angular.module('router', []).provider('$router', function () {
   }();
 });
 
-},{"./Design/designController":1,"./Project/projectController":5}]},{},[14])
+},{"./Design/designController":1}]},{},[16])
 
 
 //# sourceMappingURL=all.js.map

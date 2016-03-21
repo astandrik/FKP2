@@ -1,6 +1,4 @@
 var DesignController = require('./Design/designController');
-var ProjectController = require('./Project/projectController');
-
 
 angular.module('router',[]).provider('$router',function() {
 
@@ -44,11 +42,33 @@ angular.module('router',[]).provider('$router',function() {
       views: {
         'content@': {
           templateUrl: 'app/Project/project-page.html',
-          controller: ProjectController
+          controller: 'projectController'
         }
       },
       ncyBreadcrumb: {
           label: 'Структура программы'
+      }
+    },
+    'home.projectStructure.treeEntity': {
+      url: '/treeEntity?id',
+      views: {
+        'projectInfo' : {
+          templateUrl: 'app/Project/card/project-card.html',
+          controller: function($scope,project) {
+            $scope.project = project;
+          },
+          resolve: {
+            project: function($http, $projectFactory, $stateParams) {
+              var id = $stateParams.id;
+              return $projectFactory.getById(id).then(function(data) {
+                return data.data;
+              });
+            }
+          }
+        }
+      },
+      ncyBreadcrumb: {
+          label: 'Проект {{project.code}}'
       }
     }
   };
