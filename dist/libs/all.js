@@ -1,13 +1,14 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 "use strict";
 
-function DesignController($scope, dialogs) {
+function DesignController($scope, dialogs, $dataTableService, gridData) {
   $scope.treeData = {};
   $scope.treeData.url = 'testData/data.json';
   $scope.create_popup = function () {
     var data = { name: "МЧС", responsible: "Иванов И.И.", tel: "222-33-22" };
     var dlg = dialogs.create('app/components/popup/popup.html', 'popupController', data, { size: 'sm', animation: true });
   };
+  $scope.tableData = gridData;
 }
 module.exports = DesignController;
 
@@ -231,7 +232,8 @@ module.exports = { treeHtml: new buildTree(), bind: bindToggleEvents };
 'use strict';
 
 require('./accordion/accordion.js');
-var currentModule = angular.module('demos', ['accordion']);
+require('./dataTable/dataTable.js');
+var currentModule = angular.module('components', ['accordion', 'dataTable']);
 
 var accordionDirective = require('./accordion/accordion.js');
 var popupController = require('./popup/popupController.js');
@@ -242,7 +244,49 @@ currentModule.controller('popupController', popupController);
 currentModule.directive('split', splitDirective);
 currentModule.directive('projectCard', projectCard);
 
-},{"../Project/card/projectCardDirective.js":4,"./accordion/accordion.js":9,"./popup/popupController.js":14,"./split/split.js":15}],14:[function(require,module,exports){
+},{"../Project/card/projectCardDirective.js":4,"./accordion/accordion.js":9,"./dataTable/dataTable.js":14,"./popup/popupController.js":17,"./split/split.js":18}],14:[function(require,module,exports){
+'use strict';
+
+var dataTableDirective = require('./dataTableDirective.js');
+var dataTableService = require('./dataTableService.js');
+
+var currentModule = angular.module('dataTable', ['ui.grid']);
+
+currentModule.directive('cDataTable', dataTableDirective);
+currentModule.factory('$dataTableService', dataTableService);
+
+},{"./dataTableDirective.js":15,"./dataTableService.js":16}],15:[function(require,module,exports){
+'use strict';
+
+function DTD() {
+  return {
+    scope: {
+      data: '='
+    },
+    restrict: "E",
+    template: '<div ui-grid="{ data: gridData }" class="grid"></div>',
+    controller: function controller($scope) {
+      $scope.gridData = $scope.data;
+    }
+  };
+}
+
+module.exports = DTD;
+
+},{}],16:[function(require,module,exports){
+"use strict";
+
+function DTS($http) {
+  return {
+    getTable: function getTable(url) {
+      return $http.get(url);
+    }
+  };
+}
+
+module.exports = DTS;
+
+},{}],17:[function(require,module,exports){
 "use strict";
 
 module.exports = function ($scope, $uibModalInstance, data) {
@@ -259,7 +303,7 @@ module.exports = function ($scope, $uibModalInstance, data) {
 		};
 };
 
-},{}],15:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 'use strict';
 
 function compile(templateElement, templateAttrs) {
@@ -294,16 +338,16 @@ module.exports = function () {
   };
 };
 
-},{}],16:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 'use strict';
 
 require('./router.js');
 require('./Project/project.js');
 var layout = require('./Layout/layout.js');
-var demos = require('./components/demos.js');
+var components = require('./components/components.js');
 var icons = require('./components/Icons/icons.js');
 
-var app = angular.module('app', ['ui.router', 'ui.bootstrap', 'ngMaterial', 'ngMdIcons', 'ncy-angular-breadcrumb', 'ngSanitize', 'dialogs.main', 'layout', 'demos', 'router', 'project']);
+var app = angular.module('app', ['ui.router', 'ui.bootstrap', 'ngMaterial', 'ngMdIcons', 'ncy-angular-breadcrumb', 'ngSanitize', 'dialogs.main', 'layout', 'components', 'router', 'project']);
 app.config(['$urlRouterProvider', '$stateProvider', 'ngMdIconServiceProvider', '$routerProvider', function ($urlRouterProvider, $stateProvider, ngMdIconServiceProvider, $routerProvider) {
     for (var e in icons) {
         ngMdIconServiceProvider.addShape(e, icons[e]);
@@ -336,7 +380,7 @@ app.run(function ($rootScope, $state) {
     });
 });
 
-},{"./Layout/layout.js":2,"./Project/project.js":5,"./components/Icons/icons.js":8,"./components/demos.js":13,"./router.js":17}],17:[function(require,module,exports){
+},{"./Layout/layout.js":2,"./Project/project.js":5,"./components/Icons/icons.js":8,"./components/components.js":13,"./router.js":20}],20:[function(require,module,exports){
 'use strict';
 
 var DesignController = require('./Design/designController');
@@ -345,22 +389,14 @@ angular.module('router', []).provider('$router', function () {
 
   this.$get = new function () {
     var self = this;
-    self.createRoute = function (url, bindView, name) {
-      return {
-        url: url,
-        views: {
-          bindView: bindView
-        },
-        ncyBreadcrumb: {
-          label: name
-        }
-      };
-    };
+
     self.routes = {
       'home': {
         url: '/FKP',
         views: {
-          'sidebar': { template: '<sidebar></sidebar>' }
+          'sidebar': {
+            template: '<sidebar></sidebar>'
+          }
         },
         ncyBreadcrumb: {
           label: 'ФКП'
@@ -371,7 +407,14 @@ angular.module('router', []).provider('$router', function () {
         views: {
           'content@': {
             templateUrl: 'app/Design/design-page.html',
-            controller: DesignController
+            controller: DesignController,
+            resolve: {
+              gridData: function gridData($dataTableService) {
+                return $dataTableService.getTable('testData/tableData.json').then(function (data) {
+                  return data.data;
+                });
+              }
+            }
           }
         },
         ncyBreadcrumb: {
@@ -417,7 +460,7 @@ angular.module('router', []).provider('$router', function () {
   }();
 });
 
-},{"./Design/designController":1}]},{},[16])
+},{"./Design/designController":1}]},{},[19])
 
 
 //# sourceMappingURL=all.js.map

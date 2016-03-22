@@ -15,7 +15,7 @@ var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var autoprefixer = require('gulp-autoprefixer');
-
+var flatten = require('gulp-flatten');
 
 gulp.task('vendorsjs', function () {
     return gulp.src(
@@ -32,7 +32,8 @@ gulp.task('vendorsjs', function () {
         'node_modules/angular-material-icons/angular-material-icons.js',
         'node_modules/angular-breadcrumb/release/angular-breadcrumb.min.js',
         'node_modules/angular-dialog-service/dist/dialogs.min.js',
-        'node_modules/angular-sanitize/angular-sanitize.min.js'
+        'node_modules/angular-sanitize/angular-sanitize.min.js',
+        'node_modules/angular-ui-grid/ui-grid.min.js'
       ])
         .pipe(concat('vendors.min.js'))
         .pipe(gulp.dest('dist/libs'));
@@ -47,7 +48,8 @@ gulp.task('vendorscss', function () {
         'node_modules/angular/angular-csp.css',
         "node_modules/angular-ui-bootstrap/dist/ui-bootstrap-csp.css",
         'node_modules/angular-material/angular-material.css',
-        'node_modules/angular-dialog-service/dist/dialogs.min.css'
+        'node_modules/angular-dialog-service/dist/dialogs.min.css',
+        'node_modules/angular-ui-grid/ui-grid.min.css'
       ])
         .pipe(concat('vendors.min.css'))
         .pipe(gulp.dest('dist/css'));
@@ -89,6 +91,17 @@ gulp.task('fixjs', function () {
 
 });
 
+gulp.task('validate', function() {
+  return gulp.src([
+    'app/**/*.js'
+  ]).pipe(jsValidate());
+});
+
+gulp.task('fonts', function() {
+  return gulp.src("node_modules/**/*.{ttf,otf,woff}")
+    .pipe(flatten())
+    .pipe(gulp.dest('dist/css'));
+});
 
 gulp.task('browserify', function() {
   return browserify({entries:'app/index.js',  debug: true})
@@ -119,4 +132,4 @@ gulp.task('watch', function () {
     ], ['default']).on('error', onError);
 });
 
-gulp.task('default', ['vendors','browserify','less']);
+gulp.task('default', ['validate','vendors','browserify','less']);

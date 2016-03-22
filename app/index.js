@@ -1,7 +1,7 @@
 require('./router.js');
 require('./Project/project.js');
 var layout = require('./Layout/layout.js');
-var demos = require('./components/demos.js');
+var components = require('./components/components.js');
 var icons = require('./components/Icons/icons.js');
 
 var app = angular.module('app', [
@@ -13,7 +13,7 @@ var app = angular.module('app', [
     'ngSanitize',
     'dialogs.main',
     'layout',
-    'demos',
+    'components',
     'router',
     'project'
 ]);

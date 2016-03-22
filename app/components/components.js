@@ -1,5 +1,6 @@
 require('./accordion/accordion.js');
-var currentModule = angular.module('demos',['accordion']);
+require('./dataTable/dataTable.js');
+var currentModule = angular.module('components',['accordion','dataTable']);
 
 var accordionDirective = require('./accordion/accordion.js');
 var popupController = require('./popup/popupController.js');

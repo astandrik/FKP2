@@ -18,12 +18,16 @@ md-sidenav {
   font-family: 'Open Sans', sans-serif;
   font-weight: 300;
 }
+.accordionTree .defaultBorder {
+  border: 1px solid black;
+}
 .accordionTree ul.accordion > li:first-child {
   margin-top: 0;
 }
 .accordionTree a {
   text-decoration: none;
   color: inherit;
+  min-height: 80px;
 }
 .accordionTree p {
   font-size: 1.1em;
@@ -48,24 +52,46 @@ md-sidenav {
   list-style: none;
   padding: 0;
 }
+.accordionTree ul > li {
+  border-top: none;
+  border-bottom: none;
+}
+.accordionTree ul > li:first-child > a {
+  border-top: 1px solid #ccc;
+}
+.accordionTree ul > li:last-child > a {
+  border-bottom: 1px solid  #ccc;
+}
 .accordionTree ul .inner {
-  padding-left: 1em;
   overflow: hidden;
   display: none;
 }
+.accordionTree ul .inner span {
+  padding-left: 1.2em;
+}
+.accordionTree ul .inner .inner span {
+  padding-left: 2.4em;
+}
+.accordionTree ul .inner .inner .inner span {
+  padding-left: 3.6em;
+}
+.accordionTree ul .inner .inner .inner .inner span {
+  padding-left: 4.8em;
+}
+.accordionTree ul .inner .inner .inner .inner .inner span {
+  padding-left: 6em;
+}
+.accordionTree ul .inner .inner .inner .inner .inner .inner span {
+  padding-left: 7.2em;
+}
 .accordionTree ul .inner.show {
   /*display: block;*/
-}
-.accordionTree ul li {
-  margin: .5em 0;
 }
 .accordionTree ul li a.toggle {
   width: 100%;
   background: #FFFFFF;
   color: black;
   padding: .75em;
-  border: 1px solid black;
-  border-radius: 0.15em;
   text-decoration: none;
   -webkit-transition: background .3s ease;
   transition: background .3s ease;

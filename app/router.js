@@ -4,22 +4,14 @@ angular.module('router',[]).provider('$router',function() {
 
   this.$get =new function() {
     var self = this;
-    self.createRoute = function(url, bindView, name) {
-      return {
-        url: url,
-        views: {
-          bindView
-        },
-        ncyBreadcrumb : {
-          label: name
-        }
-      }
-    };
+
     self.routes ={
     'home': {
       url: '/FKP',
       views: {
-        'sidebar': {template: '<sidebar></sidebar>'}
+        'sidebar': {
+          template: '<sidebar></sidebar>'
+        }
       },
       ncyBreadcrumb: {
           label: 'ФКП'
@@ -30,7 +22,14 @@ angular.module('router',[]).provider('$router',function() {
       views: {
         'content@': {
            templateUrl: 'app/Design/design-page.html',
-           controller: DesignController
+           controller: DesignController,
+           resolve: {
+             gridData: function($dataTableService) {
+                return $dataTableService.getTable('testData/tableData.json').then(function(data) {
+                  return data.data;
+                })
+             }
+           }
          }
       },
       ncyBreadcrumb: {

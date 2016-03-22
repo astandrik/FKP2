@@ -1,9 +1,13 @@
 @import url('http://fonts.googleapis.com/css?family=Pacifico|Open+Sans:300,400,600');
+@basePadding: 1.2em;
 .accordionTree {
     * {
     box-sizing: border-box;
     font-family: 'Open Sans', sans-serif;
     font-weight: 300;
+  }
+  .defaultBorder {
+    border:  1px solid black;
   }
   ul.accordion > li:first-child {
     margin-top: 0;
@@ -11,6 +15,7 @@
   a {
     text-decoration: none;
     color: inherit;
+    min-height: 80px;
   }
   p {
     font-size: 1.1em;
@@ -34,25 +39,47 @@
   ul {
     list-style: none;
     padding: 0;
+    & > li {
+      border-top: none;
+      border-bottom: none;
+    }
+    & > li:first-child > a {
+      border-top: 1px solid #ccc;
+    }
+    & > li:last-child > a {
+      border-bottom: 1px solid  #ccc;
+    }
   }
   ul .inner {
-    padding-left: 1em;
     overflow: hidden;
     display: none;
   }
+  ul .inner span {
+    padding-left: 1 * @basePadding;
+  }
+  ul .inner .inner span {
+    padding-left: 2 * @basePadding;
+  }
+  ul .inner .inner .inner span {
+    padding-left: 3 * @basePadding;
+  }
+  ul .inner .inner .inner .inner span {
+    padding-left: 4 * @basePadding;
+  }
+  ul .inner .inner .inner .inner .inner span {
+    padding-left: 5 * @basePadding;
+  }
+  ul .inner .inner .inner .inner .inner .inner span {
+    padding-left: 6 * @basePadding;
+  }
   ul .inner.show {
     /*display: block;*/
-  }
-  ul li {
-    margin: .5em 0;
   }
   ul li a.toggle {
     width: 100%;
     background: #FFFFFF;
     color: black;
     padding: .75em;
-    border: 1px solid black;
-    border-radius: 0.15em;
     text-decoration: none;
     transition: background .3s ease;
   }
