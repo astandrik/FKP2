@@ -1,7 +1,6 @@
+'use strict';
 var accordionDirective = require('./accordionDirective.js');
 var accordionService = require('./accordionService.js');
-
-var currentModule = angular.module('accordion',[]);
-
+var currentModule = angular.module('accordion', []);
 currentModule.directive('accordionTree', accordionDirective);
-currentModule.service('$accordion', accordionService); 
+currentModule.service('$accordion', accordionService);

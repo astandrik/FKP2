@@ -8,6 +8,9 @@
 .breadcrumb {
   margin-bottom: 0!important;
 }
+.breadcrumb li:first-child {
+  pointer-events: none;
+}
 md-sidenav {
   max-width: 200px!important;
 }

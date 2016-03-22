@@ -33,7 +33,9 @@ gulp.task('vendorsjs', function () {
         'node_modules/angular-breadcrumb/release/angular-breadcrumb.min.js',
         'node_modules/angular-dialog-service/dist/dialogs.min.js',
         'node_modules/angular-sanitize/angular-sanitize.min.js',
-        'node_modules/angular-ui-grid/ui-grid.min.js'
+        'node_modules/angular-ui-grid/ui-grid.min.js',
+        'node_modules/chart.js/Chart.min.js',
+        'node_modules/angular-chart.js/dist/angular-chart.min.js'
       ])
         .pipe(concat('vendors.min.js'))
         .pipe(gulp.dest('dist/libs'));
@@ -49,7 +51,8 @@ gulp.task('vendorscss', function () {
         "node_modules/angular-ui-bootstrap/dist/ui-bootstrap-csp.css",
         'node_modules/angular-material/angular-material.css',
         'node_modules/angular-dialog-service/dist/dialogs.min.css',
-        'node_modules/angular-ui-grid/ui-grid.min.css'
+        'node_modules/angular-ui-grid/ui-grid.min.css',
+        'node_modules/angular-chart.js/dist/angular-chart.min.css'
       ])
         .pipe(concat('vendors.min.css'))
         .pipe(gulp.dest('dist/css'));
@@ -82,6 +85,9 @@ gulp.task('fixjs', function () {
         console.log(queue);
         queue.forEach(function (dir) {
             gulp.src(dir + '/*.js')
+            .pipe(babel({
+			presets: ['es2015']
+		}))
             .pipe(fixmyjs({
                 eqeqeq: false
             }))
