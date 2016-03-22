@@ -21,6 +21,10 @@ md-sidenav {
   font-family: 'Open Sans', sans-serif;
   font-weight: 300;
 }
+.accordionTree ul.accordion {
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+}
 .accordionTree .defaultBorder {
   border: 1px solid black;
 }
@@ -56,14 +60,14 @@ md-sidenav {
   padding: 0;
 }
 .accordionTree ul > li {
-  border-top: none;
-  border-bottom: none;
+  border-top: #eee 1px solid;
+  border-bottom: #eee 1px solid;
 }
 .accordionTree ul > li:first-child > a {
-  border-top: 1px solid #ccc;
+  border-top: 1px solid #666;
 }
 .accordionTree ul > li:last-child > a {
-  border-bottom: 1px solid  #ccc;
+  border-bottom: 1px solid  #666;
 }
 .accordionTree ul .inner {
   overflow: hidden;

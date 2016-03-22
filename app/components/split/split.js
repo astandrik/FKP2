@@ -15,7 +15,7 @@ function compile(templateElement, templateAttrs) {
   }
   left.attr('flex', leftSize);
   left.removeAttr('size');
-  right.replaceWith('<md-content flex layout-padding>' + rightContents + '</md-content>');
+  right.replaceWith('<md-content flex layout-padding style="overflow-x:hidden">' + rightContents + '</md-content>');
   right.attr('flex', rightSize);
   right.removeAttr('size');
   templateElement.attr('layout', 'row');
