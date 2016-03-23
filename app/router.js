@@ -70,6 +70,9 @@ angular.module('router', []).provider('$router', function () {
               case 'general':
                 return 'app/Project/card/sections/general.html';
                 break;
+              case 'results':
+                return 'app/Project/card/sections/results.html';
+                break;
               default:
                 return 'app/Project/card/sections/general.html';
               }
@@ -78,6 +81,12 @@ angular.module('router', []).provider('$router', function () {
               var state = $stateParams;
               switch (state.type) {
                 case 'general':
+                  $scope.sectionName = 'Общие сведения';
+                  break;
+                case 'results':
+                  $scope.sectionName = 'Результаты';
+                  break;
+                default:
                   $scope.sectionName = 'Общие сведения';
                   break;
               }

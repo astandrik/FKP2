@@ -1,16 +1,5 @@
 <div  flex="1" layout="column" flex class="projectCard">
   <span flex class="size">{{project.name}}</span>
-  <tab-strip flex data="tabstripData"></tab-strip>
+  <tab-strip flex data="tabstripData" id="tabstripId"></tab-strip>
   <div flex ui-view="projectSection"></div>
-<!--<uib-tabset  active="activeJustified" justified="true">
-  <uib-tab index="0" heading="Общие сведения" class="btn1">
-
-  </uib-tab>
-  <uib-tab index="1" heading="Результаты" class="btn1">
-    	<chart data="project.chart" id="2"></chart>
-  </uib-tab>
-  <uib-tab index="2" heading="Финансирование" class="btn1">Обновляется ...</uib-tab>
-  <uib-tab index="3" heading="Связанные проекты" class="btn1">Обновляется ...</uib-tab>
-  <uib-tab index="4" heading="События" class="btn1">Обновляется ...</uib-tab>
-</uib-tabset>-->
 </div>

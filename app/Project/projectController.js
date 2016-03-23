@@ -20,7 +20,11 @@ function ProjectController($scope, dialogs, $projectFactory, $state, $timeout) {
       state: 'projectSection',
       type: 'general'
     },
-    { name: 'Результаты' },
+    {
+      name: 'Результаты',
+      state: 'projectSection',
+      type: 'results'
+    },
     { name: 'Финансирование' },
     { name: 'Связанные проекты' },
     { name: 'События' }

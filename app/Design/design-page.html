@@ -122,9 +122,11 @@
 		<h2>Чарт</h2>
   	<chart data="chartData" id="2"></chart>
 	</div>
-	<div class="tabstripContrainer">
+	<div class="tabstripContrainer" layout="column">
 		<h2>Табстрип</h2>
-		<tab-strip data="tabstripData"></tab-strip>
+		<tab-strip flex data="tabstripData"></tab-strip>
+		<div style="min-height: 30px"></div>
+		<textarea flex style="min-height: 300px">{{tabDocs}}</textarea>
 	</div>
 
 </div>

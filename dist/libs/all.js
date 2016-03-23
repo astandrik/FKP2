@@ -18,6 +18,16 @@ function DesignController($scope, dialogs, $dataTableService, gridData, chartDat
   $scope.tableData = gridData;
   $scope.chartData = chartData;
   $scope.tabstripData = [{ name: 'Общие сведения' }, { name: 'Результаты' }, { name: 'Финансирование' }, { name: 'Связанные проекты' }, { name: 'События' }];
+  $scope.tabDocs = '\n\
+  Has params href, type, name and state. \n\
+  \n \
+  name: label for button - must have, \n \
+  \n \
+  If href present - it is a direct href, other params ignored \n \
+  state and type must present simultaneously: \n\
+    1) state - name of nested state to be redirected to\n\
+    2) type - parameter "type" that will be passed to that state\n\
+';
 }
 module.exports = DesignController;
 
@@ -98,7 +108,11 @@ function ProjectController($scope, dialogs, $projectFactory, $state, $timeout) {
     name: 'Общие сведения',
     state: 'projectSection',
     type: 'general'
-  }, { name: 'Результаты' }, { name: 'Финансирование' }, { name: 'Связанные проекты' }, { name: 'События' }];
+  }, {
+    name: 'Результаты',
+    state: 'projectSection',
+    type: 'results'
+  }, { name: 'Финансирование' }, { name: 'Связанные проекты' }, { name: 'События' }];
   $scope.$on('$viewContentLoaded', function (event) {
     $timeout(function () {
       if ($state.params.id) {
@@ -269,11 +283,11 @@ function CD() {
   return {
     scope: { data: '=' },
     restrict: 'E',
-    template: '<canvas id="bar" class="chart chart-bar"chart-data="data" chart-labels="labels"> chart-series="series" </canvas>',
+    template: '<canvas id="bar" class="chart chart-bar"chart-data="chartData" chart-labels="labels"> chart-series="series" </canvas>',
     controller: function controller($scope) {
       $scope.labels = $scope.data.labels;
       $scope.series = $scope.data.series;
-      $scope.data = $scope.data.data;
+      $scope.chartData = $scope.data.data;
     }
   };
 }
@@ -406,20 +420,31 @@ currentModule.directive('tabStrip', tabstripDirective); /*
 },{"./tabstripDirective.js":23}],23:[function(require,module,exports){
 'use strict';
 
+function reActivate(event) {
+  $('html').unbind('click', reActivate);
+  $('#' + event.data.scope.id + ' .btn-tab').removeClass('active');
+  $('#' + event.data.scope.id + ' [type="' + event.data.state.params.type + '"]').addClass('active');
+}
 function tabstripDirective($compile, $state) {
   return {
-    scope: { data: '=' },
+    scope: { data: '=', id: '@' },
     compile: function compile(templateElement, templateAttrs) {
       return function ($scope) {
         $scope.getHref = $scope.$parent.getHref;
         $scope.getCurrentState = $scope.$parent.getCurrentState;
+        $('html').bind('click', { state: $state, scope: $scope }, reActivate);
+
+        $scope.activateTab = function (e) {
+          $('#' + $scope.id + ' .btn-tab').removeClass('active');
+          $(e.target).addClass('active');
+        };
         var buttons = [];
-        var html = '<div class="btn-group" role="group"  layout="row">';
+        var html = '<div class="btn-group btn-group-tab" id="' + $scope.id + '" role="group"  layout="row">';
         $scope.data.forEach(function (btn) {
           if (btn.href) {
             buttons.push('<a class="btn btn-default btn-tab"  ng-href="' + btn.href + '" flex>' + btn.name + '</a>');
           } else if (btn.state && btn.type) {
-            buttons.push('<a class="btn btn-default btn-tab" ng-href="{{getHref(getCurrentEntityState(\'' + btn.state + '\'), {type: \'' + btn.type + '\'})}}" flex>' + btn.name + '</a>');
+            buttons.push('<a class="btn btn-default btn-tab" type="' + btn.type + '" ng-click="activateTab($event)" ng-href="{{getHref(getCurrentEntityState(\'' + btn.state + '\'), {type: \'' + btn.type + '\'})}}" flex>' + btn.name + '</a>');
           } else {
             buttons.push('<a class="btn btn-default btn-tab" flex>' + btn.name + '</a>');
           }
@@ -432,8 +457,11 @@ function tabstripDirective($compile, $state) {
         };
         var compiled = $compile(html)($scope);
         templateElement.replaceWith(compiled);
+        $('#' + $scope.id + ' .btn-tab').removeClass('active');
+        $('#' + $scope.id + ' [type="' + $state.params.type + '"]').addClass('active');
       };
-    }
+    },
+    controller: function controller() {}
   };
 }
 module.exports = tabstripDirective;
@@ -550,6 +578,9 @@ angular.module('router', []).provider('$router', function () {
                 case 'general':
                   return 'app/Project/card/sections/general.html';
                   break;
+                case 'results':
+                  return 'app/Project/card/sections/results.html';
+                  break;
                 default:
                   return 'app/Project/card/sections/general.html';
               }
@@ -560,7 +591,12 @@ angular.module('router', []).provider('$router', function () {
                 case 'general':
                   $scope.sectionName = 'Общие сведения';
                   break;
-
+                case 'results':
+                  $scope.sectionName = 'Результаты';
+                  break;
+                default:
+                  $scope.sectionName = 'Общие сведения';
+                  break;
               }
             }
           }

@@ -22,5 +22,15 @@ function DesignController($scope, dialogs, $dataTableService, gridData, chartDat
     { name: 'Связанные проекты' },
     { name: 'События' }
   ];
+  $scope.tabDocs = '\n\
+  Has params href, type, name and state. \n\
+  \n \
+  name: label for button - must have, \n \
+  \n \
+  If href present - it is a direct href, other params ignored \n \
+  state and type must present simultaneously: \n\
+    1) state - name of nested state to be redirected to\n\
+    2) type - parameter "type" that will be passed to that state\n\
+'
 }
 module.exports = DesignController;
