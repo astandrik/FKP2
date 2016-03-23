@@ -1,10 +1,12 @@
 'use strict';
 require('./accordion/accordion.js');
 require('./dataTable/dataTable.js');
+require('./tabstrip/tabstrip.js');
 require('./chart/chart.js');
 var currentModule = angular.module('components', [
   'accordion',
   'dataTable',
+  'tabstrip',
   'chart'
 ]);
 var accordionDirective = require('./accordion/accordion.js');

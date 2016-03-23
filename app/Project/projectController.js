@@ -14,6 +14,17 @@ function ProjectController($scope, dialogs, $projectFactory, $state, $timeout) {
       animation: true
     });
   };
+  $scope.tabstripData = [
+    {
+      name: 'Общие сведения',
+      state: 'projectSection',
+      type: 'general'
+    },
+    { name: 'Результаты' },
+    { name: 'Финансирование' },
+    { name: 'Связанные проекты' },
+    { name: 'События' }
+  ];
   $scope.$on('$viewContentLoaded', function (event) {
     $timeout(function () {
       if ($state.params.id) {

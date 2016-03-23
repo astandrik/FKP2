@@ -60,6 +60,31 @@ angular.module('router', []).provider('$router', function () {
           }
         },
         ncyBreadcrumb: { label: 'Проект {{project.code}}' }
+      },
+      'home.projectStructure.treeEntity.projectSection': {
+        url: '/tabSection?type',
+        views: {
+          'projectSection': {
+            templateUrl: function templateUrl($stateParams) {
+              switch ($stateParams.type) {
+              case 'general':
+                return 'app/Project/card/sections/general.html';
+                break;
+              default:
+                return 'app/Project/card/sections/general.html';
+              }
+            },
+            controller: function controller($stateParams, $scope) {
+              var state = $stateParams;
+              switch (state.type) {
+                case 'general':
+                  $scope.sectionName = 'Общие сведения';
+                  break;
+              }
+            }
+          }
+        },
+        ncyBreadcrumb: { label: '{{sectionName}}' }
       }
     };
     return this;

@@ -15,5 +15,12 @@ function DesignController($scope, dialogs, $dataTableService, gridData, chartDat
   };
   $scope.tableData = gridData;
   $scope.chartData = chartData;
+  $scope.tabstripData = [
+    { name: 'Общие сведения' },
+    { name: 'Результаты' },
+    { name: 'Финансирование' },
+    { name: 'Связанные проекты' },
+    { name: 'События' }
+  ];
 }
 module.exports = DesignController;

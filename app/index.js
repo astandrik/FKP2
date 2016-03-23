@@ -42,10 +42,12 @@ app.run(function ($rootScope, $state) {
     return $rootScope.getHref($rootScope.getCurrentState());
   };
   $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, options) {
+    //debugger;
   });
   $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
+    //debugger;
   });
   $rootScope.$on('$stateNotFound', function (event, unfoundState, fromState, fromParams) {
-    s;
+    //debugger;
   });
 });

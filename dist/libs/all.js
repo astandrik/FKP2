@@ -17,6 +17,7 @@ function DesignController($scope, dialogs, $dataTableService, gridData, chartDat
   };
   $scope.tableData = gridData;
   $scope.chartData = chartData;
+  $scope.tabstripData = [{ name: 'Общие сведения' }, { name: 'Результаты' }, { name: 'Финансирование' }, { name: 'Связанные проекты' }, { name: 'События' }];
 }
 module.exports = DesignController;
 
@@ -93,6 +94,11 @@ function ProjectController($scope, dialogs, $projectFactory, $state, $timeout) {
       animation: true
     });
   };
+  $scope.tabstripData = [{
+    name: 'Общие сведения',
+    state: 'projectSection',
+    type: 'general'
+  }, { name: 'Результаты' }, { name: 'Финансирование' }, { name: 'Связанные проекты' }, { name: 'События' }];
   $scope.$on('$viewContentLoaded', function (event) {
     $timeout(function () {
       if ($state.params.id) {
@@ -290,8 +296,9 @@ module.exports = CS;
 
 require('./accordion/accordion.js');
 require('./dataTable/dataTable.js');
+require('./tabstrip/tabstrip.js');
 require('./chart/chart.js');
-var currentModule = angular.module('components', ['accordion', 'dataTable', 'chart']);
+var currentModule = angular.module('components', ['accordion', 'dataTable', 'tabstrip', 'chart']);
 var accordionDirective = require('./accordion/accordion.js');
 var popupController = require('./popup/popupController.js');
 var splitDirective = require('./split/split.js');
@@ -300,7 +307,7 @@ currentModule.controller('popupController', popupController);
 currentModule.directive('split', splitDirective);
 currentModule.directive('projectCard', projectCard);
 
-},{"../Project/card/projectCardDirective.js":4,"./accordion/accordion.js":9,"./chart/chart.js":13,"./dataTable/dataTable.js":17,"./popup/popupController.js":20,"./split/split.js":21}],17:[function(require,module,exports){
+},{"../Project/card/projectCardDirective.js":4,"./accordion/accordion.js":9,"./chart/chart.js":13,"./dataTable/dataTable.js":17,"./popup/popupController.js":20,"./split/split.js":21,"./tabstrip/tabstrip.js":22}],17:[function(require,module,exports){
 'use strict';
 
 var dataTableDirective = require('./dataTableDirective.js');
@@ -386,6 +393,54 @@ module.exports = function () {
 },{}],22:[function(require,module,exports){
 'use strict';
 
+var tabstripDirective = require('./tabstripDirective.js');
+var currentModule = angular.module('tabstrip', []);
+currentModule.directive('tabStrip', tabstripDirective); /*
+                                                        Has params href, type and state.
+                                                        If href present - it is a direct href, other params ignored
+                                                        state and type must present simultaneously:
+                                                        1) state - name of nested state to be redirected to
+                                                        2) type - parameter "type" that will be passed to that state
+                                                        */
+
+},{"./tabstripDirective.js":23}],23:[function(require,module,exports){
+'use strict';
+
+function tabstripDirective($compile, $state) {
+  return {
+    scope: { data: '=' },
+    compile: function compile(templateElement, templateAttrs) {
+      return function ($scope) {
+        $scope.getHref = $scope.$parent.getHref;
+        $scope.getCurrentState = $scope.$parent.getCurrentState;
+        var buttons = [];
+        var html = '<div class="btn-group" role="group"  layout="row">';
+        $scope.data.forEach(function (btn) {
+          if (btn.href) {
+            buttons.push('<a class="btn btn-default btn-tab"  ng-href="' + btn.href + '" flex>' + btn.name + '</a>');
+          } else if (btn.state && btn.type) {
+            buttons.push('<a class="btn btn-default btn-tab" ng-href="{{getHref(getCurrentEntityState(\'' + btn.state + '\'), {type: \'' + btn.type + '\'})}}" flex>' + btn.name + '</a>');
+          } else {
+            buttons.push('<a class="btn btn-default btn-tab" flex>' + btn.name + '</a>');
+          }
+        });
+        html += buttons.join('');
+        html += '</div>';
+        $scope.getCurrentEntityState = function (stateName) {
+          var state = $scope.getCurrentState();
+          return state.indexOf(stateName) > -1 ? state : state + '.' + stateName;
+        };
+        var compiled = $compile(html)($scope);
+        templateElement.replaceWith(compiled);
+      };
+    }
+  };
+}
+module.exports = tabstripDirective;
+
+},{}],24:[function(require,module,exports){
+'use strict';
+
 require('./router.js');
 require('./Project/project.js');
 var layout = require('./Layout/layout.js');
@@ -410,14 +465,18 @@ app.run(function ($rootScope, $state) {
   $rootScope.getCurrentHref = function () {
     return $rootScope.getHref($rootScope.getCurrentState());
   };
-  $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, options) {});
-  $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {});
+  $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, options) {
+    //debugger;
+  });
+  $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
+    //debugger;
+  });
   $rootScope.$on('$stateNotFound', function (event, unfoundState, fromState, fromParams) {
-    s;
+    //debugger;
   });
 });
 
-},{"./Layout/layout.js":2,"./Project/project.js":5,"./components/Icons/icons.js":8,"./components/components.js":16,"./router.js":23}],23:[function(require,module,exports){
+},{"./Layout/layout.js":2,"./Project/project.js":5,"./components/Icons/icons.js":8,"./components/components.js":16,"./router.js":25}],25:[function(require,module,exports){
 'use strict';
 
 var DesignController = require('./Design/designController');
@@ -481,13 +540,39 @@ angular.module('router', []).provider('$router', function () {
           }
         },
         ncyBreadcrumb: { label: 'Проект {{project.code}}' }
+      },
+      'home.projectStructure.treeEntity.projectSection': {
+        url: '/tabSection?type',
+        views: {
+          'projectSection': {
+            templateUrl: function templateUrl($stateParams) {
+              switch ($stateParams.type) {
+                case 'general':
+                  return 'app/Project/card/sections/general.html';
+                  break;
+                default:
+                  return 'app/Project/card/sections/general.html';
+              }
+            },
+            controller: function controller($stateParams, $scope) {
+              var state = $stateParams;
+              switch (state.type) {
+                case 'general':
+                  $scope.sectionName = 'Общие сведения';
+                  break;
+
+              }
+            }
+          }
+        },
+        ncyBreadcrumb: { label: '{{sectionName}}' }
       }
     };
     return this;
   }();
 });
 
-},{"./Design/designController":1}]},{},[22])
+},{"./Design/designController":1}]},{},[24])
 
 
 //# sourceMappingURL=all.js.map

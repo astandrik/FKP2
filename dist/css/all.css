@@ -1,3 +1,29 @@
+.btn-tab {
+  padding: 0!important;
+  height: 30px;
+  display: -webkit-box!important;
+  display: -webkit-flex!important;
+  display: -ms-flexbox!important;
+  display: flex!important;
+  -webkit-box-orient: horizontal!important;
+  -webkit-box-direction: normal!important;
+  -webkit-flex-direction: row!important;
+      -ms-flex-direction: row!important;
+          flex-direction: row!important;
+  -webkit-box-pack: center!important;
+  -webkit-justify-content: center!important;
+      -ms-flex-pack: center!important;
+          justify-content: center!important;
+  -webkit-box-align: center!important;
+  -webkit-align-items: center!important;
+      -ms-flex-align: center!important;
+          align-items: center!important;
+}
+.btn-tab a {
+  color: black!important;
+  text-decoration: none!important;
+}
+
 .space-header-name {
   padding: 3% 0 0 12.3%;
 }
@@ -63,10 +89,10 @@ md-sidenav {
   border-top: #eee 1px solid;
   border-bottom: #eee 1px solid;
 }
-.accordionTree ul > li:first-child > a {
+.accordionTree ul > li:first-child {
   border-top: 1px solid #666;
 }
-.accordionTree ul > li:last-child > a {
+.accordionTree ul > li:last-child {
   border-bottom: 1px solid  #666;
 }
 .accordionTree ul .inner {
