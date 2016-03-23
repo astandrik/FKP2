@@ -421,18 +421,21 @@ currentModule.directive('tabStrip', tabstripDirective); /*
 'use strict';
 
 function reActivate(event) {
-  $('html').unbind('click', reActivate);
-  $('#' + event.data.scope.id + ' .btn-tab').removeClass('active');
-  $('#' + event.data.scope.id + ' [type="' + event.data.state.params.type + '"]').addClass('active');
+  event.data.timeout(function () {
+    $('html').unbind('click', reActivate);
+    $('#' + event.data.scope.id + ' .btn-tab').removeClass('active');
+    $('#' + event.data.scope.id + ' [type="' + event.data.state.params.type + '"]').addClass('active');
+    $('html').bind('click', { state: event.data.state, scope: event.data.scope, timeout: event.data.timeout }, reActivate);
+  });
 }
-function tabstripDirective($compile, $state) {
+function tabstripDirective($compile, $state, $timeout) {
   return {
     scope: { data: '=', id: '@' },
     compile: function compile(templateElement, templateAttrs) {
       return function ($scope) {
         $scope.getHref = $scope.$parent.getHref;
         $scope.getCurrentState = $scope.$parent.getCurrentState;
-        $('html').bind('click', { state: $state, scope: $scope }, reActivate);
+        $('html').bind('click', { state: $state, scope: $scope, timeout: $timeout }, reActivate);
 
         $scope.activateTab = function (e) {
           $('#' + $scope.id + ' .btn-tab').removeClass('active');
