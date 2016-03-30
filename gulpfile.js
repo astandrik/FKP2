@@ -35,11 +35,14 @@ gulp.task('vendorsjs', function () {
         'node_modules/angular-sanitize/angular-sanitize.min.js',
         'node_modules/angular-ui-grid/ui-grid.min.js',
         'node_modules/chart.js/Chart.min.js',
-        'node_modules/angular-chart.js/dist/angular-chart.min.js'
+        'node_modules/angular-chart.js/dist/angular-chart.min.js',
+        'node_modules/angular-i18n/angular-locale_ru.js',
+        'external/timeLine/timeline-min.js'
       ])
         .pipe(concat('vendors.min.js'))
         .pipe(gulp.dest('dist/libs'));
 });
+
 
 gulp.task('vendorscss', function () {
     return gulp.src(
@@ -52,7 +55,11 @@ gulp.task('vendorscss', function () {
         'node_modules/angular-material/angular-material.css',
         'node_modules/angular-dialog-service/dist/dialogs.min.css',
         'node_modules/angular-ui-grid/ui-grid.min.css',
-        'node_modules/angular-chart.js/dist/angular-chart.min.css'
+        'node_modules/angular-chart.js/dist/angular-chart.min.css',
+        'node_modules/angular-bootstrap-calendar/dist/css/angular-bootstrap-calendar.min.css',
+        'external/timeLine/timeline.css',
+        'external/timeLine/timeline-theme.css'
+
       ])
         .pipe(concat('vendors.min.css'))
         .pipe(gulp.dest('dist/css'));
@@ -104,9 +111,10 @@ gulp.task('validate', function() {
 });
 
 gulp.task('fonts', function() {
-  return gulp.src("node_modules/**/*.{ttf,otf,woff}")
+  return gulp.src("node_modules/**/*.{ttf,otf,woff, woff2}")
     .pipe(flatten())
-    .pipe(gulp.dest('dist/css'));
+    .pipe(gulp.dest('dist/css'))
+    .pipe(gulp.dest('dist/fonts'));
 });
 
 gulp.task('browserify', function() {

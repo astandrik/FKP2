@@ -118,15 +118,255 @@
   	<c-data-table data="tableData" id="1"></c-data-table>
 	</div>
 
-	<div class="chartContainer" flex="1">
-		<h2>Чарт</h2>
-  	<chart data="chartData" id="2"></chart>
+	<div class="chartsContainer" flex="1">
+		<h2>Бар чарт</h2>
+  	<bar-chart data="barChartData" id="2"></bar-chart>
 	</div>
-	<div class="tabstripContrainer" layout="column">
+
+	<div class="chartsContainer" flex="1">
+		<h2>Пай чарт</h2>
+		<pie-chart data="pieChartData" id="3"></pie-chart>
+	</div>
+
+	<div class="tabstripContrainer" layout="column" style="min-height:500px">
 		<h2>Табстрип</h2>
 		<tab-strip flex data="tabstripData"></tab-strip>
 		<div style="min-height: 30px"></div>
 		<textarea flex style="min-height: 300px">{{tabDocs}}</textarea>
 	</div>
+
+	<div ng-controller="KitchenSinkCtrl as vm">
+		<h2>Календарь</h2>
+	  <h2 class="text-center">{{ vm.calendarTitle }}</h2>
+
+	  <div class="row">
+
+	    <div class="col-md-6 text-center">
+	      <div class="btn-group">
+
+	        <button
+	          class="btn btn-primary"
+	          mwl-date-modifier
+	          date="vm.viewDate"
+	          decrement="vm.calendarView">
+	          Предыдущий
+	        </button>
+	        <button
+	          class="btn btn-default"
+	          mwl-date-modifier
+	          date="vm.viewDate"
+	          set-to-today>
+	          Текущий
+	        </button>
+	        <button
+	          class="btn btn-primary"
+	          mwl-date-modifier
+	          date="vm.viewDate"
+	          increment="vm.calendarView">
+	          Следующий
+	        </button>
+	      </div>
+	    </div>
+
+	    <br class="visible-xs visible-sm">
+
+	    <div class="col-md-6 text-center">
+	      <div class="btn-group">
+	        <label class="btn btn-primary" ng-model="vm.calendarView" uib-btn-radio="'year'">Год</label>
+	        <label class="btn btn-primary" ng-model="vm.calendarView" uib-btn-radio="'month'">Месяц</label>
+	        <label class="btn btn-primary" ng-model="vm.calendarView" uib-btn-radio="'week'">Неделя</label>
+	        <label class="btn btn-primary" ng-model="vm.calendarView" uib-btn-radio="'day'">День</label>
+	      </div>
+	    </div>
+
+	  </div>
+
+	  <br>
+
+	  <mwl-calendar
+	    events="vm.events"
+	    view="vm.calendarView"
+	    view-title="vm.calendarTitle"
+	    view-date="vm.viewDate"
+	    on-event-click="vm.eventClicked(calendarEvent)"
+	    on-event-times-changed="vm.eventTimesChanged(calendarEvent); calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd"
+	    edit-event-html="'<i class=\'glyphicon glyphicon-pencil\'></i>'"
+	    delete-event-html="'<i class=\'glyphicon glyphicon-remove\'></i>'"
+	    on-edit-event-click="vm.eventEdited(calendarEvent)"
+	    on-delete-event-click="vm.eventDeleted(calendarEvent)"
+	    cell-is-open="vm.isCellOpen"
+	    day-view-start="06:00"
+	    day-view-end="22:00"
+	    day-view-split="30"
+	    cell-modifier="vm.modifyCell(calendarCell)">
+	  </mwl-calendar>
+
+	  <br><br><br>
+
+	  <h3 id="event-editor">
+	    Редактор событий
+	    <button
+	      class="btn btn-primary pull-right"
+	      ng-click="vm.events.push({title: 'New event', type: 'important', draggable: true, resizable: true})">
+	      Добавить
+	    </button>
+	    <div class="clearfix"></div>
+	  </h3>
+
+	  <table class="table table-bordered">
+
+	    <thead>
+	      <tr>
+	        <th>Название</th>
+	        <th>Тип</th>
+	        <th>Начало</th>
+	        <th>Окончание</th>
+	        <th>Отменить</th>
+	      </tr>
+	    </thead>
+
+	    <tbody>
+	      <tr ng-repeat="event in vm.events track by $index">
+	        <td>
+	          <input
+	            type="text"
+	            class="form-control"
+	            ng-model="event.title">
+	        </td>
+	        <td>
+	          <select ng-model="event.type" class="form-control">
+	            <option value="important">Важное</option>
+	            <option value="warning">Ожидаемое</option>
+	            <option value="info">Информативное</option>
+	            <option value="inverse">Неоднозначное</option>
+	            <option value="success">Успешное</option>
+	            <option value="special">Особенное</option>
+	          </select>
+	        </td>
+	        <td>
+	          <p class="input-group" style="max-width: 250px">
+	            <input
+	              type="text"
+	              class="form-control"
+	              readonly
+	              uib-datepicker-popup="dd MMMM yyyy"
+	              ng-model="event.startsAt"
+	              is-open="event.startOpen"
+	              close-text="Close" >
+	            <span class="input-group-btn">
+	              <button
+	                type="button"
+	                class="btn btn-default"
+	                ng-click="vm.toggle($event, 'startOpen', event)">
+	                <i class="glyphicon glyphicon-calendar"></i>
+	              </button>
+	            </span>
+	          </p>
+	          <uib-timepicker
+	            ng-model="event.startsAt"
+	            hour-step="1"
+	            minute-step="15"
+	            show-meridian="true">
+	          </uib-timepicker>
+	        </td>
+	        <td>
+	          <p class="input-group" style="max-width: 250px">
+	            <input
+	              type="text"
+	              class="form-control"
+	              readonly
+	              uib-datepicker-popup="dd MMMM yyyy"
+	              ng-model="event.endsAt"
+	              is-open="event.endOpen"
+	              close-text="Close">
+	            <span class="input-group-btn">
+	              <button
+	                type="button"
+	                class="btn btn-default"
+	                ng-click="vm.toggle($event, 'endOpen', event)">
+	                <i class="glyphicon glyphicon-calendar"></i>
+	              </button>
+	            </span>
+	          </p>
+	          <uib-timepicker
+	            ng-model="event.endsAt"
+	            hour-step="1"
+	            minute-step="15"
+	            show-meridian="true">
+	          </uib-timepicker>
+	        </td>
+	        <td>
+	          <button
+	            class="btn btn-danger"
+	            ng-click="vm.events.splice($index, 1)">
+	            Удалить
+	          </button>
+	        </td>
+	      </tr>
+	    </tbody>
+
+	  </table>
+	</div>
+
+<h2>Date picker</h2>
+
+<style>
+  .full button span {
+    background-color: limegreen;
+    border-radius: 32px;
+    color: black;
+  }
+  .partially button span {
+    background-color: orange;
+    border-radius: 32px;
+    color: black;
+  }
+</style>
+<div ng-controller="DatepickerDemoCtrl">
+    <pre>Выбрать дату: <em>{{dt | date:'fullDate' }}</em></pre>
+
+    <h4>Popup</h4>
+    <div class="row">
+      <div class="col-md-6">
+        <p class="input-group">
+          <input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dt" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+          </span>
+        </p>
+      </div>
+
+      <div class="col-md-6">
+        <p class="input-group">
+          <input type="text" class="form-control" uib-datepicker-popup ng-model="dt" is-open="popup2.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
+          </span>
+        </p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <label>Формат:<span class="muted-text"></span></label> <select class="form-control" ng-model="format" ng-options="f for f in formats"><option></option></select>
+      </div>
+    </div>
+
+    <hr />
+    <button type="button" class="btn btn-sm btn-info" ng-click="today()">Сегодня</button>
+    <button type="button" class="btn btn-sm btn-default" ng-click="setDate(2009, 7, 24)">2009-08-24</button>
+    <button type="button" class="btn btn-sm btn-danger" ng-click="clear()">Очистить</button>
+    <button type="button" class="btn btn-sm btn-default" ng-click="toggleMin()" uib-tooltip="After today restriction">Мин дата</button>
+</div>
+
+
+<div class="timeLineContainer" flex="1">
+	<h2>Таймлайн</h2>
+	<time-line-d id="4"></time-line-d>
+</div>
+
+<div flex="1">
+	<div id="mytimeline"></div>
+</div>
+
 
 </div>

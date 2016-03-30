@@ -21,8 +21,13 @@ angular.module('router', []).provider('$router', function () {
                   return data.data;
                 });
               },
-              chartData: function chartData($chartService) {
+              chartData: function ($chartService) {
                 return $chartService.getData('testData/chart.json').then(function (data) {
+                  return data.data;
+                });
+              },
+              pieData: function ($chartService1) {
+                return $chartService1.getData('testData/pie.json').then(function (data) {
                   return data.data;
                 });
               }

@@ -6,7 +6,6 @@ var components = require('./components/components.js');
 var icons = require('./components/Icons/icons.js');
 var app = angular.module('app', [
   'ui.router',
-  'ui.bootstrap',
   'ngMaterial',
   'ngMdIcons',
   'ncy-angular-breadcrumb',
@@ -15,7 +14,9 @@ var app = angular.module('app', [
   'layout',
   'components',
   'router',
-  'project'
+  'project',
+require('angular-bootstrap-calendar'),
+require('angular-ui-bootstrap')
 ]);
 app.config([
   '$urlRouterProvider',
