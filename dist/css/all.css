@@ -228,6 +228,15 @@ tab-strip {
 }
 #timeline .timeline-badge {
   color: #fff;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
   width: 50px;
   height: 50px;
   font-size: 1.2em;
@@ -287,6 +296,8 @@ tab-strip {
 }
 #timeline .timeline-movement .timeline-item {
   padding: 20px 0;
+  float: left;
+  clear: both;
 }
 #timeline .timeline-movement .timeline-item .timeline-panel {
   border: 1px solid #d4d4d4;
@@ -318,6 +329,22 @@ tab-strip {
 #timeline .timeline-movement .timeline-item .timeline-panel.debits .timeline-panel-ul span.importo {
   color: #e2001a;
   font-size: 1.3em;
+}
+
+#sidebar-left .md-whiteframe-z2 {
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
+}
+#sidebar-left .layout-padding > * {
+  padding: 6px;
+}
+@media screen and (min-width: 600px) md-sidenav {
+  #sidebar-left {
+    max-width: 270px;
+  }
+}
+#sidebar-left md-toolbar:not(.md-menu-toolbar) {
+  background-color: white;
+  color: black;
 }
 
 .projectCard .size {
@@ -356,20 +383,4 @@ tab-strip {
 }
 .projectCard .space-info-name {
   padding: 2% 0 0 10%;
-}
-
-#sidebar-left .md-whiteframe-z2 {
-  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
-}
-#sidebar-left .layout-padding > * {
-  padding: 6px;
-}
-@media screen and (min-width: 600px) md-sidenav {
-  #sidebar-left {
-    max-width: 270px;
-  }
-}
-#sidebar-left md-toolbar:not(.md-menu-toolbar) {
-  background-color: white;
-  color: black;
 }

@@ -22,97 +22,6 @@
 		</split>
 	</div>
 
-<!--
-<div flex="1" style="max-height:600px;min-height:600px">
-<project-card ></project-card>
-</div>
-
-<div flex="1" style="max-height:600px;min-height:600px">
-<div  flex="1" layout="column"  class="projectCard">
-	<span class="size"> КА Арктика-М (Карточка КК) </span>
-
-		<uib-tabset  active="activeJustified" justified="true">
-		  <uib-tab index="5" heading="Общие сведения" class="btn1">
-
-		    <md-content flex layout-padding>
-		      <div layout="row">
-		        <div flex="20" class="space-header-name">Направление </div>
-		        <div flex="80" class="space-info-name">	ОКР </div>
-		      </div>
-		      <div layout="row">
-		        <div flex="20" class="space-header-name">Заказчики </div>
-		        <div flex="80" class="space-info-name">	<a ng-click="create_popup()"> МЧС России, </a> Минтранс России,Росгидромет  </div>
-		      </div>
-		      <div layout="row">
-		        <div flex="20" class="space-header-name">Головной исполнитель </div>
-		        <div flex="80" class="space-info-name">ИСС</div>
-		      </div>
-					<div layout="row">
-		        <div flex="20" class="space-header-name">Оператор </div>
-		        <div flex="80" class="space-info-name">	Спутниковая система "Голд" </div>
-		      </div>
-		    </md-content>
-		  </uib-tab>
-		  <uib-tab index="6" heading="Описание" class="btn1">
-
-				<md-content flex layout-padding>
-					<div layout="row">
-						<div flex="20" class="space-header-name">Характеристики изделия</div>
-						<div flex="80" class="space-info-name"></div>
-					</div>
-					<div layout="row">
-						<div flex="20" class="space-header-name">Наземная инфраструктура </div>
-						<div flex="80" class="space-info-name"></div>
-					</div>
-					<div layout="row">
-						<div flex="20" class="space-header-name">Количество стартов </div>
-						<div flex="80" class="space-info-name"></div>
-					</div>
-					<div layout="row">
-						<div flex="20" class="space-header-name">Документы</div>
-						<div flex="80" class="space-info-name"></div>
-					</div>
-				</md-content>
-			</uib-tab>
-
-		  <uib-tab index="7" heading="Связанные проекты" class="btn1">Обновляется ...</uib-tab>
-		</uib-tabset>
-	</div>
-	</div>
-
-	<div flex="1" style="max-height:600px;min-height:600px">
-	<div  flex="1" layout="column"  class="projectCard">
-		<span class="size"> МЧС России (Карточка заказчика) </span>
-
-			<uib-tabset  active="activeJustified" justified="true">
-			  <uib-tab index="8" heading="Общие сведения" class="btn1">
-						<div flex="1" class="space-header-name"> Описание: </div>
-			  </uib-tab>
-			  <uib-tab index="9" heading="Контактные данные" class="btn1">
-					<md-content flex layout-padding>
-			      <div layout="row">
-			        <div flex="20" class="space-header-name">Ответственное лицо </div>
-			        <div flex="80" class="space-info-name">	Иванов И.И. </div>
-			      </div>
-			      <div layout="row">
-			        <div flex="20" class="space-header-name">Телефон </div>
-			        <div flex="80" class="space-info-name">+7(495)-222-33-22</div>
-			      </div>
-			      <div layout="row">
-			        <div flex="20" class="space-header-name">Электронная почта </div>
-			        <div flex="80" class="space-info-name">mchs@gmail.com</div>
-			      </div>
-						<div layout="row">
-			        <div flex="20" class="space-header-name">Адрес</div>
-			        <div flex="80" class="space-info-name">	г.Москва, ул.Тверская, 59 </div>
-			      </div>
-			    </md-content>
-				</uib-tab>
-				<uib-tab index="10" heading="Связанные проекты" class="btn1">Обновляется ...</uib-tab>
-			</uib-tabset>
-
-		</div>
-	</div>-->
 	<div class="dataTableContainer" flex="1">
 		<h2>Таблица</h2>
   	<c-data-table data="tableData" id="1"></c-data-table>
@@ -135,177 +44,9 @@
 		<textarea flex style="min-height: 300px">{{tabDocs}}</textarea>
 	</div>
 
-	<div ng-controller="KitchenSinkCtrl as vm">
-		<h2>Календарь</h2>
-	  <h2 class="text-center">{{ vm.calendarTitle }}</h2>
-
-	  <div class="row">
-
-	    <div class="col-md-6 text-center">
-	      <div class="btn-group">
-
-	        <button
-	          class="btn btn-primary"
-	          mwl-date-modifier
-	          date="vm.viewDate"
-	          decrement="vm.calendarView">
-	          Предыдущий
-	        </button>
-	        <button
-	          class="btn btn-default"
-	          mwl-date-modifier
-	          date="vm.viewDate"
-	          set-to-today>
-	          Текущий
-	        </button>
-	        <button
-	          class="btn btn-primary"
-	          mwl-date-modifier
-	          date="vm.viewDate"
-	          increment="vm.calendarView">
-	          Следующий
-	        </button>
-	      </div>
-	    </div>
-
-	    <br class="visible-xs visible-sm">
-
-	    <div class="col-md-6 text-center">
-	      <div class="btn-group">
-	        <label class="btn btn-primary" ng-model="vm.calendarView" uib-btn-radio="'year'">Год</label>
-	        <label class="btn btn-primary" ng-model="vm.calendarView" uib-btn-radio="'month'">Месяц</label>
-	        <label class="btn btn-primary" ng-model="vm.calendarView" uib-btn-radio="'week'">Неделя</label>
-	        <label class="btn btn-primary" ng-model="vm.calendarView" uib-btn-radio="'day'">День</label>
-	      </div>
-	    </div>
-
-	  </div>
-
-	  <br>
-
-	  <mwl-calendar
-	    events="vm.events"
-	    view="vm.calendarView"
-	    view-title="vm.calendarTitle"
-	    view-date="vm.viewDate"
-	    on-event-click="vm.eventClicked(calendarEvent)"
-	    on-event-times-changed="vm.eventTimesChanged(calendarEvent); calendarEvent.startsAt = calendarNewEventStart; calendarEvent.endsAt = calendarNewEventEnd"
-	    edit-event-html="'<i class=\'glyphicon glyphicon-pencil\'></i>'"
-	    delete-event-html="'<i class=\'glyphicon glyphicon-remove\'></i>'"
-	    on-edit-event-click="vm.eventEdited(calendarEvent)"
-	    on-delete-event-click="vm.eventDeleted(calendarEvent)"
-	    cell-is-open="vm.isCellOpen"
-	    day-view-start="06:00"
-	    day-view-end="22:00"
-	    day-view-split="30"
-	    cell-modifier="vm.modifyCell(calendarCell)">
-	  </mwl-calendar>
-
-	  <br><br><br>
-
-	  <h3 id="event-editor">
-	    Редактор событий
-	    <button
-	      class="btn btn-primary pull-right"
-	      ng-click="vm.events.push({title: 'New event', type: 'important', draggable: true, resizable: true})">
-	      Добавить
-	    </button>
-	    <div class="clearfix"></div>
-	  </h3>
-
-	  <table class="table table-bordered">
-
-	    <thead>
-	      <tr>
-	        <th>Название</th>
-	        <th>Тип</th>
-	        <th>Начало</th>
-	        <th>Окончание</th>
-	        <th>Отменить</th>
-	      </tr>
-	    </thead>
-
-	    <tbody>
-	      <tr ng-repeat="event in vm.events track by $index">
-	        <td>
-	          <input
-	            type="text"
-	            class="form-control"
-	            ng-model="event.title">
-	        </td>
-	        <td>
-	          <select ng-model="event.type" class="form-control">
-	            <option value="important">Важное</option>
-	            <option value="warning">Ожидаемое</option>
-	            <option value="info">Информативное</option>
-	            <option value="inverse">Неоднозначное</option>
-	            <option value="success">Успешное</option>
-	            <option value="special">Особенное</option>
-	          </select>
-	        </td>
-	        <td>
-	          <p class="input-group" style="max-width: 250px">
-	            <input
-	              type="text"
-	              class="form-control"
-	              readonly
-	              uib-datepicker-popup="dd MMMM yyyy"
-	              ng-model="event.startsAt"
-	              is-open="event.startOpen"
-	              close-text="Close" >
-	            <span class="input-group-btn">
-	              <button
-	                type="button"
-	                class="btn btn-default"
-	                ng-click="vm.toggle($event, 'startOpen', event)">
-	                <i class="glyphicon glyphicon-calendar"></i>
-	              </button>
-	            </span>
-	          </p>
-	          <uib-timepicker
-	            ng-model="event.startsAt"
-	            hour-step="1"
-	            minute-step="15"
-	            show-meridian="true">
-	          </uib-timepicker>
-	        </td>
-	        <td>
-	          <p class="input-group" style="max-width: 250px">
-	            <input
-	              type="text"
-	              class="form-control"
-	              readonly
-	              uib-datepicker-popup="dd MMMM yyyy"
-	              ng-model="event.endsAt"
-	              is-open="event.endOpen"
-	              close-text="Close">
-	            <span class="input-group-btn">
-	              <button
-	                type="button"
-	                class="btn btn-default"
-	                ng-click="vm.toggle($event, 'endOpen', event)">
-	                <i class="glyphicon glyphicon-calendar"></i>
-	              </button>
-	            </span>
-	          </p>
-	          <uib-timepicker
-	            ng-model="event.endsAt"
-	            hour-step="1"
-	            minute-step="15"
-	            show-meridian="true">
-	          </uib-timepicker>
-	        </td>
-	        <td>
-	          <button
-	            class="btn btn-danger"
-	            ng-click="vm.events.splice($index, 1)">
-	            Удалить
-	          </button>
-	        </td>
-	      </tr>
-	    </tbody>
-
-	  </table>
+	<div>
+				<h2>Календарь</h2>
+		<calendar data='calendarData'></calendar>
 	</div>
 
 <h2>Date picker</h2>
@@ -360,11 +101,12 @@
 
 
 <div class="timeLineContainer" flex="1">
-	<h2>Таймлайн</h2>
-	<time-line-d id="4"></time-line-d>
+	<h2>Таймлайн вертикальный</h2>
+	<time-line-vertical data="timeLineVerticalData" id="4"></time-line-vertical>
 </div>
 
 <div flex="1">
+	<h2>Таймлайн горизонтальный</h2>
 	<div id="mytimeline"></div>
 </div>
 

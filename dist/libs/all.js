@@ -1,7 +1,7 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
-function DesignController($timeout, $scope, dialogs, $dataTableService, gridData, chartData, pieData) {
+function DesignController($timeout, $scope, dialogs, $dataTableService, gridData, chartData, pieData, timeLineVerticalData) {
   $scope.treeData = {};
   $timeout(function () {
     var data = [];
@@ -40,6 +40,7 @@ function DesignController($timeout, $scope, dialogs, $dataTableService, gridData
   $scope.tableData = gridData;
   $scope.barChartData = chartData;
   $scope.pieChartData = pieData;
+  $scope.timeLineVerticalData = timeLineVerticalData;
   $scope.tabstripData = [{ name: 'Общие сведения' }, { name: 'Результаты' }, { name: 'Финансирование' }, { name: 'Связанные проекты' }, { name: 'События' }];
   $scope.tabDocs = '\n\
   Has params href, type, name and state. \n\
@@ -81,7 +82,9 @@ module.exports = function () {
       }, {
         name: 'Космические комплексы',
         icon: 'brightness_5'
-      }, { name: 'Финансирование' }, { name: 'Заказчики' }, { name: 'Планирование' }, { name: 'Документация' }, { name: 'События' }];
+      }, { name: 'Финансирование' }, { name: 'Заказчики' }, { name: 'Планирование' }, { name: 'Документация' }, { name: 'События',
+        icon: 'event',
+        state: 'home.events' }];
       $scope.directories = directories;
     }
   };
@@ -294,6 +297,63 @@ module.exports = {
 },{}],13:[function(require,module,exports){
 'use strict';
 
+var calendarDirective = require('./calendarDirective.js');
+
+var currentModule = angular.module('calendar', [require('angular-bootstrap-calendar')]);
+
+currentModule.directive('calendar', calendarDirective);
+
+},{"./calendarDirective.js":14,"angular-bootstrap-calendar":31}],14:[function(require,module,exports){
+'use strict';
+
+function C() {
+        return {
+                restrict: 'E',
+                scope: { data: '=' },
+                templateUrl: 'app/components/calendar/calendar.html',
+                controller: function controller($scope) {
+                        var calendarData = $scope.data;
+                        var moment = require('moment');
+                        $scope.vm = {};
+
+                        require('../../../node_modules/moment/locale/ru');
+
+                        $scope.vm.calendarView = 'month';
+                        $scope.vm.viewDate = new Date();
+                        $scope.vm.events = [];
+
+                        $scope.vm.isCellOpen = true;
+
+                        $scope.vm.eventClicked = function (event) {
+                                alert.show('Clicked', event);
+                        };
+
+                        $scope.vm.eventEdited = function (event) {
+                                alert.show('Edited', event);
+                        };
+
+                        $scope.vm.eventDeleted = function (event) {
+                                alert.show('Deleted', event);
+                        };
+
+                        $scope.vm.eventTimesChanged = function (event) {
+                                alert.show('Dropped or resized', event);
+                        };
+
+                        $scope.vm.toggle = function ($event, field, event) {
+                                $event.preventDefault();
+                                $event.stopPropagation();
+                                event[field] = !event[field];
+                        };
+                }
+        };
+}
+
+module.exports = C;
+
+},{"../../../node_modules/moment/locale/ru":37,"moment":38}],15:[function(require,module,exports){
+'use strict';
+
 function CD($timeout, $compile) {
   return {
     scope: { data: '=' },
@@ -338,7 +398,7 @@ module.exports = {
   pieChart: CD1
 };
 
-},{}],14:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 'use strict';
 
 function CS($http) {
@@ -360,7 +420,7 @@ module.exports = {
   pieChart: CS1
 };
 
-},{}],15:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 'use strict';
 
 var chartDirective = require('./chartDirective.js');
@@ -371,15 +431,16 @@ currentModule.directive('pieChart', chartDirective.pieChart);
 currentModule.factory('$chartService', chartService.barChart);
 currentModule.factory('$chartService1', chartService.pieChart);
 
-},{"./chartDirective.js":13,"./chartService.js":14}],16:[function(require,module,exports){
+},{"./chartDirective.js":15,"./chartService.js":16}],18:[function(require,module,exports){
 'use strict';
 
 require('./accordion/accordion.js');
 require('./dataTable/dataTable.js');
 require('./tabstrip/tabstrip.js');
 require('./charts/charts.js');
-require('./timeLine/timeLine.js');
-var currentModule = angular.module('components', ['accordion', 'dataTable', 'tabstrip', 'charts', 'timeLineModule']);
+require('./timeLines/timeLines.js');
+require('./calendar/calendar.js');
+var currentModule = angular.module('components', ['accordion', 'dataTable', 'tabstrip', 'charts', 'timeLineModule', 'calendar']);
 var accordionDirective = require('./accordion/accordion.js');
 var popupController = require('./popup/popupController.js');
 var splitDirective = require('./split/split.js');
@@ -388,66 +449,7 @@ currentModule.controller('popupController', popupController);
 currentModule.directive('split', splitDirective);
 currentModule.directive('projectCard', projectCard);
 
-currentModule.controller('KitchenSinkCtrl', function () {
-  var moment = require('moment');
-  var vm = this;
-
-  moment.locale('en', {
-    week: {
-      dow: 1
-    }
-  });
-
-  vm.calendarView = 'month';
-  vm.viewDate = new Date();
-  vm.events = [{
-    title: 'An event',
-    type: 'warning',
-    startsAt: moment().startOf('week').subtract(2, 'days').add(8, 'hours').toDate(),
-    endsAt: moment().startOf('week').add(1, 'week').add(9, 'hours').toDate(),
-    draggable: true,
-    resizable: true
-  }, {
-    title: '<i class="glyphicon glyphicon-asterisk"></i> <span class="text-primary">Another event</span>, with a <i>html</i> title',
-    type: 'info',
-    startsAt: moment().subtract(1, 'day').toDate(),
-    endsAt: moment().add(5, 'days').toDate(),
-    draggable: true,
-    resizable: true
-  }, {
-    title: 'This is a really long event title that occurs on every year',
-    type: 'important',
-    startsAt: moment().startOf('day').add(7, 'hours').toDate(),
-    endsAt: moment().startOf('day').add(19, 'hours').toDate(),
-    recursOn: 'year',
-    draggable: true,
-    resizable: true
-  }];
-
-  vm.isCellOpen = true;
-
-  vm.eventClicked = function (event) {
-    alert.show('Clicked', event);
-  };
-
-  vm.eventEdited = function (event) {
-    alert.show('Edited', event);
-  };
-
-  vm.eventDeleted = function (event) {
-    alert.show('Deleted', event);
-  };
-
-  vm.eventTimesChanged = function (event) {
-    alert.show('Dropped or resized', event);
-  };
-
-  vm.toggle = function ($event, field, event) {
-    $event.preventDefault();
-    $event.stopPropagation();
-    event[field] = !event[field];
-  };
-});
+currentModule.controller('KitchenSinkCtrl', function () {});
 
 currentModule.controller('DatepickerDemoCtrl', function ($scope) {
   $scope.today = function () {
@@ -542,7 +544,7 @@ currentModule.controller('DatepickerDemoCtrl', function ($scope) {
   }
 });
 
-},{"../Project/card/projectCardDirective.js":4,"./accordion/accordion.js":9,"./charts/charts.js":15,"./dataTable/dataTable.js":17,"./popup/popupController.js":20,"./split/split.js":21,"./tabstrip/tabstrip.js":22,"./timeLine/timeLine.js":24,"moment":34}],17:[function(require,module,exports){
+},{"../Project/card/projectCardDirective.js":4,"./accordion/accordion.js":9,"./calendar/calendar.js":13,"./charts/charts.js":17,"./dataTable/dataTable.js":19,"./popup/popupController.js":22,"./split/split.js":23,"./tabstrip/tabstrip.js":24,"./timeLines/timeLines.js":28}],19:[function(require,module,exports){
 'use strict';
 
 var dataTableDirective = require('./dataTableDirective.js');
@@ -551,7 +553,7 @@ var currentModule = angular.module('dataTable', ['ui.grid']);
 currentModule.directive('cDataTable', dataTableDirective);
 currentModule.factory('$dataTableService', dataTableService);
 
-},{"./dataTableDirective.js":18,"./dataTableService.js":19}],18:[function(require,module,exports){
+},{"./dataTableDirective.js":20,"./dataTableService.js":21}],20:[function(require,module,exports){
 'use strict';
 
 function DTD() {
@@ -566,7 +568,7 @@ function DTD() {
 }
 module.exports = DTD;
 
-},{}],19:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 'use strict';
 
 function DTS($http) {
@@ -578,7 +580,7 @@ function DTS($http) {
 }
 module.exports = DTS;
 
-},{}],20:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 'use strict';
 
 module.exports = function ($scope, $uibModalInstance, data) {
@@ -593,7 +595,7 @@ module.exports = function ($scope, $uibModalInstance, data) {
   };
 };
 
-},{}],21:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 'use strict';
 
 function compile(templateElement, templateAttrs) {
@@ -625,7 +627,7 @@ module.exports = function () {
   };
 };
 
-},{}],22:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 'use strict';
 
 var tabstripDirective = require('./tabstripDirective.js');
@@ -639,7 +641,7 @@ currentModule.directive('tabStrip', tabstripDirective); /*
                                                         2) type - parameter "type" that will be passed to that state
                                                         */
 
-},{"./tabstripDirective.js":23}],23:[function(require,module,exports){
+},{"./tabstripDirective.js":25}],25:[function(require,module,exports){
 'use strict';
 
 function reActivate(event) {
@@ -691,26 +693,108 @@ function tabstripDirective($compile, $state, $timeout) {
 }
 module.exports = tabstripDirective;
 
-},{}],24:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 'use strict';
 
-var timeLineDirective = require('./timeLineDirective.js');
-var currentModule = angular.module('timeLineModule', []);
-currentModule.directive('timeLineD', timeLineDirective);
+function generateElement(header, text, messageDate) {
+  var htmlHeader = '<li><span class="importo">' + header + '</span></li>';
+  var htmlText = '<li><span class="causale">' + text + '</span> </li>';
+  var htmlDate = '		<li><p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>' + messageDate + '</small></p> </li>';
+  var start = '<div class="col-sm-6  timeline-item">	<div class="row">\
+        <div class="col-sm-11">\
+            <div class="timeline-panel credits">\
+                <ul class="timeline-panel-ul">';
+  start += htmlHeader + htmlText + htmlDate;
+  start += '</ul></div></div></div></div>';
+  return start;
+}
 
-},{"./timeLineDirective.js":25}],25:[function(require,module,exports){
-'use strict';
+function generateBadge(date) {
+  var moment = require('moment');
+  require('../../../node_modules/moment/locale/ru');
+  var d = moment(new Date(date));
+  var html = '<div class="timeline-badge">';
+  var dayHtml = '  <span class="timeline-balloon-date-day">' + d.format('D') + '</span>';
+  var monthHtml = '  <span class="timeline-balloon-date-month">' + d.format('MMM') + '</span>';
+  html += dayHtml + monthHtml + '</div>';
+  return html;
+}
 
-function TLD() {
+function generateBlock(date, events) {
+  var html = '<div class="row timeline-movement">';
+  html += generateBadge(date);
+  events.forEach(function (e) {
+    html += generateElement(e.header, e.text, e.date);
+  });
+  html += '</div>';
+  return html;
+}
+
+function generateTimeline(data) {
+  var html = '<div class="container">';
+  data.forEach(function (e) {
+    html += generateBlock(e.date, e.events);
+  });
+  html += '</div>';
+  return html;
+}
+
+function TLD($compile) {
   return {
     restrict: 'E',
-    templateUrl: 'app/components/timeLine/timeLine.html'
+    scope: { data: '=' },
+    compile: function compile(templateElement, templateAttrs) {
+      return {
+        pre: function pre($scope) {
+          var html = '<div id="timeline">';
+          html += generateTimeline($scope.data);
+          html += '</div>';
+          templateElement.replaceWith($compile(html)($scope));
+        }
+      };
+    }
   };
 };
 
+function Horizontal() {
+  return {
+    restrict: 'E',
+    scope: { data: '=' },
+    compile: function compile(templateElement, templateAttrs) {
+      return {
+        pre: function pre() {
+          templateElement.replaceWith($compile(html)($scope));
+        }
+      };
+    }
+  };
+}
+
 module.exports = TLD;
 
-},{}],26:[function(require,module,exports){
+},{"../../../node_modules/moment/locale/ru":37,"moment":38}],27:[function(require,module,exports){
+"use strict";
+
+function CS($http) {
+  return {
+    getData: function getData(url) {
+      return $http.get(url);
+    }
+  };
+}
+
+module.exports = CS;
+
+},{}],28:[function(require,module,exports){
+'use strict';
+
+var timeLineDirective = require('./timeLineDirective.js');
+var timeLineService = require('./timeLineService.js');
+var currentModule = angular.module('timeLineModule', []);
+currentModule.directive('timeLineVertical', timeLineDirective);
+currentModule.factory('$timelineVertical', timeLineService);
+
+},{"./timeLineDirective.js":26,"./timeLineService.js":27}],29:[function(require,module,exports){
 'use strict';
 
 require('./router.js');
@@ -718,8 +802,8 @@ require('./Project/project.js');
 var layout = require('./Layout/layout.js');
 var components = require('./components/components.js');
 var icons = require('./components/Icons/icons.js');
-var app = angular.module('app', ['ui.router', 'ngMaterial', 'ngMdIcons', 'ncy-angular-breadcrumb', 'ngSanitize', 'dialogs.main', 'layout', 'components', 'router', 'project', require('angular-bootstrap-calendar'), require('angular-ui-bootstrap')]);
-app.config(['$urlRouterProvider', '$stateProvider', 'ngMdIconServiceProvider', '$routerProvider', function ($urlRouterProvider, $stateProvider, ngMdIconServiceProvider, $routerProvider) {
+var app = angular.module('app', ['ui.router', 'ngMaterial', 'ngMdIcons', 'ncy-angular-breadcrumb', 'ngSanitize', 'dialogs.main', 'layout', 'components', 'router', 'project', require('angular-ui-bootstrap')]);
+app.config(['$urlRouterProvider', '$stateProvider', 'ngMdIconServiceProvider', '$routerProvider', 'calendarConfig', function ($urlRouterProvider, $stateProvider, ngMdIconServiceProvider, $routerProvider, calendarConfig) {
   for (var e in icons) {
     ngMdIconServiceProvider.addShape(e, icons[e]);
   }
@@ -727,6 +811,7 @@ app.config(['$urlRouterProvider', '$stateProvider', 'ngMdIconServiceProvider', '
   for (var e in $routerProvider.$get.routes) {
     $stateProvider.state(e, $routerProvider.$get.routes[e]);
   }
+  calendarConfig.dateFormatter = 'moment'; // use moment to format dates
 }]);
 app.run(function ($rootScope, $state) {
   $rootScope.$state = $state;
@@ -748,7 +833,7 @@ app.run(function ($rootScope, $state) {
   });
 });
 
-},{"./Layout/layout.js":2,"./Project/project.js":5,"./components/Icons/icons.js":8,"./components/components.js":16,"./router.js":27,"angular-bootstrap-calendar":28,"angular-ui-bootstrap":31}],27:[function(require,module,exports){
+},{"./Layout/layout.js":2,"./Project/project.js":5,"./components/Icons/icons.js":8,"./components/components.js":18,"./router.js":30,"angular-ui-bootstrap":34}],30:[function(require,module,exports){
 'use strict';
 
 var DesignController = require('./Design/designController');
@@ -780,6 +865,11 @@ angular.module('router', []).provider('$router', function () {
               },
               pieData: function pieData($chartService1) {
                 return $chartService1.getData('testData/pie.json').then(function (data) {
+                  return data.data;
+                });
+              },
+              timeLineVerticalData: function timeLineVerticalData($timelineVertical) {
+                return $timelineVertical.getData('testData/timelineVertical.json').then(function (data) {
                   return data.data;
                 });
               }
@@ -851,13 +941,21 @@ angular.module('router', []).provider('$router', function () {
           }
         },
         ncyBreadcrumb: { label: '{{sectionName}}' }
+      },
+      'home.events': {
+        url: '/Events',
+        views: {
+          'content@': {
+            templateUrl: "app/Events/events.html"
+          }
+        }
       }
     };
     return this;
   }();
 });
 
-},{"./Design/designController":1}],28:[function(require,module,exports){
+},{"./Design/designController":1}],31:[function(require,module,exports){
 /**
  * angular-bootstrap-calendar - A pure AngularJS bootstrap themed responsive calendar that can display events and has views for year, month, week and day
  * @version v0.19.5
@@ -2996,7 +3094,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ ])
 });
 ;
-},{"angular":33,"interact.js":29,"moment":34}],29:[function(require,module,exports){
+},{"angular":36,"interact.js":32,"moment":38}],32:[function(require,module,exports){
 /**
  * interact.js v1.2.6
  *
@@ -8974,7 +9072,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 } (typeof window === 'undefined'? undefined : window));
 
-},{}],30:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 /*
  * angular-ui-bootstrap
  * http://angular-ui.github.io/bootstrap/
@@ -16371,12 +16469,12 @@ angular.module('ui.bootstrap.datepicker').run(function() {!angular.$$csp().noInl
 angular.module('ui.bootstrap.tooltip').run(function() {!angular.$$csp().noInlineStyle && !angular.$$uibTooltipCss && angular.element(document).find('head').prepend('<style type="text/css">[uib-tooltip-popup].tooltip.top-left > .tooltip-arrow,[uib-tooltip-popup].tooltip.top-right > .tooltip-arrow,[uib-tooltip-popup].tooltip.bottom-left > .tooltip-arrow,[uib-tooltip-popup].tooltip.bottom-right > .tooltip-arrow,[uib-tooltip-popup].tooltip.left-top > .tooltip-arrow,[uib-tooltip-popup].tooltip.left-bottom > .tooltip-arrow,[uib-tooltip-popup].tooltip.right-top > .tooltip-arrow,[uib-tooltip-popup].tooltip.right-bottom > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.top-left > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.top-right > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.bottom-left > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.bottom-right > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.left-top > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.left-bottom > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.right-top > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.right-bottom > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.top-left > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.top-right > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.bottom-left > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.bottom-right > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.left-top > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.left-bottom > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.right-top > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.right-bottom > .tooltip-arrow,[uib-popover-popup].popover.top-left > .arrow,[uib-popover-popup].popover.top-right > .arrow,[uib-popover-popup].popover.bottom-left > .arrow,[uib-popover-popup].popover.bottom-right > .arrow,[uib-popover-popup].popover.left-top > .arrow,[uib-popover-popup].popover.left-bottom > .arrow,[uib-popover-popup].popover.right-top > .arrow,[uib-popover-popup].popover.right-bottom > .arrow,[uib-popover-html-popup].popover.top-left > .arrow,[uib-popover-html-popup].popover.top-right > .arrow,[uib-popover-html-popup].popover.bottom-left > .arrow,[uib-popover-html-popup].popover.bottom-right > .arrow,[uib-popover-html-popup].popover.left-top > .arrow,[uib-popover-html-popup].popover.left-bottom > .arrow,[uib-popover-html-popup].popover.right-top > .arrow,[uib-popover-html-popup].popover.right-bottom > .arrow,[uib-popover-template-popup].popover.top-left > .arrow,[uib-popover-template-popup].popover.top-right > .arrow,[uib-popover-template-popup].popover.bottom-left > .arrow,[uib-popover-template-popup].popover.bottom-right > .arrow,[uib-popover-template-popup].popover.left-top > .arrow,[uib-popover-template-popup].popover.left-bottom > .arrow,[uib-popover-template-popup].popover.right-top > .arrow,[uib-popover-template-popup].popover.right-bottom > .arrow{top:auto;bottom:auto;left:auto;right:auto;margin:0;}[uib-popover-popup].popover,[uib-popover-html-popup].popover,[uib-popover-template-popup].popover{display:block !important;}</style>'); angular.$$uibTooltipCss = true; });
 angular.module('ui.bootstrap.timepicker').run(function() {!angular.$$csp().noInlineStyle && !angular.$$uibTimepickerCss && angular.element(document).find('head').prepend('<style type="text/css">.uib-time input{width:50px;}</style>'); angular.$$uibTimepickerCss = true; });
 angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInlineStyle && !angular.$$uibTypeaheadCss && angular.element(document).find('head').prepend('<style type="text/css">[uib-typeahead-popup].dropdown-menu{display:block;}</style>'); angular.$$uibTypeaheadCss = true; });
-},{}],31:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 require('./dist/ui-bootstrap-tpls');
 
 module.exports = 'ui.bootstrap';
 
-},{"./dist/ui-bootstrap-tpls":30}],32:[function(require,module,exports){
+},{"./dist/ui-bootstrap-tpls":33}],35:[function(require,module,exports){
 /**
  * @license AngularJS v1.5.3
  * (c) 2010-2016 Google, Inc. http://angularjs.org
@@ -47091,11 +47189,180 @@ $provide.value("$locale", {
 })(window, document);
 
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
-},{}],33:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 require('./angular');
 module.exports = angular;
 
-},{"./angular":32}],34:[function(require,module,exports){
+},{"./angular":35}],37:[function(require,module,exports){
+//! moment.js locale configuration
+//! locale : russian (ru)
+//! author : Viktorminator : https://github.com/Viktorminator
+//! Author : Menelion Elensúle : https://github.com/Oire
+//! author : Коренберг Марк : https://github.com/socketpair
+
+;(function (global, factory) {
+   typeof exports === 'object' && typeof module !== 'undefined'
+       && typeof require === 'function' ? factory(require('../moment')) :
+   typeof define === 'function' && define.amd ? define(['moment'], factory) :
+   factory(global.moment)
+}(this, function (moment) { 'use strict';
+
+
+    function plural(word, num) {
+        var forms = word.split('_');
+        return num % 10 === 1 && num % 100 !== 11 ? forms[0] : (num % 10 >= 2 && num % 10 <= 4 && (num % 100 < 10 || num % 100 >= 20) ? forms[1] : forms[2]);
+    }
+    function relativeTimeWithPlural(number, withoutSuffix, key) {
+        var format = {
+            'mm': withoutSuffix ? 'минута_минуты_минут' : 'минуту_минуты_минут',
+            'hh': 'час_часа_часов',
+            'dd': 'день_дня_дней',
+            'MM': 'месяц_месяца_месяцев',
+            'yy': 'год_года_лет'
+        };
+        if (key === 'm') {
+            return withoutSuffix ? 'минута' : 'минуту';
+        }
+        else {
+            return number + ' ' + plural(format[key], +number);
+        }
+    }
+    var monthsParse = [/^янв/i, /^фев/i, /^мар/i, /^апр/i, /^ма[й|я]/i, /^июн/i, /^июл/i, /^авг/i, /^сен/i, /^окт/i, /^ноя/i, /^дек/i];
+
+    // http://new.gramota.ru/spravka/rules/139-prop : § 103
+    var ru = moment.defineLocale('ru', {
+        months : {
+            format: 'января_февраля_марта_апреля_мая_июня_июля_августа_сентября_октября_ноября_декабря'.split('_'),
+            standalone: 'январь_февраль_март_апрель_май_июнь_июль_август_сентябрь_октябрь_ноябрь_декабрь'.split('_')
+        },
+        monthsShort : {
+            format: 'янв_фев_мар_апр_мая_июня_июля_авг_сен_окт_ноя_дек'.split('_'),
+            standalone: 'янв_фев_март_апр_май_июнь_июль_авг_сен_окт_ноя_дек'.split('_')
+        },
+        weekdays : {
+            standalone: 'воскресенье_понедельник_вторник_среда_четверг_пятница_суббота'.split('_'),
+            format: 'воскресенье_понедельник_вторник_среду_четверг_пятницу_субботу'.split('_'),
+            isFormat: /\[ ?[Вв] ?(?:прошлую|следующую|эту)? ?\] ?dddd/
+        },
+        weekdaysShort : 'вс_пн_вт_ср_чт_пт_сб'.split('_'),
+        weekdaysMin : 'вс_пн_вт_ср_чт_пт_сб'.split('_'),
+        monthsParse : monthsParse,
+        longMonthsParse : monthsParse,
+        shortMonthsParse : monthsParse,
+        longDateFormat : {
+            LT : 'HH:mm',
+            LTS : 'HH:mm:ss',
+            L : 'DD.MM.YYYY',
+            LL : 'D MMMM YYYY г.',
+            LLL : 'D MMMM YYYY г., HH:mm',
+            LLLL : 'dddd, D MMMM YYYY г., HH:mm'
+        },
+        calendar : {
+            sameDay: '[Сегодня в] LT',
+            nextDay: '[Завтра в] LT',
+            lastDay: '[Вчера в] LT',
+            nextWeek: function (now) {
+                if (now.week() !== this.week()) {
+                    switch (this.day()) {
+                    case 0:
+                        return '[В следующее] dddd [в] LT';
+                    case 1:
+                    case 2:
+                    case 4:
+                        return '[В следующий] dddd [в] LT';
+                    case 3:
+                    case 5:
+                    case 6:
+                        return '[В следующую] dddd [в] LT';
+                    }
+                } else {
+                    if (this.day() === 2) {
+                        return '[Во] dddd [в] LT';
+                    } else {
+                        return '[В] dddd [в] LT';
+                    }
+                }
+            },
+            lastWeek: function (now) {
+                if (now.week() !== this.week()) {
+                    switch (this.day()) {
+                    case 0:
+                        return '[В прошлое] dddd [в] LT';
+                    case 1:
+                    case 2:
+                    case 4:
+                        return '[В прошлый] dddd [в] LT';
+                    case 3:
+                    case 5:
+                    case 6:
+                        return '[В прошлую] dddd [в] LT';
+                    }
+                } else {
+                    if (this.day() === 2) {
+                        return '[Во] dddd [в] LT';
+                    } else {
+                        return '[В] dddd [в] LT';
+                    }
+                }
+            },
+            sameElse: 'L'
+        },
+        relativeTime : {
+            future : 'через %s',
+            past : '%s назад',
+            s : 'несколько секунд',
+            m : relativeTimeWithPlural,
+            mm : relativeTimeWithPlural,
+            h : 'час',
+            hh : relativeTimeWithPlural,
+            d : 'день',
+            dd : relativeTimeWithPlural,
+            M : 'месяц',
+            MM : relativeTimeWithPlural,
+            y : 'год',
+            yy : relativeTimeWithPlural
+        },
+        meridiemParse: /ночи|утра|дня|вечера/i,
+        isPM : function (input) {
+            return /^(дня|вечера)$/.test(input);
+        },
+        meridiem : function (hour, minute, isLower) {
+            if (hour < 4) {
+                return 'ночи';
+            } else if (hour < 12) {
+                return 'утра';
+            } else if (hour < 17) {
+                return 'дня';
+            } else {
+                return 'вечера';
+            }
+        },
+        ordinalParse: /\d{1,2}-(й|го|я)/,
+        ordinal: function (number, period) {
+            switch (period) {
+            case 'M':
+            case 'd':
+            case 'DDD':
+                return number + '-й';
+            case 'D':
+                return number + '-го';
+            case 'w':
+            case 'W':
+                return number + '-я';
+            default:
+                return number;
+            }
+        },
+        week : {
+            dow : 1, // Monday is the first day of the week.
+            doy : 7  // The week that contains Jan 1st is the first week of the year.
+        }
+    });
+
+    return ru;
+
+}));
+},{"../moment":38}],38:[function(require,module,exports){
 //! moment.js
 //! version : 2.12.0
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
@@ -50784,7 +51051,7 @@ module.exports = angular;
     return _moment;
 
 }));
-},{}]},{},[26])
+},{}]},{},[29])
 
 
 //# sourceMappingURL=all.js.map

@@ -30,6 +30,11 @@ angular.module('router', []).provider('$router', function () {
                 return $chartService1.getData('testData/pie.json').then(function (data) {
                   return data.data;
                 });
+              },
+              timeLineVerticalData: function($timelineVertical) {
+                return $timelineVertical.getData('testData/timelineVertical.json').then((data) => {
+                  return data.data;
+                });
               }
             }
           }
@@ -99,6 +104,14 @@ angular.module('router', []).provider('$router', function () {
           }
         },
         ncyBreadcrumb: { label: '{{sectionName}}' }
+      },
+      'home.events': {
+        url: '/Events',
+        views: {
+          'content@': {
+            templateUrl: "app/Events/events.html"
+          }
+        }
       }
     };
     return this;

@@ -15,7 +15,6 @@ var app = angular.module('app', [
   'components',
   'router',
   'project',
-require('angular-bootstrap-calendar'),
 require('angular-ui-bootstrap')
 ]);
 app.config([
@@ -23,7 +22,8 @@ app.config([
   '$stateProvider',
   'ngMdIconServiceProvider',
   '$routerProvider',
-  function ($urlRouterProvider, $stateProvider, ngMdIconServiceProvider, $routerProvider) {
+  'calendarConfig',
+  function ($urlRouterProvider, $stateProvider, ngMdIconServiceProvider, $routerProvider,calendarConfig) {
     for (var e in icons) {
       ngMdIconServiceProvider.addShape(e, icons[e]);
     }
@@ -31,6 +31,7 @@ app.config([
     for (var e in $routerProvider.$get.routes) {
       $stateProvider.state(e, $routerProvider.$get.routes[e]);
     }
+     calendarConfig.dateFormatter = 'moment'; // use moment to format dates
   }
 ]);
 app.run(function ($rootScope, $state) {

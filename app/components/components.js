@@ -3,13 +3,15 @@ require('./accordion/accordion.js');
 require('./dataTable/dataTable.js');
 require('./tabstrip/tabstrip.js');
 require('./charts/charts.js');
-require('./timeLine/timeLine.js');
+require('./timeLines/timeLines.js');
+require('./calendar/calendar.js')
 var currentModule = angular.module('components', [
   'accordion',
   'dataTable',
   'tabstrip',
   'charts',
   'timeLineModule',
+  'calendar'
 ]);
 var accordionDirective = require('./accordion/accordion.js');
 var popupController = require('./popup/popupController.js');
@@ -20,66 +22,6 @@ currentModule.directive('split', splitDirective);
 currentModule.directive('projectCard', projectCard);
 
 currentModule.controller('KitchenSinkCtrl', function() {
-    var moment = require('moment');
-    var vm = this;
-
-    moment.locale('en', {
-  week : {
-    dow : 1
-  }
-});
-
-    vm.calendarView = 'month';
-    vm.viewDate = new Date();
-    vm.events = [
-      {
-        title: 'An event',
-        type: 'warning',
-        startsAt: moment().startOf('week').subtract(2, 'days').add(8, 'hours').toDate(),
-        endsAt: moment().startOf('week').add(1, 'week').add(9, 'hours').toDate(),
-        draggable: true,
-        resizable: true
-      }, {
-        title: '<i class="glyphicon glyphicon-asterisk"></i> <span class="text-primary">Another event</span>, with a <i>html</i> title',
-        type: 'info',
-        startsAt: moment().subtract(1, 'day').toDate(),
-        endsAt: moment().add(5, 'days').toDate(),
-        draggable: true,
-        resizable: true
-      }, {
-        title: 'This is a really long event title that occurs on every year',
-        type: 'important',
-        startsAt: moment().startOf('day').add(7, 'hours').toDate(),
-        endsAt: moment().startOf('day').add(19, 'hours').toDate(),
-        recursOn: 'year',
-        draggable: true,
-        resizable: true
-      }
-    ];
-
-    vm.isCellOpen = true;
-
-    vm.eventClicked = function(event) {
-      alert.show('Clicked', event);
-    };
-
-    vm.eventEdited = function(event) {
-      alert.show('Edited', event);
-    };
-
-    vm.eventDeleted = function(event) {
-      alert.show('Deleted', event);
-    };
-
-    vm.eventTimesChanged = function(event) {
-      alert.show('Dropped or resized', event);
-    };
-
-    vm.toggle = function($event, field, event) {
-      $event.preventDefault();
-      $event.stopPropagation();
-      event[field] = !event[field];
-    };
 
   });
 

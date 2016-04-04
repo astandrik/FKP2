@@ -23,7 +23,9 @@ module.exports = function () {
         { name: 'Заказчики' },
         { name: 'Планирование' },
         { name: 'Документация' },
-        { name: 'События' }
+        { name: 'События',
+          icon: 'event',
+          state: 'home.events'}
       ];
       $scope.directories = directories;
     }

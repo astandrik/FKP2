@@ -1,5 +1,5 @@
 'use strict';
-function DesignController($timeout, $scope, dialogs, $dataTableService, gridData, chartData, pieData) {
+function DesignController($timeout, $scope, dialogs, $dataTableService, gridData, chartData, pieData, timeLineVerticalData) {
   $scope.treeData = {};
   $timeout(function() {
     var data = [];
@@ -38,6 +38,7 @@ function DesignController($timeout, $scope, dialogs, $dataTableService, gridData
   $scope.tableData = gridData;
   $scope.barChartData = chartData;
   $scope.pieChartData = pieData;
+  $scope.timeLineVerticalData = timeLineVerticalData;
   $scope.tabstripData = [
     { name: 'Общие сведения' },
     { name: 'Результаты' },
