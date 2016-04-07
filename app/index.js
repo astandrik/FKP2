@@ -1,6 +1,8 @@
 'use strict';
 require('./router.js');
 require('./Project/project.js');
+require('./SpaceComplex/complex.js');
+require('./Design/design.js');
 var layout = require('./Layout/layout.js');
 var components = require('./components/components.js');
 var icons = require('./components/Icons/icons.js');
@@ -15,6 +17,8 @@ var app = angular.module('app', [
   'components',
   'router',
   'project',
+  'complex',
+  'design',
 require('angular-ui-bootstrap')
 ]);
 app.config([

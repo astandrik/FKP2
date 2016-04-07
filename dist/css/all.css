@@ -110,6 +110,12 @@ md-sidenav {
 .accordionTree ul li a.selected {
   background: #D6D6D6;
 }
+.accordionTree ul li span {
+  max-width: 80%;
+}
+.accordionTree ul li a.fullWidth span {
+  max-width: 90%!important;
+}
 .accordionTree ng-md-icon > svg {
   -webkit-transition: all 0.1s ease;
   transition: all 0.1s ease;
@@ -383,4 +389,72 @@ tab-strip {
 }
 .projectCard .space-info-name {
   padding: 2% 0 0 10%;
+}
+.projectCard #table-finance > .grid {
+  height: 100px !important;
+}
+.projectCard #table-finance {
+  padding: 20px;
+}
+.projectCard .ui-grid-viewport {
+  overflow: hidden !important;
+}
+.projectCard #finance-charts {
+  padding-top: 70px !important;
+}
+.projectCard #finance-charts > .flex-40 {
+  padding-top: 30px !important;
+}
+
+.complexCard .size {
+  font-size: 24px;
+  padding: 0 0 20px 0;
+  color: #d76e00;
+}
+.complexCard .header-name {
+  padding: 3% 0 0 3.92%;
+  font-weight: bold;
+}
+.complexCard .info-name {
+  padding: 3% 0 0 2%;
+}
+.complexCard .btn-text {
+  font-weight: bold;
+}
+.complexCard .btn-default {
+  border-color: black;
+}
+.complexCard .btn-default:focus {
+  background-color: #66d9ff;
+}
+.complexCard .btn1 {
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+}
+.complexCard li.active {
+  border-top: 2px solid #66d9ff;
+}
+.complexCard li > a {
+  color: black;
+}
+.complexCard .space-header-name {
+  padding: 5% 0 0 12.3%;
+  font-weight: bold;
+}
+.complexCard .space-info-name {
+  padding: 5% 0 0 10%;
+}
+.complexCard #table-finance > .grid {
+  height: 100px !important;
+}
+.complexCard #table-finance {
+  padding: 20px;
+}
+.complexCard .ui-grid-viewport {
+  overflow: hidden !important;
+}
+.complexCard #finance-charts {
+  padding-top: 70px !important;
+}
+.complexCard #finance-charts > .flex-40 {
+  padding-top: 30px !important;
 }

@@ -17,7 +17,8 @@ module.exports = function () {
         },
         {
           name: 'Космические комплексы',
-          icon: 'brightness_5'
+          icon: 'brightness_5',
+          state: 'home.complexStructure'
         },
         { name: 'Финансирование' },
         { name: 'Заказчики' },

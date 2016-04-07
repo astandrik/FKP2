@@ -14,20 +14,19 @@ module.exports = function ($compile, $accordion, $state) {
             var state = $scope.getCurrentState();
             return state.indexOf('treeEntity') > -1 ? state : state + '.treeEntity';
           };
-          $accordion.getTree($scope.data.url).then(function (response) {
+            var treeData = $scope.data;
             templateAttrs.timeout === undefined ? 400 : parseint(templateAttrs.timeout);
             var html = '<div  class="accordionTree">  <ul class="accordion">';
             var elements = [];
-            if (!response.data) {
+            if (!treeData.data) {
               throw 'define data attribute for tree';
             }
-            response.data.forEach(function (item) {
+            treeData.data.forEach(function (item) {
               elements.push(treeBuilder.buildNode(item));
             });
             var treeHtml = html + elements.join('') + '</ul></div>';
             templateElement.replaceWith($compile(treeHtml)($scope));
             bindToggleEvents();
-          });
         }
       };
     },

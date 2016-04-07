@@ -2,5 +2,6 @@
 var timeLineDirective = require('./timeLineDirective.js');
 var timeLineService = require('./timeLineService.js');
 var currentModule = angular.module('timeLineModule', []);
-currentModule.directive('timeLineVertical', timeLineDirective);
-currentModule.factory('$timelineVertical', timeLineService);
+currentModule.directive('timeLineVertical', timeLineDirective.vertical);
+currentModule.directive('timeLineHorizontal', timeLineDirective.horizontal);
+currentModule.factory('$timelineService', timeLineService);

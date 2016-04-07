@@ -1,5 +1,6 @@
 'use strict';
-var DesignController = require('./Design/designController');
+var routes = require('./Routes/routes.js');
+
 angular.module('router', []).provider('$router', function () {
   this.$get = new function () {
     var self = this;
@@ -9,102 +10,15 @@ angular.module('router', []).provider('$router', function () {
         views: { 'sidebar': { template: '<sidebar></sidebar>' } },
         ncyBreadcrumb: { label: 'ФКП' }
       },
-      'home.design': {
-        url: '/Design',
-        views: {
-          'content@': {
-            templateUrl: 'app/Design/design-page.html',
-            controller: DesignController,
-            resolve: {
-              gridData: function gridData($dataTableService) {
-                return $dataTableService.getTable('testData/tableData.json').then(function (data) {
-                  return data.data;
-                });
-              },
-              chartData: function ($chartService) {
-                return $chartService.getData('testData/chart.json').then(function (data) {
-                  return data.data;
-                });
-              },
-              pieData: function ($chartService1) {
-                return $chartService1.getData('testData/pie.json').then(function (data) {
-                  return data.data;
-                });
-              },
-              timeLineVerticalData: function($timelineVertical) {
-                return $timelineVertical.getData('testData/timelineVertical.json').then((data) => {
-                  return data.data;
-                });
-              }
-            }
-          }
-        },
-        ncyBreadcrumb: { label: 'Дизайн-страница' }
-      },
-      'home.projectStructure': {
-        url: '/ProjectStructure',
-        views: {
-          'content@': {
-            templateUrl: 'app/Project/project-page.html',
-            controller: 'projectController'
-          }
-        },
-        ncyBreadcrumb: { label: 'Структура программы' }
-      },
-      'home.projectStructure.treeEntity': {
-        url: '/treeEntity?id',
-        views: {
-          'projectInfo': {
-            templateUrl: 'app/Project/card/project-card.html',
-            controller: function controller($scope, project) {
-              $scope.project = project;
-            },
-            resolve: {
-              project: function project($http, $projectFactory, $stateParams) {
-                var id = $stateParams.id;
-                return $projectFactory.getById(id).then(function (data) {
-                  return data.data;
-                });
-              }
-            }
-          }
-        },
-        ncyBreadcrumb: { label: 'Проект {{project.code}}' }
-      },
-      'home.projectStructure.treeEntity.projectSection': {
-        url: '/tabSection?type',
-        views: {
-          'projectSection': {
-            templateUrl: function templateUrl($stateParams) {
-              switch ($stateParams.type) {
-              case 'general':
-                return 'app/Project/card/sections/general.html';
-                break;
-              case 'results':
-                return 'app/Project/card/sections/results.html';
-                break;
-              default:
-                return 'app/Project/card/sections/general.html';
-              }
-            },
-            controller: function controller($stateParams, $scope) {
-              var state = $stateParams;
-              switch (state.type) {
-                case 'general':
-                  $scope.sectionName = 'Общие сведения';
-                  break;
-                case 'results':
-                  $scope.sectionName = 'Результаты';
-                  break;
-                default:
-                  $scope.sectionName = 'Общие сведения';
-                  break;
-              }
-            }
-          }
-        },
-        ncyBreadcrumb: { label: '{{sectionName}}' }
-      },
+      'home.design': routes.design,
+      'home.projectStructure': routes.project.structure,
+      'home.complexStructure': routes.complex.structure,
+
+      'home.projectStructure.treeEntity': routes.project.entity,
+      'home.complexStructure.treeEntity': routes.complex.entity,
+      'home.projectStructure.treeEntity.projectSection': routes.project.section ,
+      'home.complexStructure.treeEntity.complexSection': routes.complex.section,
+
       'home.events': {
         url: '/Events',
         views: {

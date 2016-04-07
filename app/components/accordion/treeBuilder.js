@@ -3,7 +3,12 @@ function buildTree() {
   var self = this;
   this.elementHtml = function (element, nested) {
     nested = nested === undefined ? '' : nested;
-    return '<li><a layout="row" layout-align="space-between center" class="toggle" id="node_' + element.id + '" ng-href=" {{getHref(getCurrentEntityState(), {id: ' + element.id + '})}}"><span>' + element.name + '</span><ng-md-icon class="toggleOpen" size=30 layout="column" layout-align="center center" icon="keyboard_arrow_right"></ng-md-icon></a>' + nested + '</li>';
+    var hasChildren = element.children && element.children.length > 0;
+    return '<li><a layout="row" layout-align="space-between center" class="toggle '+(!hasChildren? 'fullWidth' : '')+'" id="node_' + element.id + '' + element.object_type + '" ng-href=" {{getHref(getCurrentEntityState(), {id: ' + element.id + ', eType: '+ element.object_type +'})}}"><span>' +
+    element.name +
+    ( hasChildren ? '</span><ng-md-icon class="toggleOpen" size=30 layout="column" layout-align="center center" icon="keyboard_arrow_right"></ng-md-icon></a>'
+    : '')
+    + nested + '</li>';
   };
   this.buildNode = function (root) {
     var inner = '';
@@ -46,8 +51,8 @@ function bindToggleEvents() {
     }
   });
 }
-function highlightNode(id) {
-  var elem = $('.accordion a#node_' + id);
+function highlightNode(id, object_type) {
+  var elem = $('.accordion a#node_' + id + '' + object_type);
   $('.accordion a').removeClass('selected');
   elem.addClass('selected');
   while (elem.parent().closest('.inner').length > 0) {

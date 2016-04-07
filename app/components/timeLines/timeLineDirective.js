@@ -43,7 +43,7 @@ function generateTimeline(data) {
   return html;
 }
 
-function TLD($compile) {
+function Vertical($compile) {
   return{
     restrict: 'E',
     scope: {data: '='},
@@ -66,12 +66,33 @@ function Horizontal() {
     scope: {data: '='},
     compile: function(templateElement, templateAttrs) {
       return {
-        pre: () => {
-          templateElement.replaceWith($compile(html)($scope));
+        pre: ($scope) => {
+          var data = [];
+          var events = $scope.data.events;
+          var options = {
+                  "width":  "100%",
+                  "height": "150px",
+                  "style": "box",
+                  showCurrentTime: false
+                };
+          var moment = require('moment');
+          require('../../../node_modules/moment/locale/ru');
+          events.forEach((e) => {
+            data.push({
+              'start': new Date(moment(e.date,'DD.MM.YYYY').format()),
+              'content': e.text,
+              'className': 'timeline-event'
+            })
+          });
+          var timeline = new links.Timeline($(templateElement)[0]);
+          timeline.draw(data, options);
         }
       }
     }
   }
 }
 
-module.exports = TLD;
+module.exports = {
+  vertical: Vertical,
+  horizontal: Horizontal
+}

@@ -1,8 +1,8 @@
 'use strict';
 var highlightNode = require('../components/accordion/treeBuilder.js').highlight;
-function ProjectController($scope, dialogs, $projectFactory, $state, $timeout) {
-  $scope.treeData = {};
-  $scope.treeData.url = 'testData/data.json';
+function ProjectController($scope, dialogs, $projectFactory, $state, $timeout, treeData) {
+  $scope.treeData = treeData;
+
   $scope.create_popup = function () {
     var data = {
       name: 'МЧС',
@@ -14,6 +14,7 @@ function ProjectController($scope, dialogs, $projectFactory, $state, $timeout) {
       animation: true
     });
   };
+
   $scope.tabstripData = [
     {
       name: 'Общие сведения',
@@ -25,14 +26,24 @@ function ProjectController($scope, dialogs, $projectFactory, $state, $timeout) {
       state: 'projectSection',
       type: 'results'
     },
-    { name: 'Финансирование' },
-    { name: 'Связанные проекты' },
-    { name: 'События' }
+    { name: 'Финансирование',
+      state: 'projectSection',
+      type: 'finance'
+    },
+    {
+      name: 'Связанные проекты',
+      state: 'projectSection',
+      type: 'relatedProjects'  },
+
+    {
+      name: 'События',
+      state: 'projectSection',
+      type: 'relatedProjects' }
   ];
   $scope.$on('$viewContentLoaded', function (event) {
     $timeout(function () {
       if ($state.params.id) {
-        highlightNode($state.params.id);
+        highlightNode($state.params.id, $state.params.eType);
       } else {
         highlightNode(-1);
       }
