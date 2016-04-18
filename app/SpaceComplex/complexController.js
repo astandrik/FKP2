@@ -1,6 +1,6 @@
-function CC($scope,treeData, dialogs) {
+'use strict';
+function CC($scope, treeData, dialogs) {
   $scope.treeData = treeData;
-
   $scope.create_popup = function () {
     var data = {
       name: 'МЧС',
@@ -26,8 +26,8 @@ function CC($scope,treeData, dialogs) {
     {
       name: 'Связанные проекты',
       state: 'complexSection',
-      type: 'relatedProjects' }
+      type: 'relatedProjects'
+    }
   ];
 }
-
 module.exports = CC;

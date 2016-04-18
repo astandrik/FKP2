@@ -2,7 +2,7 @@
 module.exports = function projectFactory($http) {
   return {
     getById: function getById(id) {
-      return $http.get('testData/project.json');
+      return $http.get('data/project?id=' + id);
     }
   };
-};
+}; 

@@ -16,4 +16,4 @@ function CS1($http) {
 module.exports = {
   barChart: CS,
   pieChart: CS1
-}
+};

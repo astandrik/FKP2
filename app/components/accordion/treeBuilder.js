@@ -1,27 +1,30 @@
 'use strict';
 function buildTree() {
   var self = this;
-  this.elementHtml = function (element, nested) {
+  this.elementHtml = function (element, nested, paramList) {
     nested = nested === undefined ? '' : nested;
+    var elemObj = {};
     var hasChildren = element.children && element.children.length > 0;
-    return '<li><a layout="row" layout-align="space-between center" class="toggle '+(!hasChildren? 'fullWidth' : '')+'" id="node_' + element.id + '' + element.object_type + '" ng-href=" {{getHref(getCurrentEntityState(), {id: ' + element.id + ', eType: '+ element.object_type +'})}}"><span>' +
-    element.name +
-    ( hasChildren ? '</span><ng-md-icon class="toggleOpen" size=30 layout="column" layout-align="center center" icon="keyboard_arrow_right"></ng-md-icon></a>'
-    : '')
-    + nested + '</li>';
+    var elemId = paramList.reduce(function (sum, current) {
+      return sum + current + element[current];
+    }, 'node_');
+    paramList.forEach(function (item) {
+      elemObj[item] = element[item];
+    });
+    return '<li><a layout="row" layout-align="space-between center" class="toggle ' + (!hasChildren ? 'fullWidth' : '') + '" id="' + elemId + '" ng-href="{{getHref(getCurrentEntityState(), ' + JSON.stringify(elemObj).replace(/"/g, '\'') + ')}}"><span>' + element.name + (hasChildren ? '</span><ng-md-icon class="toggleOpen" size=30 layout="column" layout-align="center center" icon="keyboard_arrow_right"></ng-md-icon></a>' : '') + nested + '</li>';
   };
-  this.buildNode = function (root) {
+  this.buildNode = function (root, paramList) {
     var inner = '';
     if (root.children) {
       inner = '<ul class="inner">';
       root.children.forEach(function (item) {
-        inner += self.buildNode(item);
+        inner += self.buildNode(item, paramList);
       });
       inner += '</ul>';
     } else {
-      return self.elementHtml(root);
+      return self.elementHtml(root, null, paramList);
     }
-    return self.elementHtml(root, inner);
+    return self.elementHtml(root, inner, paramList);
   };
   return this;
 }
@@ -30,6 +33,12 @@ function bindToggleEvents() {
     var $this = $(this);
     $('.toggle').removeClass('selected');
     $this.addClass('selected');
+    var elemParent = $this.parent().parent().parent().children('a');
+    while (elemParent.length>0) {
+        elemParent.addClass('selected');
+        elemParent = elemParent.parent().parent().parent().children('a');
+      //  debugger;
+      }
   });
   $('.toggleOpen').click(function (e) {
     e.preventDefault();
@@ -51,11 +60,20 @@ function bindToggleEvents() {
     }
   });
 }
-function highlightNode(id, object_type) {
-  var elem = $('.accordion a#node_' + id + '' + object_type);
+function highlightNode(node, paramList) {
+  var elemId = paramList.reduce(function (sum, current) {
+    return sum + current + node[current];
+  }, 'node_');
+  var elem = $('.accordion a#' + elemId);
   $('.accordion a').removeClass('selected');
   elem.addClass('selected');
-  while (elem.parent().closest('.inner').length > 0) {
+  var elemParent = elem.parent().parent().parent().children('a');
+  while (elemParent.length>0) {
+      elemParent.addClass('selected');
+      elemParent = elemParent.parent().parent().parent().children('a');
+    //  debugger;
+    }
+    while (elem.parent().closest('.inner').length > 0) {
     elem = elem.parent().closest('.inner');
     elem.addClass('show');
   }

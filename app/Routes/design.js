@@ -1,3 +1,4 @@
+'use strict';
 module.exports = {
   url: '/Design',
   views: {
@@ -10,23 +11,23 @@ module.exports = {
             return data.data;
           });
         },
-        chartData: function ($chartService) {
+        chartData: function chartData($chartService) {
           return $chartService.getData('testData/chart.json').then(function (data) {
             return data.data;
           });
         },
-        pieData: function ($chartService1) {
+        pieData: function pieData($chartService1) {
           return $chartService1.getData('testData/pie.json').then(function (data) {
             return data.data;
           });
         },
-        timeLineVerticalData: function($timelineService) {
-          return $timelineService.getData('testData/timelineVertical.json').then((data) => {
+        timeLineVerticalData: function timeLineVerticalData($timelineService) {
+          return $timelineService.getData('testData/timelineVertical.json').then(function (data) {
             return data.data;
           });
         },
-        timeLineHorizontalData: function($timelineService) {
-          return $timelineService.getData('testData/timelineHorizontal.json').then((data) => {
+        timeLineHorizontalData: function timeLineHorizontalData($timelineService) {
+          return $timelineService.getData('testData/timelineHorizontal.json').then(function (data) {
             return data.data;
           });
         }

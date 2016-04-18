@@ -1,0 +1,12 @@
+<c-data-table data="project.finance" id="table-finance"></c-data-table>
+
+<div layout="row" layout-xs="column" id="finance-charts">
+  <div flex="60">
+    <bar-chart data="project.chart" id="bar-chart-finance"></bar-chart>
+  </div>
+  <div flex="40" layout="column" layout-align="center center">
+    <h4>Объем капитальных вложений, млн. руб.</h4>
+    <h6>{{::start}} - {{::end}}</h6>
+    <pie-chart data="pieChartData" id="pie-chart-finance"></pie-chart>
+  </div>
+</div>

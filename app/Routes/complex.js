@@ -1,3 +1,4 @@
+'use strict';
 var structure = {
   url: '/SpaceComplex',
   views: {
@@ -5,8 +6,8 @@ var structure = {
       templateUrl: 'app/SpaceComplex/spaceComplex-page.html',
       controller: 'spaceComplexController',
       resolve: {
-        treeData: function($accordion) {
-          return $accordion.getTree('data/tree').then(function(response) {
+        treeData: function treeData($accordion) {
+          return $accordion.getTree('data/tree').then(function (response) {
             return response.data;
           });
         }
@@ -14,8 +15,7 @@ var structure = {
     }
   },
   ncyBreadcrumb: { label: 'Космические комплексы' }
-}
-
+};
 var entity = {
   url: '/treeEntity?id',
   views: {
@@ -26,7 +26,7 @@ var entity = {
         $scope.timeLineVerticalData = timeLineVerticalData;
         $scope.pieChartData = pieData;
         $scope.start = complex.chart.barLabels[0];
-        $scope.end = complex.chart.barLabels[complex.chart.barLabels.length-1];
+        $scope.end = complex.chart.barLabels[complex.chart.barLabels.length - 1];  //  debugger;
       },
       resolve: {
         complex: function project($http, $complex, $stateParams) {
@@ -35,12 +35,12 @@ var entity = {
             return data.data;
           });
         },
-        timeLineVerticalData: function($timelineService) {
-          return $timelineService.getData('testData/timelineVertical.json').then((data) => {
+        timeLineVerticalData: function timeLineVerticalData($timelineService) {
+          return $timelineService.getData('testData/timelineVertical.json').then(function (data) {
             return data.data;
           });
         },
-        pieData: function ($chartService1) {
+        pieData: function pieData($chartService1) {
           return $chartService1.getData('testData/pie.json').then(function (data) {
             return data.data;
           });
@@ -49,8 +49,7 @@ var entity = {
     }
   },
   ncyBreadcrumb: { label: 'Комплекс {{project.code}}' }
-}
-
+};
 var section = {
   url: '/tabSection?type',
   views: {
@@ -73,24 +72,23 @@ var section = {
       controller: function controller($stateParams, $scope) {
         var state = $stateParams;
         switch (state.type) {
-          case 'general':
-            $scope.sectionName = 'Общие сведения';
-            break;
-          case 'finance':
-            $scope.sectionName = 'Финансирование';
-            break;
-          default:
-            $scope.sectionName = 'Общие сведения';
-            break;
+        case 'general':
+          $scope.sectionName = 'Общие сведения';
+          break;
+        case 'finance':
+          $scope.sectionName = 'Финансирование';
+          break;
+        default:
+          $scope.sectionName = 'Общие сведения';
+          break;
         }
       }
     }
   },
   ncyBreadcrumb: { label: '{{sectionName}}' }
-}
-
+};
 module.exports = {
-  structure,
-  entity,
-  section
-}
+  structure: structure,
+  entity: entity,
+  section: section
+};

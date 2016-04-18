@@ -19,7 +19,7 @@ var app = angular.module('app', [
   'project',
   'complex',
   'design',
-require('angular-ui-bootstrap')
+  require('angular-ui-bootstrap')
 ]);
 app.config([
   '$urlRouterProvider',
@@ -27,7 +27,7 @@ app.config([
   'ngMdIconServiceProvider',
   '$routerProvider',
   'calendarConfig',
-  function ($urlRouterProvider, $stateProvider, ngMdIconServiceProvider, $routerProvider,calendarConfig) {
+  function ($urlRouterProvider, $stateProvider, ngMdIconServiceProvider, $routerProvider, calendarConfig) {
     for (var e in icons) {
       ngMdIconServiceProvider.addShape(e, icons[e]);
     }
@@ -35,7 +35,7 @@ app.config([
     for (var e in $routerProvider.$get.routes) {
       $stateProvider.state(e, $routerProvider.$get.routes[e]);
     }
-     calendarConfig.dateFormatter = 'moment'; // use moment to format dates
+    calendarConfig.dateFormatter = 'moment';  // use moment to format dates
   }
 ]);
 app.run(function ($rootScope, $state) {
@@ -48,12 +48,9 @@ app.run(function ($rootScope, $state) {
     return $rootScope.getHref($rootScope.getCurrentState());
   };
   $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, options) {
-    //debugger;
   });
   $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
-    //debugger;
   });
   $rootScope.$on('$stateNotFound', function (event, unfoundState, fromState, fromParams) {
-    //debugger;
   });
 });

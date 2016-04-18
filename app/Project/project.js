@@ -1,4 +1,4 @@
- 'use strict';
+'use strict';
 var projectCard = require('./card/projectCardDirective.js');
 var projectFactory = require('./projectFactory.js');
 var projectController = require('./projectController.js');

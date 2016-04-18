@@ -1,3 +1,4 @@
+'use strict';
 function CS($http) {
   return {
     getData: function getData(url) {
@@ -5,5 +6,4 @@ function CS($http) {
     }
   };
 }
-
 module.exports = CS;

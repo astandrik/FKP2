@@ -37,7 +37,8 @@ gulp.task('vendorsjs', function () {
         'node_modules/chart.js/Chart.min.js',
         'node_modules/angular-chart.js/dist/angular-chart.min.js',
         'node_modules/angular-i18n/angular-locale_ru.js',
-        'external/timeLine/timeline-min.js'
+        'external/timeLine/timeline-min.js',
+        'node_modules/lodash/lodash.min.js'
       ])
         .pipe(concat('vendors.min.js'))
         .pipe(gulp.dest('dist/libs'));

@@ -4,7 +4,7 @@ require('./dataTable/dataTable.js');
 require('./tabstrip/tabstrip.js');
 require('./charts/charts.js');
 require('./timeLines/timeLines.js');
-require('./calendar/calendar.js')
+require('./calendar/calendar.js');
 var currentModule = angular.module('components', [
   'accordion',
   'dataTable',
@@ -20,28 +20,21 @@ var projectCard = require('../Project/card/projectCardDirective.js');
 currentModule.controller('popupController', popupController);
 currentModule.directive('split', splitDirective);
 currentModule.directive('projectCard', projectCard);
-
-currentModule.controller('KitchenSinkCtrl', function() {
-
-  });
-
-
+currentModule.controller('KitchenSinkCtrl', function () {
+});
 currentModule.controller('DatepickerDemoCtrl', function ($scope) {
-  $scope.today = function() {
+  $scope.today = function () {
     $scope.dt = new Date();
   };
   $scope.today();
-
-  $scope.clear = function() {
+  $scope.clear = function () {
     $scope.dt = null;
   };
-
   $scope.inlineOptions = {
     customClass: getDayClass,
     minDate: new Date(),
     showWeeks: true
   };
-
   $scope.dateOptions = {
     dateDisabled: disabled,
     formatYear: 'yy',
@@ -49,45 +42,35 @@ currentModule.controller('DatepickerDemoCtrl', function ($scope) {
     minDate: new Date(),
     startingDay: 1
   };
-
   // Disable weekend selection
   function disabled(data) {
-    var date = data.date,
-      mode = data.mode;
+    var date = data.date, mode = data.mode;
     return mode === 'day' && (date.getDay() === 0 || date.getDay() === 6);
   }
-
-  $scope.toggleMin = function() {
+  $scope.toggleMin = function () {
     $scope.inlineOptions.minDate = $scope.inlineOptions.minDate ? null : new Date();
     $scope.dateOptions.minDate = $scope.inlineOptions.minDate;
   };
-
   $scope.toggleMin();
-
-  $scope.open1 = function() {
+  $scope.open1 = function () {
     $scope.popup1.opened = true;
   };
-
-  $scope.open2 = function() {
+  $scope.open2 = function () {
     $scope.popup2.opened = true;
   };
-
-  $scope.setDate = function(year, month, day) {
+  $scope.setDate = function (year, month, day) {
     $scope.dt = new Date(year, month, day);
   };
-
-  $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+  $scope.formats = [
+    'dd-MMMM-yyyy',
+    'yyyy/MM/dd',
+    'dd.MM.yyyy',
+    'shortDate'
+  ];
   $scope.format = $scope.formats[0];
   $scope.altInputFormats = ['M!/d!/yyyy'];
-
-  $scope.popup1 = {
-    opened: false
-  };
-
-  $scope.popup2 = {
-    opened: false
-  };
-
+  $scope.popup1 = { opened: false };
+  $scope.popup2 = { opened: false };
   var tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
   var afterTomorrow = new Date();
@@ -102,22 +85,17 @@ currentModule.controller('DatepickerDemoCtrl', function ($scope) {
       status: 'partially'
     }
   ];
-
   function getDayClass(data) {
-    var date = data.date,
-      mode = data.mode;
+    var date = data.date, mode = data.mode;
     if (mode === 'day') {
-      var dayToCheck = new Date(date).setHours(0,0,0,0);
-
+      var dayToCheck = new Date(date).setHours(0, 0, 0, 0);
       for (var i = 0; i < $scope.events.length; i++) {
-        var currentDay = new Date($scope.events[i].date).setHours(0,0,0,0);
-
+        var currentDay = new Date($scope.events[i].date).setHours(0, 0, 0, 0);
         if (dayToCheck === currentDay) {
           return $scope.events[i].status;
         }
       }
     }
-
     return '';
   }
 });
