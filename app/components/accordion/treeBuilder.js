@@ -1,30 +1,33 @@
 'use strict';
 function buildTree() {
   var self = this;
-  this.elementHtml = function (element, nested, paramList) {
+  this.elementHtml = function (element, nested, paramList, specialDict) {
     nested = nested === undefined ? '' : nested;
-    var elemObj = {};
     var hasChildren = element.children && element.children.length > 0;
     var elemId = paramList.reduce(function (sum, current) {
       return sum + current + element[current];
     }, 'node_');
-    paramList.forEach(function (item) {
-      elemObj[item] = element[item];
-    });
-    return '<li><a layout="row" layout-align="space-between center" class="toggle ' + (!hasChildren ? 'fullWidth' : '') + '" id="' + elemId + '" ng-href="{{getHref(getCurrentEntityState(), ' + JSON.stringify(elemObj).replace(/"/g, '\'') + ')}}"><span>' + element.name + (hasChildren ? '</span><ng-md-icon class="toggleOpen" size=30 layout="column" layout-align="center center" icon="keyboard_arrow_right"></ng-md-icon></a>' : '') + nested + '</li>';
+    var special = '';
+    for(var p in specialDict) {
+      var row = p + '="';
+      row += element[specialDict[p]].toString();
+      row += '"';
+      special += row + ' ';
+    }
+    return '<li><a layout="row" layout-align="space-between center" '+(special? special : '')+' class="toggle ' + (!hasChildren ? 'fullWidth' : '') + '" id="' + elemId + '" href="'+element.href+'"><span>' + element.name + (hasChildren ? '</span><ng-md-icon class="toggleOpen" size=30 layout="column" layout-align="center center" icon="keyboard_arrow_right"></ng-md-icon></a>' : '') + nested + '</li>';
   };
-  this.buildNode = function (root, paramList) {
+  this.buildNode = function (root, paramList,specialDict) {
     var inner = '';
     if (root.children) {
       inner = '<ul class="inner">';
       root.children.forEach(function (item) {
-        inner += self.buildNode(item, paramList);
+        inner += self.buildNode(item, paramList,specialDict);
       });
       inner += '</ul>';
     } else {
-      return self.elementHtml(root, null, paramList);
+      return self.elementHtml(root, null, paramList,specialDict);
     }
-    return self.elementHtml(root, inner, paramList);
+    return self.elementHtml(root, inner, paramList,specialDict);
   };
   return this;
 }
@@ -70,6 +73,7 @@ function highlightNode(node, paramList) {
   var elemParent = elem.parent().parent().parent().children('a');
   while (elemParent.length>0) {
       elemParent.addClass('selected');
+      elemParent.find('ng-md-icon>svg').addClass('show');
       elemParent = elemParent.parent().parent().parent().children('a');
     //  debugger;
     }

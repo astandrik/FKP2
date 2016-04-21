@@ -1,0 +1,10 @@
+<ol class="breadcrumb">
+    <li ng-repeat="step in steps" ng-class="{active: $last}" ng-switch="$last || !!step.abstract">
+      <a     uib-tooltip="{{step.ncyBreadcrumb.toolTipInterpolated}}"
+             tooltip-placement="bottom"
+             tooltip-trigger="mouseenter"
+            ng-switch-when="false" href="{{step.ncyBreadcrumbLink}}">{{step.ncyBreadcrumbLabel}}</a>
+      <span ng-switch-when="true"   uib-tooltip="{{step.ncyBreadcrumb.toolTipInterpolated}}"              tooltip-placement="bottom"
+                   tooltip-trigger="mouseenter"  >{{step.ncyBreadcrumbLabel}}</span>
+    </li>
+</ol>

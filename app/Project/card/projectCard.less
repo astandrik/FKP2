@@ -1,13 +1,15 @@
 .projectCard{
 
   .tabstripId {
-    
+
 
   }
   .size {
     font-size: 24px;
+    min-height: 105px;
     padding: 0 0 20px 0;
     color:#d76e00;
+    padding: 0 20px;
   }
   .header-name {
     padding: 3% 0 0 3.92%;
@@ -46,13 +48,15 @@ li>a {color:black}
 #table-finance {
   padding: 20px;
 }
-.ui-grid-viewport{
-  overflow: hidden !important;
-}
+
 #finance-charts{
   padding-top: 70px !important;
 }
-#finance-charts > .flex-40{
-  padding-top: 30px !important;
+
+@media (max-width: 1400px){
+  .ChartName {
+    font-size: 14px;
+  }
 }
+
 }

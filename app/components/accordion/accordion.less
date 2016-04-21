@@ -92,11 +92,23 @@
   }
 
   ul li a.selected {
+    &[type="2"] {
+      background: #76A5AF;
+      color: white;
+    }
+    &[type="1"] {
+      background: #B4A7D5;
+      color: white;
+    }
+    &[type="0"] {
       background: #D6D6D6;
+    }
+
   }
 
   ul li span {
     max-width: 80%;
+    font-size: 16px;
   }
 
   ul li a.fullWidth span {

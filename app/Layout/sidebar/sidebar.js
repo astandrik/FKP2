@@ -6,11 +6,6 @@ module.exports = function () {
     controller: function controller($scope) {
       var directories = [
         {
-          name: 'Дизайн',
-          icon: 'wheelChair',
-          state: 'home.design'
-        },
-        {
           name: 'Структура программы',
           icon: 'business_center',
           state: 'home.projectStructure'

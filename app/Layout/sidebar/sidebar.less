@@ -5,11 +5,35 @@
     .layout-padding > * {
       padding:6px
     }
-    @media screen and (min-width: 600px) md-sidenav {
-        max-width: 270px;
-    }
     md-toolbar:not(.md-menu-toolbar) {
      background-color: white;
      color: black;
+    }
+    max-width: 10vw!important;
+    .md-button {
+      font-size: 15px;
+    }
+    @media (max-width: 1795px) and (min-width: 1300px){
+      .md-button {
+        font-size: 14px;
+        white-space: normal;
+        line-height: normal;
+      }
+    }
+    @media (max-width: 1300px){
+      .md-button {
+        white-space: normal;
+        font-size: 13px;
+        line-height: normal;
+      }
+    }
+    .programmHeader {
+      font-size:15px;
+      text-align:center
+    }
+    @media (max-width: 1755px){
+      .programmHeader {
+        font-size: 13px;
+      }
     }
 }

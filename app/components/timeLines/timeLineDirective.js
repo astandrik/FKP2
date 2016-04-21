@@ -39,10 +39,11 @@ function generateBadge(date) {
   var moment = require('moment');
   require('../../../node_modules/moment/locale/ru');
   var d = moment(new Date(date));
+  d = date.split('-')[0];
   var html = '<div class="timeline-badge">';
 //  var dayHtml = '  <span class="timeline-balloon-date-day">' + d.format('D') + '</span>';
 //  var monthHtml = '  <span class="timeline-balloon-date-month">' + d.format('MMM') + '</span>';
-  var yearHtml = '  <span class="timeline-balloon-date-year">' + d.format('YYYY') + '</span>';
+  var yearHtml = '  <span class="timeline-balloon-date-year">' + d + '</span>';
   html += yearHtml + '</div>';
   return html;
 }

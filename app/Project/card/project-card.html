@@ -1,5 +1,5 @@
 <div  flex="1" layout="column" flex class="projectCard">
-  <span flex class="size">{{project.name}}</span>
-  <tab-strip flex data="tabstripData" id="tabstripId"></tab-strip>
+  <div flex class="size">{{project.name}}</div>
+  <tab-strip flex data="tabstripData" initial="home.projectStructure.section.subSection.project" id="tabstripId"></tab-strip>
   <div flex ui-view="projectSection"></div>
 </div>

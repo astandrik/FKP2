@@ -1,4 +1,4 @@
-function millionsFunction (project) {
+function projectMillionsFunction (project) {
     for (var type in project.finance){
         for(var val in project.finance[type]) {
             project.finance[type][val] = project.finance[type][val] / 1000000.0;
@@ -7,7 +7,7 @@ function millionsFunction (project) {
   return project;
 }
 
-function prepareFinance(finance) {
+function prepareFinance(finance, baseName) {
   var years =[];
   var valueBudget =[];
   var valueOwnBudget =[];
@@ -25,13 +25,44 @@ function prepareFinance(finance) {
   years.sort();
   var start = years[0];
   var end = years[years.length-1];
-  finance["Финансирование из собственных средств"]['Тип'] = 'Внебюджет, млн.р.';
-  finance["Финансирование за счет бюджетных средств"]['Тип'] = 'Бюджет, млн.р.';
+  finance["Финансирование из собственных средств"][baseName] = 'Внебюджет, млн.р.';
+  finance["Финансирование за счет бюджетных средств"][baseName] = 'Бюджет, млн.р.';
   var a=[finance["Финансирование из собственных средств"],finance["Финансирование за счет бюджетных средств"]];
   return {finance:a, start: start, end: end, years: years, valueBudget: valueBudget, valueOwnBudget: valueOwnBudget, sumBudget: sumBudget, sumOwnBudget: sumOwnBudget};
 }
 
+function traverseTree(data, initialHref,parentId, parentType) {
+  data.forEach((node) => {
+    if(node.object_type != parentType) {
+      switch (node.object_type) {
+        case 2:
+          node.href = initialHref + '/section/' + node.id;
+          break;
+        case 1:
+          node.href = initialHref + '/subsection/' + node.id;
+          break;
+        case 0:
+          node.href = initialHref + '/project/' + node.id;
+          break;
+        }
+    } else {
+      node.href = initialHref.replace(new RegExp('/' + parentId + '$'), '/'+node.id);
+    }
+    parentId = node.id;
+    traverseTree(node.children, node.href, parentId, node.object_type);
+  });
+}
+
+function appendHrefs(data,initialState) {
+  var initialHref = window.getHref(initialState);
+  var curData = data.data.data;
+  traverseTree(curData, initialHref);
+}
+
+
+
 module.exports = {
-  prepareValues: millionsFunction,
-  prepareFinance: prepareFinance
+  prepareValues: projectMillionsFunction,
+  prepareFinance: prepareFinance,
+  appendHrefs: appendHrefs
 }

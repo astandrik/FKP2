@@ -1,9 +1,12 @@
 'use strict';
-var design = require('./design.js');
-var project = require('./project.js');
-var complex = require('./complex.js');
+
 module.exports = {
-  design: design,
-  project: project,
-  complex: complex
-};
+projectStructure: require('./ProjectStructure/projectStructure.js'),
+section: require('./ProjectStructure/section.js'),
+subsection: require('./ProjectStructure/subsection.js'),
+project: require('./ProjectStructure/project.js'),
+projectSection: require('./ProjectStructure/projectSection.js'),
+
+design: require('./design.js'),
+
+}

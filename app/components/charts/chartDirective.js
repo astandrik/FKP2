@@ -6,10 +6,11 @@ function CD($timeout, $compile) {
     compile: function compile(templateElement, templateAttrs) {
       return {
         pre: function pre($scope) {
+          window.Chart.defaults.global.colours = ["#4997cd", "#d76e00"]
           $scope.labels = $scope.data.barLabels;
           $scope.series = $scope.data.barSeries;
           $scope.chartData = $scope.data.barData;
-          var template = '<canvas id="bar" class="chart chart-bar chartFullWidth" chart-data="chartData" chart-labels="labels" chart-series="series"></canvas>';
+          var template = '<canvas id="bar" class="chart chart-bar chartFullWidth" chart-data="chartData" chart-labels="labels" chart-series="series":></canvas>';
           $timeout(function () {
             templateElement.replaceWith($compile(template)($scope));
           });

@@ -7,6 +7,9 @@ function ProjectController($scope, dialogs, $projectFactory, $state, $timeout, t
     'object_type',
     'section_id'
   ];
+  $scope.specialDict = {
+    type: 'object_type'
+  };
   $scope.create_popup = function () {
     var data = {
       name: 'МЧС',
@@ -20,11 +23,23 @@ function ProjectController($scope, dialogs, $projectFactory, $state, $timeout, t
   };
   $scope.$on('$viewContentLoaded', function (event) {
     $timeout(function () {
-      if ($state.params.id) {
+      if($state.params.projectId) {
         highlightNode({
-          id: $state.params.id,
-          object_type: $state.params.object_type,
-          section_id: $state.params.section_id
+          id: $state.params.projectId,
+          object_type: 0,
+          section_id: $state.params.sectionId
+        }, $scope.treeParams);
+      } else if ($state.params.subsectionId) {
+        highlightNode({
+          id: $state.params.subsectionId,
+          object_type: 1,
+          section_id: $state.params.sectionId
+        }, $scope.treeParams);
+      }  else if ($state.params.sectionId) {
+        highlightNode({
+          id: $state.params.sectionId,
+          object_type: 2,
+          section_id: $state.params.sectionId
         }, $scope.treeParams);
       } else {
         highlightNode(-1, []);

@@ -48,10 +48,6 @@ module.exports = function () {
     replace: true,
     controller: function controller($scope) {
       var directories = [{
-        name: 'Дизайн',
-        icon: 'wheelChair',
-        state: 'home.design'
-      }, {
         name: 'Структура программы',
         icon: 'business_center',
         state: 'home.projectStructure'
@@ -87,18 +83,25 @@ module.exports = function () {
 var projectCard = require('./card/projectCardDirective.js');
 var projectFactory = require('./projectFactory.js');
 var projectController = require('./projectController.js');
+var sectionFactory = require('./sectionFactory.js');
+var subsectionFactory = require('./subsectionFactory.js');
 var currentModule = angular.module('project', []);
 currentModule.controller('projectController', projectController);
 currentModule.directive('projectCard', projectCard);
 currentModule.factory('$projectFactory', projectFactory);
+currentModule.factory('$subsectionFactory', subsectionFactory);
+currentModule.factory('$sectionFactory', sectionFactory);
 
-},{"./card/projectCardDirective.js":5,"./projectController.js":7,"./projectFactory.js":8}],7:[function(require,module,exports){
+},{"./card/projectCardDirective.js":5,"./projectController.js":7,"./projectFactory.js":8,"./sectionFactory.js":9,"./subsectionFactory.js":10}],7:[function(require,module,exports){
 'use strict';
 
 var highlightNode = require('../components/accordion/treeBuilder.js').highlight;
 function ProjectController($scope, dialogs, $projectFactory, $state, $timeout, treeData) {
   $scope.treeData = treeData;
   $scope.treeParams = ['id', 'object_type', 'section_id'];
+  $scope.specialDict = {
+    type: 'object_type'
+  };
   $scope.create_popup = function () {
     var data = {
       name: 'МЧС',
@@ -112,11 +115,23 @@ function ProjectController($scope, dialogs, $projectFactory, $state, $timeout, t
   };
   $scope.$on('$viewContentLoaded', function (event) {
     $timeout(function () {
-      if ($state.params.id) {
+      if ($state.params.projectId) {
         highlightNode({
-          id: $state.params.id,
-          object_type: $state.params.object_type,
-          section_id: $state.params.section_id
+          id: $state.params.projectId,
+          object_type: 0,
+          section_id: $state.params.sectionId
+        }, $scope.treeParams);
+      } else if ($state.params.subsectionId) {
+        highlightNode({
+          id: $state.params.subsectionId,
+          object_type: 1,
+          section_id: $state.params.sectionId
+        }, $scope.treeParams);
+      } else if ($state.params.sectionId) {
+        highlightNode({
+          id: $state.params.sectionId,
+          object_type: 2,
+          section_id: $state.params.sectionId
         }, $scope.treeParams);
       } else {
         highlightNode(-1, []);
@@ -126,7 +141,7 @@ function ProjectController($scope, dialogs, $projectFactory, $state, $timeout, t
 }
 module.exports = ProjectController;
 
-},{"../components/accordion/treeBuilder.js":22}],8:[function(require,module,exports){
+},{"../components/accordion/treeBuilder.js":28}],8:[function(require,module,exports){
 'use strict';
 
 module.exports = function projectFactory($http) {
@@ -140,101 +155,361 @@ module.exports = function projectFactory($http) {
 },{}],9:[function(require,module,exports){
 'use strict';
 
+module.exports = function ($http) {
+  return {
+    getById: function getById(id) {
+      return $http.get('data/section?id=' + id);
+    }
+  };
+};
+
+},{}],10:[function(require,module,exports){
+'use strict';
+
+module.exports = function ($http) {
+  return {
+    getById: function getById(id) {
+      return $http.get('data/subsection?id=' + id);
+    }
+  };
+};
+
+},{}],11:[function(require,module,exports){
+'use strict';
+
+var crumbs = {
+  section: { label: '{{sectionCutFunction(section.name)}}', toolTip: '{{section.name}}', dependencies: [] },
+  subsection: { label: '{{subsectionCutFunction(subsection.name)}}', toolTip: '{{subsection.name}}', dependencies: ['section'] },
+  project: { label: 'Проект {{projectCutFunction(project.cipher) || projectCutFunction(project.name)}}', toolTip: '{{project.name}}', dependencies: ['section', 'subsection'] },
+  projectSection: { label: '{{sectionName}}', toolTip: '{{sectionName}}', dependencies: [] }
+};
+
+function interpolateTooltips(interpolate, type, scope) {
+  crumbs[type].dependencies.forEach(function (dep) {
+    interpolateTooltips(interpolate, dep, scope);
+  });
+  crumbs[type].toolTipInterpolated = interpolate(crumbs[type].toolTip)(scope);
+}
+
+function init(interpolate, type, scope) {
+  interpolateTooltips(interpolate, type, scope);
+  return crumbs;
+}
+
+module.exports = {
+  init: init, crumbs: crumbs
+};
+
+},{}],12:[function(require,module,exports){
+'use strict';
+
+var helpers = require('./projectHelper.js');
+
+var breadcrumbs = require('./breadcrumbs.js');
+
+var entity = {
+  url: '/project/:projectId',
+  views: {
+    'projectInfo@home.projectStructure': {
+      templateUrl: 'app/Project/card/project-card.html',
+      controller: function controller($scope, project, pieData, tabstripData, section, subsection, $interpolate) {
+        $scope.tabstripData = tabstripData;
+        $scope.project = project;
+        project = helpers.prepareValues(project);
+        $scope.timeLineVerticalData = project.plans;
+        $scope.basename = 'Тип';
+        var finObj = helpers.prepareFinance(project.finance, $scope.basename);
+        $scope.start = finObj.start;
+        $scope.end = finObj.end;
+        project.finance = finObj.finance;
+        $scope.project.chart = { barLabels: finObj.years, barSeries: ['Бюджет, млн.р.', 'Внебюджет, млн.р'], barData: [finObj.valueBudget, finObj.valueOwnBudget] };
+        $scope.pieChartData = { pieLabels: ["Бюджет", "Внебюджет"], pieData: [finObj.sumBudget, finObj.sumOwnBudget] };
+        $scope.section = section;
+        $scope.subsection = subsection;
+        breadcrumbs.init($interpolate, 'project', $scope);
+      }
+    }
+  },
+  ncyBreadcrumb: breadcrumbs.crumbs.project,
+  resolve: {
+    projectResource: '$projectFactory',
+    project: function project($http, projectResource, $stateParams) {
+      var id = $stateParams.projectId;
+      return projectResource.getById(id).then(function (data) {
+        return data.data.data;
+      });
+    },
+    pieData: function pieData($chartService1) {
+      return $chartService1.getData('testData/pie.json').then(function (data) {
+        return data.data;
+      });
+    },
+    tabstripData: function tabstripData($stateParams) {
+      var tabs = [];
+      tabs.push({
+        name: 'Общие сведения',
+        state: 'projectSection',
+        type: 'general'
+      });
+      if ($stateParams.sectionId != 2) {
+        tabs.push({
+          name: 'Результаты',
+          state: 'projectSection',
+          type: 'results'
+        });
+      }
+      tabs.push({
+        name: 'Финансирование',
+        state: 'projectSection',
+        type: 'finance'
+      });
+      tabs.push({
+        name: 'Связанные проекты',
+        state: 'projectSection',
+        type: 'relatedProjects'
+      });
+      tabs.push({
+        name: 'События',
+        state: 'projectSection',
+        type: 'events'
+      });
+      return tabs;
+    }
+  }
+};
+
+module.exports = entity;
+
+},{"./breadcrumbs.js":11,"./projectHelper.js":13}],13:[function(require,module,exports){
+"use strict";
+
+function projectMillionsFunction(project) {
+  for (var type in project.finance) {
+    for (var val in project.finance[type]) {
+      project.finance[type][val] = project.finance[type][val] / 1000000.0;
+    }
+  }
+  return project;
+}
+
+function prepareFinance(finance, baseName) {
+  var years = [];
+  var valueBudget = [];
+  var valueOwnBudget = [];
+  var sumBudget = 0;
+  var sumOwnBudget = 0;
+  for (var p in finance["Финансирование из собственных средств"]) {
+    years.push(p);
+    valueOwnBudget.push(finance["Финансирование из собственных средств"][p]);
+    sumOwnBudget = sumOwnBudget + finance["Финансирование из собственных средств"][p];
+  };
+  for (var p in finance["Финансирование за счет бюджетных средств"]) {
+    valueBudget.push(finance["Финансирование за счет бюджетных средств"][p]);
+    sumBudget = sumBudget + finance["Финансирование за счет бюджетных средств"][p];
+  };
+  years.sort();
+  var start = years[0];
+  var end = years[years.length - 1];
+  finance["Финансирование из собственных средств"][baseName] = 'Внебюджет, млн.р.';
+  finance["Финансирование за счет бюджетных средств"][baseName] = 'Бюджет, млн.р.';
+  var a = [finance["Финансирование из собственных средств"], finance["Финансирование за счет бюджетных средств"]];
+  return { finance: a, start: start, end: end, years: years, valueBudget: valueBudget, valueOwnBudget: valueOwnBudget, sumBudget: sumBudget, sumOwnBudget: sumOwnBudget };
+}
+
+function traverseTree(data, initialHref, parentId, parentType) {
+  data.forEach(function (node) {
+    if (node.object_type != parentType) {
+      switch (node.object_type) {
+        case 2:
+          node.href = initialHref + '/section/' + node.id;
+          break;
+        case 1:
+          node.href = initialHref + '/subsection/' + node.id;
+          break;
+        case 0:
+          node.href = initialHref + '/project/' + node.id;
+          break;
+      }
+    } else {
+      node.href = initialHref.replace(new RegExp('/' + parentId + '$'), '/' + node.id);
+    }
+    parentId = node.id;
+    traverseTree(node.children, node.href, parentId, node.object_type);
+  });
+}
+
+function appendHrefs(data, initialState) {
+  var initialHref = window.getHref(initialState);
+  var curData = data.data.data;
+  traverseTree(curData, initialHref);
+}
+
+module.exports = {
+  prepareValues: projectMillionsFunction,
+  prepareFinance: prepareFinance,
+  appendHrefs: appendHrefs
+};
+
+},{}],14:[function(require,module,exports){
+'use strict';
+
+var breadcrumbs = require('./breadcrumbs.js');
+
+var section = {
+  url: '/:type',
+  views: {
+    'projectSection': {
+      templateUrl: function templateUrl($stateParams) {
+        return 'app/Project/card/sections/' + $stateParams.sectionId + $stateParams.type + '.html';
+      },
+      controller: function controller($stateParams, $scope, $interpolate) {
+        var state = $stateParams;
+        switch (state.type) {
+          case 'general':
+            $scope.sectionName = 'Общие сведения';
+            break;
+          case 'results':
+            $scope.sectionName = 'Результаты';
+            break;
+          case 'finance':
+            $scope.sectionName = 'Финансирование';
+            break;
+          case 'events':
+            $scope.sectionName = 'События';
+            break;
+          case 'relatedProjects':
+            $scope.sectionName = 'Связанные проекты';
+            break;
+          default:
+            $scope.sectionName = 'Общие сведения';
+            break;
+        }
+        breadcrumbs.init($interpolate, 'projectSection', $scope);
+      }
+    }
+  },
+  ncyBreadcrumb: breadcrumbs.crumbs.projectSection
+};
+
+module.exports = section;
+
+},{"./breadcrumbs.js":11}],15:[function(require,module,exports){
+'use strict';
+
+var helpers = require('./projectHelper.js');
 var structure = {
-  url: '/SpaceComplex',
+  url: '/ProjectStructure',
   views: {
     'content@': {
-      templateUrl: 'app/SpaceComplex/spaceComplex-page.html',
-      controller: 'spaceComplexController',
+      templateUrl: 'app/Project/project-page.html',
+      controller: 'projectController',
       resolve: {
         treeData: function treeData($accordion) {
           return $accordion.getTree('data/tree').then(function (response) {
+            helpers.appendHrefs(response, 'home.projectStructure');
             return response.data;
           });
         }
       }
     }
   },
-  ncyBreadcrumb: { label: 'Космические комплексы' }
-};
-var entity = {
-  url: '/treeEntity?id',
-  views: {
-    'complexInfo': {
-      templateUrl: 'app/SpaceComplex/card/complex-card.html',
-      controller: function controller($scope, complex, timeLineVerticalData, pieData) {
-        $scope.complex = complex;
-        $scope.timeLineVerticalData = timeLineVerticalData;
-        $scope.pieChartData = pieData;
-        $scope.start = complex.chart.barLabels[0];
-        $scope.end = complex.chart.barLabels[complex.chart.barLabels.length - 1]; //  debugger;
-      },
-      resolve: {
-        complex: function project($http, $complex, $stateParams) {
-          var id = $stateParams.id;
-          return $complex.getById(id).then(function (data) {
-            return data.data;
-          });
-        },
-        timeLineVerticalData: function timeLineVerticalData($timelineService) {
-          return $timelineService.getData('testData/timelineVertical.json').then(function (data) {
-            return data.data;
-          });
-        },
-        pieData: function pieData($chartService1) {
-          return $chartService1.getData('testData/pie.json').then(function (data) {
-            return data.data;
-          });
-        }
-      }
-    }
-  },
-  ncyBreadcrumb: { label: 'Комплекс {{project.code}}' }
-};
-var section = {
-  url: '/tabSection?type',
-  views: {
-    'complexSection': {
-      templateUrl: function templateUrl($stateParams) {
-        switch ($stateParams.type) {
-          case 'general':
-            return 'app/SpaceComplex/card/sections/general.html';
-            break;
-          case 'description':
-            return 'app/SpaceComplex/card/sections/description.html';
-            break;
-          case 'relatedProjects':
-            return 'app/SpaceComplex/card/sections/relatedProjects.html';
-            break;
-          default:
-            return 'app/SpaceComplex/card/sections/general.html';
-        }
-      },
-      controller: function controller($stateParams, $scope) {
-        var state = $stateParams;
-        switch (state.type) {
-          case 'general':
-            $scope.sectionName = 'Общие сведения';
-            break;
-          case 'finance':
-            $scope.sectionName = 'Финансирование';
-            break;
-          default:
-            $scope.sectionName = 'Общие сведения';
-            break;
-        }
-      }
-    }
-  },
-  ncyBreadcrumb: { label: '{{sectionName}}' }
-};
-module.exports = {
-  structure: structure,
-  entity: entity,
-  section: section
+  ncyBreadcrumb: { label: 'Структура программы', toolTipInterpolated: 'Структура программы' }
 };
 
-},{}],10:[function(require,module,exports){
+module.exports = structure;
+
+},{"./projectHelper.js":13}],16:[function(require,module,exports){
+'use strict';
+
+var breadcrumbs = require('./breadcrumbs.js');
+
+function prepareSection(finance) {
+  for (var e in finance) {
+    if (isNaN(finance[e])) {
+      prepareSection(finance[e]);
+    } else {
+      finance[e] = parseFloat(finance[e]) / 1000000.0;
+    }
+  }
+}
+
+function getFinanceTables(finance) {
+  var projectsBudget = [];
+  var projectsOwn = [];
+  for (var e in finance) {
+    var projectBudget = { 'Название': e };
+    var projectOwn = { 'Название': e };
+    for (var y in finance[e]["Финансирование за счет бюджетных средств"]) {
+      projectBudget[y] = finance[e]["Финансирование за счет бюджетных средств"][y];
+    }
+    for (var y in finance[e]["Финансирование из собственных средств"]) {
+      projectOwn[y] = finance[e]["Финансирование из собственных средств"][y];
+    }
+    projectsBudget.push(projectBudget);
+    projectsOwn.push(projectOwn);
+  }
+  return { 'Budget': projectsBudget, 'Own': projectsOwn };
+}
+
+var entity = {
+  url: '/section/:sectionId',
+  views: {
+    'projectInfo@home.projectStructure': {
+      templateUrl: 'app/Project/card/section-card.html',
+      controller: function controller($scope, section, $interpolate) {
+        $scope.section = _.cloneDeep(section);
+        prepareSection($scope.section.finance);
+        var tables = getFinanceTables($scope.section.finance);
+        $scope.financeBudget = tables.Budget;
+        $scope.financeOwn = tables.Own;
+        breadcrumbs.init($interpolate, 'section', $scope);
+        $scope.basename = 'Название';
+      }
+    }
+  },
+  ncyBreadcrumb: breadcrumbs.crumbs.section,
+  resolve: {
+    section: function section($http, $stateParams, $sectionFactory) {
+      var id = $stateParams.sectionId;
+      return $sectionFactory.getById(id).then(function (data) {
+        return data.data.data;
+      });
+    }
+  }
+};
+
+module.exports = entity;
+
+},{"./breadcrumbs.js":11}],17:[function(require,module,exports){
+'use strict';
+
+var breadcrumbs = require('./breadcrumbs.js');
+var entity = {
+  url: '/subsection/:subsectionId',
+  views: {
+    'projectInfo@home.projectStructure': {
+      templateUrl: 'app/Project/card/subsection-card.html',
+      controller: function controller($scope, subsection, section, $interpolate) {
+        $scope.subsection = subsection;
+        $scope.section = section;
+        breadcrumbs.init($interpolate, 'subsection', $scope);
+      }
+    }
+  },
+  ncyBreadcrumb: breadcrumbs.crumbs.subsection,
+  resolve: {
+    subsection: function subsection($http, $stateParams, $subsectionFactory) {
+      var id = $stateParams.subsectionId;
+      return $subsectionFactory.getById(id).then(function (data) {
+        return data.data.data;
+      });
+    }
+  }
+};
+
+module.exports = entity;
+
+},{"./breadcrumbs.js":11}],18:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -275,185 +550,21 @@ module.exports = {
   ncyBreadcrumb: { label: 'Дизайн-страница' }
 };
 
-},{}],11:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 'use strict';
 
-var helpers = require('./projectHelper.js');
-
-var structure = {
-  url: '/ProjectStructure',
-  views: {
-    'content@': {
-      templateUrl: 'app/Project/project-page.html',
-      controller: 'projectController',
-      resolve: {
-        treeData: function treeData($accordion) {
-          return $accordion.getTree('data/tree').then(function (response) {
-            return response.data;
-          });
-        }
-      }
-    }
-  },
-  ncyBreadcrumb: { label: 'Структура программы' }
-};
-var entity = {
-  url: '/treeEntity?id&object_type&section_id',
-  views: {
-    'projectInfo': {
-      templateUrl: 'app/Project/card/project-card.html',
-      controller: function controller($scope, project, pieData, tabstripData) {
-        $scope.tabstripData = tabstripData;
-        $scope.project = project;
-        project = helpers.prepareValues(project);
-        $scope.timeLineVerticalData = project.plans;
-        var finObj = helpers.prepareFinance(project.finance);
-        $scope.start = finObj.start;
-        $scope.end = finObj.end;
-        project.finance = finObj.finance;
-
-        $scope.project.chart = { barLabels: finObj.years, barSeries: ['Бюджет, млн.р.', 'Внебюджет, млн.р'], barData: [finObj.valueBudget, finObj.valueOwnBudget] };
-        $scope.pieChartData = { pieLabels: ["Бюджет", "Внебюджет"], pieData: [finObj.sumBudget, finObj.sumOwnBudget]
-        };
-      },
-      resolve: {
-        projectResource: '$projectFactory',
-        project: function project($http, projectResource, $stateParams) {
-          var id = $stateParams.id;
-          return projectResource.getById(id).then(function (data) {
-            return data.data.data;
-          });
-        },
-        pieData: function pieData($chartService1) {
-          return $chartService1.getData('testData/pie.json').then(function (data) {
-            return data.data;
-          });
-        },
-        tabstripData: function tabstripData($stateParams) {
-          var tabs = [];
-          tabs.push({
-            name: 'Общие сведения',
-            state: 'projectSection',
-            type: 'general'
-          });
-          if ($stateParams.section_id != 2) {
-            tabs.push({
-              name: 'Результаты',
-              state: 'projectSection',
-              type: 'results'
-            });
-          }
-          tabs.push({
-            name: 'Финансирование',
-            state: 'projectSection',
-            type: 'finance'
-          });
-          tabs.push({
-            name: 'Связанные проекты',
-            state: 'projectSection',
-            type: 'relatedProjects'
-          });
-          tabs.push({
-            name: 'События',
-            state: 'projectSection',
-            type: 'events'
-          });
-          return tabs;
-        }
-      }
-    }
-  },
-  ncyBreadcrumb: { label: 'Проект {{project.cipher}}' }
-};
-var section = {
-  url: '/tabSection?type',
-  views: {
-    'projectSection': {
-      templateUrl: function templateUrl($stateParams) {
-        return 'app/Project/card/sections/' + $stateParams.section_id + $stateParams.type + '.html';
-      },
-      controller: function controller($stateParams, $scope) {
-        var state = $stateParams;
-        switch (state.type) {
-          case 'general':
-            $scope.sectionName = 'Общие сведения';
-            break;
-          case 'results':
-            $scope.sectionName = 'Результаты';
-            break;
-          case 'finance':
-            $scope.sectionName = 'Финансирование';
-            break;
-          default:
-            $scope.sectionName = 'Общие сведения';
-            break;
-        }
-      }
-    }
-  },
-  ncyBreadcrumb: { label: '{{sectionName}}' }
-};
-var project = {
-  structure: structure,
-  entity: entity,
-  section: section
-};
-module.exports = project;
-
-},{"./projectHelper.js":12}],12:[function(require,module,exports){
-"use strict";
-
-function millionsFunction(project) {
-  for (var type in project.finance) {
-    for (var val in project.finance[type]) {
-      project.finance[type][val] = project.finance[type][val] / 1000000.0;
-    }
-  }
-  return project;
-}
-
-function prepareFinance(finance) {
-  var years = [];
-  var valueBudget = [];
-  var valueOwnBudget = [];
-  var sumBudget = 0;
-  var sumOwnBudget = 0;
-  for (var p in finance["Финансирование из собственных средств"]) {
-    years.push(p);
-    valueOwnBudget.push(finance["Финансирование из собственных средств"][p]);
-    sumOwnBudget = sumOwnBudget + finance["Финансирование из собственных средств"][p];
-  };
-  for (var p in finance["Финансирование за счет бюджетных средств"]) {
-    valueBudget.push(finance["Финансирование за счет бюджетных средств"][p]);
-    sumBudget = sumBudget + finance["Финансирование за счет бюджетных средств"][p];
-  };
-  years.sort();
-  var start = years[0];
-  var end = years[years.length - 1];
-  finance["Финансирование из собственных средств"]['Тип'] = 'Внебюджет, млн.р.';
-  finance["Финансирование за счет бюджетных средств"]['Тип'] = 'Бюджет, млн.р.';
-  var a = [finance["Финансирование из собственных средств"], finance["Финансирование за счет бюджетных средств"]];
-  return { finance: a, start: start, end: end, years: years, valueBudget: valueBudget, valueOwnBudget: valueOwnBudget, sumBudget: sumBudget, sumOwnBudget: sumOwnBudget };
-}
-
 module.exports = {
-  prepareValues: millionsFunction,
-  prepareFinance: prepareFinance
+  projectStructure: require('./ProjectStructure/projectStructure.js'),
+  section: require('./ProjectStructure/section.js'),
+  subsection: require('./ProjectStructure/subsection.js'),
+  project: require('./ProjectStructure/project.js'),
+  projectSection: require('./ProjectStructure/projectSection.js'),
+
+  design: require('./design.js')
+
 };
 
-},{}],13:[function(require,module,exports){
-'use strict';
-
-var design = require('./design.js');
-var project = require('./project.js');
-var complex = require('./complex.js');
-module.exports = {
-  design: design,
-  project: project,
-  complex: complex
-};
-
-},{"./complex.js":9,"./design.js":10,"./project.js":11}],14:[function(require,module,exports){
+},{"./ProjectStructure/project.js":12,"./ProjectStructure/projectSection.js":14,"./ProjectStructure/projectStructure.js":15,"./ProjectStructure/section.js":16,"./ProjectStructure/subsection.js":17,"./design.js":18}],20:[function(require,module,exports){
 'use strict';
 
 module.exports = function () {
@@ -465,7 +576,7 @@ module.exports = function () {
   };
 };
 
-},{}],15:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 'use strict';
 
 var spaceComplexController = require('./complexController.js');
@@ -476,7 +587,7 @@ currentModule.controller('spaceComplexController', spaceComplexController);
 currentModule.factory('$complex', factory);
 currentModule.directive('complexCard', complexCard);
 
-},{"./card/complexCardDirective.js":14,"./complexController.js":16,"./complexFactory.js":17}],16:[function(require,module,exports){
+},{"./card/complexCardDirective.js":20,"./complexController.js":22,"./complexFactory.js":23}],22:[function(require,module,exports){
 'use strict';
 
 function CC($scope, treeData, dialogs) {
@@ -508,7 +619,7 @@ function CC($scope, treeData, dialogs) {
 }
 module.exports = CC;
 
-},{}],17:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 'use strict';
 
 module.exports = function complexFactory($http) {
@@ -519,7 +630,7 @@ module.exports = function complexFactory($http) {
   };
 };
 
-},{}],18:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 'use strict';
 
 var icons = {
@@ -528,7 +639,7 @@ var icons = {
 };
 module.exports = icons;
 
-},{}],19:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 'use strict';
 
 var accordionDirective = require('./accordionDirective.js');
@@ -537,7 +648,7 @@ var currentModule = angular.module('accordion', []);
 currentModule.directive('accordionTree', accordionDirective);
 currentModule.service('$accordion', accordionService);
 
-},{"./accordionDirective.js":20,"./accordionService.js":21}],20:[function(require,module,exports){
+},{"./accordionDirective.js":26,"./accordionService.js":27}],26:[function(require,module,exports){
 'use strict';
 
 var treeBuilder = require('./treeBuilder.js').treeHtml;
@@ -546,7 +657,8 @@ module.exports = function ($compile, $accordion, $state) {
   return {
     scope: {
       data: '=',
-      params: '='
+      params: '=',
+      special: '='
     },
     compile: function compile(templateElement, templateAttrs) {
       return {
@@ -554,6 +666,7 @@ module.exports = function ($compile, $accordion, $state) {
           $scope.getHref = $scope.$parent.getHref;
           $scope.getCurrentState = $scope.$parent.getCurrentState;
           var paramList = $scope.params;
+          var specialDict = $scope.special || {};
           $scope.getCurrentEntityState = function () {
             var state = $scope.getCurrentState();
             return state.indexOf('treeEntity') > -1 ? state.slice(0, state.indexOf('treeEntity') + 'treeEntity'.length) : state + '.treeEntity';
@@ -566,7 +679,7 @@ module.exports = function ($compile, $accordion, $state) {
             throw 'define data attribute for tree';
           }
           treeData.data.forEach(function (item) {
-            elements.push(treeBuilder.buildNode(item, paramList));
+            elements.push(treeBuilder.buildNode(item, paramList, specialDict));
           });
           var treeHtml = html + elements.join('') + '</ul></div>';
           templateElement.replaceWith($compile(treeHtml)($scope));
@@ -578,7 +691,7 @@ module.exports = function ($compile, $accordion, $state) {
   };
 };
 
-},{"./treeBuilder.js":22}],21:[function(require,module,exports){
+},{"./treeBuilder.js":28}],27:[function(require,module,exports){
 'use strict';
 
 module.exports = function ($http) {
@@ -587,35 +700,38 @@ module.exports = function ($http) {
   };
 };
 
-},{}],22:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 'use strict';
 
 function buildTree() {
   var self = this;
-  this.elementHtml = function (element, nested, paramList) {
+  this.elementHtml = function (element, nested, paramList, specialDict) {
     nested = nested === undefined ? '' : nested;
-    var elemObj = {};
     var hasChildren = element.children && element.children.length > 0;
     var elemId = paramList.reduce(function (sum, current) {
       return sum + current + element[current];
     }, 'node_');
-    paramList.forEach(function (item) {
-      elemObj[item] = element[item];
-    });
-    return '<li><a layout="row" layout-align="space-between center" class="toggle ' + (!hasChildren ? 'fullWidth' : '') + '" id="' + elemId + '" ng-href="{{getHref(getCurrentEntityState(), ' + JSON.stringify(elemObj).replace(/"/g, '\'') + ')}}"><span>' + element.name + (hasChildren ? '</span><ng-md-icon class="toggleOpen" size=30 layout="column" layout-align="center center" icon="keyboard_arrow_right"></ng-md-icon></a>' : '') + nested + '</li>';
+    var special = '';
+    for (var p in specialDict) {
+      var row = p + '="';
+      row += element[specialDict[p]].toString();
+      row += '"';
+      special += row + ' ';
+    }
+    return '<li><a layout="row" layout-align="space-between center" ' + (special ? special : '') + ' class="toggle ' + (!hasChildren ? 'fullWidth' : '') + '" id="' + elemId + '" href="' + element.href + '"><span>' + element.name + (hasChildren ? '</span><ng-md-icon class="toggleOpen" size=30 layout="column" layout-align="center center" icon="keyboard_arrow_right"></ng-md-icon></a>' : '') + nested + '</li>';
   };
-  this.buildNode = function (root, paramList) {
+  this.buildNode = function (root, paramList, specialDict) {
     var inner = '';
     if (root.children) {
       inner = '<ul class="inner">';
       root.children.forEach(function (item) {
-        inner += self.buildNode(item, paramList);
+        inner += self.buildNode(item, paramList, specialDict);
       });
       inner += '</ul>';
     } else {
-      return self.elementHtml(root, null, paramList);
+      return self.elementHtml(root, null, paramList, specialDict);
     }
-    return self.elementHtml(root, inner, paramList);
+    return self.elementHtml(root, inner, paramList, specialDict);
   };
   return this;
 }
@@ -661,6 +777,7 @@ function highlightNode(node, paramList) {
   var elemParent = elem.parent().parent().parent().children('a');
   while (elemParent.length > 0) {
     elemParent.addClass('selected');
+    elemParent.find('ng-md-icon>svg').addClass('show');
     elemParent = elemParent.parent().parent().parent().children('a');
     //  debugger;
   }
@@ -675,14 +792,14 @@ module.exports = {
   highlight: highlightNode
 };
 
-},{}],23:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 'use strict';
 
 var calendarDirective = require('./calendarDirective.js');
 var currentModule = angular.module('calendar', [require('angular-bootstrap-calendar')]);
 currentModule.directive('calendar', calendarDirective);
 
-},{"./calendarDirective.js":24,"angular-bootstrap-calendar":41}],24:[function(require,module,exports){
+},{"./calendarDirective.js":30,"angular-bootstrap-calendar":47}],30:[function(require,module,exports){
 'use strict';
 
 function C() {
@@ -721,7 +838,7 @@ function C() {
 }
 module.exports = C;
 
-},{"../../../node_modules/moment/locale/ru":48,"moment":49}],25:[function(require,module,exports){
+},{"../../../node_modules/moment/locale/ru":54,"moment":55}],31:[function(require,module,exports){
 'use strict';
 
 function CD($timeout, $compile) {
@@ -731,10 +848,11 @@ function CD($timeout, $compile) {
     compile: function compile(templateElement, templateAttrs) {
       return {
         pre: function pre($scope) {
+          window.Chart.defaults.global.colours = ["#4997cd", "#d76e00"];
           $scope.labels = $scope.data.barLabels;
           $scope.series = $scope.data.barSeries;
           $scope.chartData = $scope.data.barData;
-          var template = '<canvas id="bar" class="chart chart-bar chartFullWidth" chart-data="chartData" chart-labels="labels" chart-series="series"></canvas>';
+          var template = '<canvas id="bar" class="chart chart-bar chartFullWidth" chart-data="chartData" chart-labels="labels" chart-series="series":></canvas>';
           $timeout(function () {
             templateElement.replaceWith($compile(template)($scope));
           });
@@ -766,7 +884,7 @@ module.exports = {
   pieChart: CD1
 };
 
-},{}],26:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 'use strict';
 
 function CS($http) {
@@ -788,7 +906,7 @@ module.exports = {
   pieChart: CS1
 };
 
-},{}],27:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 'use strict';
 
 var chartDirective = require('./chartDirective.js');
@@ -799,7 +917,7 @@ currentModule.directive('pieChart', chartDirective.pieChart);
 currentModule.factory('$chartService', chartService.barChart);
 currentModule.factory('$chartService1', chartService.pieChart);
 
-},{"./chartDirective.js":25,"./chartService.js":26}],28:[function(require,module,exports){
+},{"./chartDirective.js":31,"./chartService.js":32}],34:[function(require,module,exports){
 'use strict';
 
 require('./accordion/accordion.js');
@@ -889,56 +1007,75 @@ currentModule.controller('DatepickerDemoCtrl', function ($scope) {
   }
 });
 
-},{"../Project/card/projectCardDirective.js":5,"./accordion/accordion.js":19,"./calendar/calendar.js":23,"./charts/charts.js":27,"./dataTable/dataTable.js":29,"./popup/popupController.js":32,"./split/split.js":33,"./tabstrip/tabstrip.js":34,"./timeLines/timeLines.js":38}],29:[function(require,module,exports){
+},{"../Project/card/projectCardDirective.js":5,"./accordion/accordion.js":25,"./calendar/calendar.js":29,"./charts/charts.js":33,"./dataTable/dataTable.js":35,"./popup/popupController.js":38,"./split/split.js":39,"./tabstrip/tabstrip.js":40,"./timeLines/timeLines.js":44}],35:[function(require,module,exports){
 'use strict';
 
 var dataTableDirective = require('./dataTableDirective.js');
 var dataTableService = require('./dataTableService.js');
-var currentModule = angular.module('dataTable', ['ui.grid']);
+var currentModule = angular.module('dataTable', ['ui.grid', 'ui.grid.pinning']);
 currentModule.directive('cDataTable', dataTableDirective);
 currentModule.factory('$dataTableService', dataTableService);
 
-},{"./dataTableDirective.js":30,"./dataTableService.js":31}],30:[function(require,module,exports){
+},{"./dataTableDirective.js":36,"./dataTableService.js":37}],36:[function(require,module,exports){
 'use strict';
+
+var _ = require('lodash');
 
 function DTD() {
   return {
-    scope: { data: '=' },
+    scope: { data: '=', 'basename': '=' },
     restrict: 'E',
-    template: '<div ui-grid="{ data: gridData, columnDefs : columns}" class="grid"></div>',
+    template: '<div ui-grid="gridOptions" ng-style="{\'min-height\': minHeight}" class="grid"></div>',
     controller: function controller($scope, $filter) {
-      if (Object.prototype.toString.call($scope.data) === '[object Array]') {
+      var minRowsToShow = 5,
+          rowHeight = 70;
+      $scope.minHeight = minRowsToShow > $scope.data.length ? $scope.data.length * rowHeight + 30 + 'px' : minRowsToShow * rowHeight + 30 + 'px';
+      var data = _.cloneDeep($scope.data);
+      if (Object.prototype.toString.call(data) === '[object Array]') {
         //Переводим всё в тип валюты.
-        for (var i = 0; i < $scope.data.length; i++) {
-          for (var p in $scope.data[i]) {
-            if (p != 'Тип') {
-              $scope.data[i][p] = $filter('currency')($scope.data[i][p], '');
+        for (var i = 0; i < data.length; i++) {
+          for (var p in data[i]) {
+            if (p != $scope.basename) {
+              data[i][p] = $filter('currency')(data[i][p], '');
             }
           }
         }
         //Проходим по именам столбцов и сортируем годы
         var b = [];
-        for (var p in $scope.data[0]) {
+        for (var p in data[0]) {
           if (isNaN(p) == false) {
             b.push(p);
           }
         };
         b.sort();
         //добавляем первый столбец и формируем окончательный список столбцов, который кладем в переменную $scope.columns
-        var c = ['Тип'].concat(b);
-        $scope.gridData = $scope.data;
+        var c = [$scope.basename].concat(b);
         $scope.columns = [];
         c.forEach(function (item) {
-          $scope.columns.push({ field: item });
+          if (item == $scope.basename) {
+            $scope.columns.push({
+              field: item,
+              minWidth: 250,
+              pinnedLeft: true
+            });
+          } else {
+            $scope.columns.push({
+              field: item,
+              width: 90
+            });
+          }
         });
-        $scope.gridData = $scope.data;
+        $scope.gridData = data;
       }
+      $scope.gridOptions = { data: $scope.gridData, columnDefs: $scope.columns, rowHeight: rowHeight, minimumColumnSize: 5,
+        enableHorizontalScrollbar: 1,
+        enableVerticalScrollbar: 1 };
     }
   };
 }
 module.exports = DTD;
 
-},{}],31:[function(require,module,exports){
+},{"lodash":53}],37:[function(require,module,exports){
 'use strict';
 
 function DTS($http) {
@@ -950,7 +1087,7 @@ function DTS($http) {
 }
 module.exports = DTS;
 
-},{}],32:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 'use strict';
 
 module.exports = function ($scope, $uibModalInstance, data) {
@@ -965,7 +1102,7 @@ module.exports = function ($scope, $uibModalInstance, data) {
   };
 };
 
-},{}],33:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 'use strict';
 
 function compile(templateElement, templateAttrs) {
@@ -997,7 +1134,7 @@ module.exports = function () {
   };
 };
 
-},{}],34:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 'use strict';
 
 var tabstripDirective = require('./tabstripDirective.js');
@@ -1011,7 +1148,7 @@ currentModule.directive('tabStrip', tabstripDirective); /*
                                                         2) type - parameter "type" that will be passed to that state
                                                         */
 
-},{"./tabstripDirective.js":35}],35:[function(require,module,exports){
+},{"./tabstripDirective.js":41}],41:[function(require,module,exports){
 'use strict';
 
 function reActivate(event) {
@@ -1051,17 +1188,14 @@ function tabstripDirective($compile, $state, $timeout) {
           if (btn.href) {
             buttons.push('<a class="btn btn-default btn-tab"  ng-href="' + btn.href + '" flex>' + btn.name + '</a>');
           } else if (btn.state && btn.type) {
-            buttons.push('<a class="btn btn-default btn-tab" type="' + btn.type + '" ng-click="activateTab($event)" ng-href="{{getHref(getCurrentEntityState(\'' + btn.state + '\'), {type: \'' + btn.type + '\'})}}" flex>' + btn.name + '</a>');
+            var href = window.getHref(templateAttrs.initial) + '/' + btn.type;
+            buttons.push('<a class="btn btn-default btn-tab" type="' + btn.type + '" ng-click="activateTab($event)" href="' + href + '" flex>' + btn.name + '</a>');
           } else {
             buttons.push('<a class="btn btn-default btn-tab" flex>' + btn.name + '</a>');
           }
         });
         html += buttons.join('');
         html += '</div>';
-        $scope.getCurrentEntityState = function (stateName) {
-          var state = $scope.getCurrentState();
-          return state.indexOf(stateName) > -1 ? state : state + '.' + stateName;
-        };
         var compiled = $compile(html)($scope);
         templateElement.replaceWith(compiled);
         $('#' + $scope.id + ' .btn-tab').removeClass('active');
@@ -1073,7 +1207,7 @@ function tabstripDirective($compile, $state, $timeout) {
 }
 module.exports = tabstripDirective;
 
-},{}],36:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 'use strict';
 
 var _ = require('lodash');
@@ -1115,10 +1249,11 @@ function generateBadge(date) {
   var moment = require('moment');
   require('../../../node_modules/moment/locale/ru');
   var d = moment(new Date(date));
+  d = date.split('-')[0];
   var html = '<div class="timeline-badge">';
   //  var dayHtml = '  <span class="timeline-balloon-date-day">' + d.format('D') + '</span>';
   //  var monthHtml = '  <span class="timeline-balloon-date-month">' + d.format('MMM') + '</span>';
-  var yearHtml = '  <span class="timeline-balloon-date-year">' + d.format('YYYY') + '</span>';
+  var yearHtml = '  <span class="timeline-balloon-date-year">' + d + '</span>';
   html += yearHtml + '</div>';
   return html;
 }
@@ -1216,7 +1351,7 @@ module.exports = {
   horizontal: Horizontal
 };
 
-},{"../../../node_modules/moment/locale/ru":48,"lodash":47,"moment":49}],37:[function(require,module,exports){
+},{"../../../node_modules/moment/locale/ru":54,"lodash":53,"moment":55}],43:[function(require,module,exports){
 'use strict';
 
 function CS($http) {
@@ -1228,7 +1363,7 @@ function CS($http) {
 }
 module.exports = CS;
 
-},{}],38:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 'use strict';
 
 var timeLineDirective = require('./timeLineDirective.js');
@@ -1238,7 +1373,7 @@ currentModule.directive('timeLineVertical', timeLineDirective.vertical);
 currentModule.directive('timeLineHorizontal', timeLineDirective.horizontal);
 currentModule.factory('$timelineService', timeLineService);
 
-},{"./timeLineDirective.js":36,"./timeLineService.js":37}],39:[function(require,module,exports){
+},{"./timeLineDirective.js":42,"./timeLineService.js":43}],45:[function(require,module,exports){
 'use strict';
 
 require('./router.js');
@@ -1248,8 +1383,13 @@ require('./Design/design.js');
 var layout = require('./Layout/layout.js');
 var components = require('./components/components.js');
 var icons = require('./components/Icons/icons.js');
+
 var app = angular.module('app', ['ui.router', 'ngMaterial', 'ngMdIcons', 'ncy-angular-breadcrumb', 'ngSanitize', 'dialogs.main', 'layout', 'components', 'router', 'project', 'complex', 'design', require('angular-ui-bootstrap')]);
-app.config(['$urlRouterProvider', '$stateProvider', 'ngMdIconServiceProvider', '$routerProvider', 'calendarConfig', function ($urlRouterProvider, $stateProvider, ngMdIconServiceProvider, $routerProvider, calendarConfig) {
+
+app.config(['$urlRouterProvider', '$stateProvider', 'ngMdIconServiceProvider', '$routerProvider', 'calendarConfig', '$breadcrumbProvider', function ($urlRouterProvider, $stateProvider, ngMdIconServiceProvider, $routerProvider, calendarConfig, $breadcrumbProvider) {
+  $breadcrumbProvider.setOptions({
+    templateUrl: 'app/components/breadcrumbs.html'
+  });
   for (var e in icons) {
     ngMdIconServiceProvider.addShape(e, icons[e]);
   }
@@ -1262,21 +1402,55 @@ app.config(['$urlRouterProvider', '$stateProvider', 'ngMdIconServiceProvider', '
 app.run(function ($rootScope, $state) {
   $rootScope.$state = $state;
   $rootScope.getHref = $state.href.bind($state);
+  $rootScope.sectionCutFunction = function sectionCutFunction(section) {
+    if (section && section.length > 30) {
+      var p = section;
+      p = p.slice(0, p.indexOf("."));
+      return p;
+    } else {
+      return section;
+    }
+  };
+  $rootScope.subsectionCutFunction = function subsectionCutFunction(subsection) {
+    if (subsection && subsection.length > 30) {
+      var s = subsection;
+      s = s.slice(0, 30).concat('...');
+      return s;
+    } else {
+      return subsection;
+    }
+  };
+
+  $rootScope.projectCutFunction = function projectCutFunction(project) {
+    if (project && project.length > 30) {
+      return project.slice(0, 30).concat('...');
+    } else {
+      return project;
+    }
+  };
+  window.getHref = $rootScope.getHref;
   $rootScope.getCurrentState = function () {
     return $state.current.name;
   };
   $rootScope.getCurrentHref = function () {
     return $rootScope.getHref($rootScope.getCurrentState());
   };
-  $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, options) {});
-  $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {});
-  $rootScope.$on('$stateNotFound', function (event, unfoundState, fromState, fromParams) {});
+  $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, options) {
+    //debugger;
+  });
+  $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
+    //debugger;
+  });
+  $rootScope.$on('$stateNotFound', function (event, unfoundState, fromState, fromParams) {
+    //debugger;
+  });
 });
 
-},{"./Design/design.js":1,"./Layout/layout.js":3,"./Project/project.js":6,"./SpaceComplex/complex.js":15,"./components/Icons/icons.js":18,"./components/components.js":28,"./router.js":40,"angular-ui-bootstrap":44}],40:[function(require,module,exports){
+},{"./Design/design.js":1,"./Layout/layout.js":3,"./Project/project.js":6,"./SpaceComplex/complex.js":21,"./components/Icons/icons.js":24,"./components/components.js":34,"./router.js":46,"angular-ui-bootstrap":50}],46:[function(require,module,exports){
 'use strict';
 
 var routes = require('./Routes/routes.js');
+
 angular.module('router', []).provider('$router', function () {
   this.$get = new function () {
     var self = this;
@@ -1287,12 +1461,12 @@ angular.module('router', []).provider('$router', function () {
         ncyBreadcrumb: { label: 'ФКП' }
       },
       'home.design': routes.design,
-      'home.projectStructure': routes.project.structure,
-      'home.complexStructure': routes.complex.structure,
-      'home.projectStructure.treeEntity': routes.project.entity,
-      'home.complexStructure.treeEntity': routes.complex.entity,
-      'home.projectStructure.treeEntity.projectSection': routes.project.section,
-      'home.complexStructure.treeEntity.complexSection': routes.complex.section,
+
+      'home.projectStructure': routes.projectStructure,
+      'home.projectStructure.section': routes.section,
+      'home.projectStructure.section.subSection': routes.subsection,
+      'home.projectStructure.section.subSection.project': routes.project,
+      'home.projectStructure.section.subSection.project.tab': routes.projectSection,
       'home.events': {
         url: '/Events',
         views: { 'content@': { templateUrl: 'app/Events/events.html' } }
@@ -1302,7 +1476,7 @@ angular.module('router', []).provider('$router', function () {
   }();
 });
 
-},{"./Routes/routes.js":13}],41:[function(require,module,exports){
+},{"./Routes/routes.js":19}],47:[function(require,module,exports){
 /**
  * angular-bootstrap-calendar - A pure AngularJS bootstrap themed responsive calendar that can display events and has views for year, month, week and day
  * @version v0.19.5
@@ -3441,7 +3615,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ ])
 });
 ;
-},{"angular":46,"interact.js":42,"moment":49}],42:[function(require,module,exports){
+},{"angular":52,"interact.js":48,"moment":55}],48:[function(require,module,exports){
 /**
  * interact.js v1.2.6
  *
@@ -9419,7 +9593,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 } (typeof window === 'undefined'? undefined : window));
 
-},{}],43:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 /*
  * angular-ui-bootstrap
  * http://angular-ui.github.io/bootstrap/
@@ -16816,12 +16990,12 @@ angular.module('ui.bootstrap.datepicker').run(function() {!angular.$$csp().noInl
 angular.module('ui.bootstrap.tooltip').run(function() {!angular.$$csp().noInlineStyle && !angular.$$uibTooltipCss && angular.element(document).find('head').prepend('<style type="text/css">[uib-tooltip-popup].tooltip.top-left > .tooltip-arrow,[uib-tooltip-popup].tooltip.top-right > .tooltip-arrow,[uib-tooltip-popup].tooltip.bottom-left > .tooltip-arrow,[uib-tooltip-popup].tooltip.bottom-right > .tooltip-arrow,[uib-tooltip-popup].tooltip.left-top > .tooltip-arrow,[uib-tooltip-popup].tooltip.left-bottom > .tooltip-arrow,[uib-tooltip-popup].tooltip.right-top > .tooltip-arrow,[uib-tooltip-popup].tooltip.right-bottom > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.top-left > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.top-right > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.bottom-left > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.bottom-right > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.left-top > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.left-bottom > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.right-top > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.right-bottom > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.top-left > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.top-right > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.bottom-left > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.bottom-right > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.left-top > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.left-bottom > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.right-top > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.right-bottom > .tooltip-arrow,[uib-popover-popup].popover.top-left > .arrow,[uib-popover-popup].popover.top-right > .arrow,[uib-popover-popup].popover.bottom-left > .arrow,[uib-popover-popup].popover.bottom-right > .arrow,[uib-popover-popup].popover.left-top > .arrow,[uib-popover-popup].popover.left-bottom > .arrow,[uib-popover-popup].popover.right-top > .arrow,[uib-popover-popup].popover.right-bottom > .arrow,[uib-popover-html-popup].popover.top-left > .arrow,[uib-popover-html-popup].popover.top-right > .arrow,[uib-popover-html-popup].popover.bottom-left > .arrow,[uib-popover-html-popup].popover.bottom-right > .arrow,[uib-popover-html-popup].popover.left-top > .arrow,[uib-popover-html-popup].popover.left-bottom > .arrow,[uib-popover-html-popup].popover.right-top > .arrow,[uib-popover-html-popup].popover.right-bottom > .arrow,[uib-popover-template-popup].popover.top-left > .arrow,[uib-popover-template-popup].popover.top-right > .arrow,[uib-popover-template-popup].popover.bottom-left > .arrow,[uib-popover-template-popup].popover.bottom-right > .arrow,[uib-popover-template-popup].popover.left-top > .arrow,[uib-popover-template-popup].popover.left-bottom > .arrow,[uib-popover-template-popup].popover.right-top > .arrow,[uib-popover-template-popup].popover.right-bottom > .arrow{top:auto;bottom:auto;left:auto;right:auto;margin:0;}[uib-popover-popup].popover,[uib-popover-html-popup].popover,[uib-popover-template-popup].popover{display:block !important;}</style>'); angular.$$uibTooltipCss = true; });
 angular.module('ui.bootstrap.timepicker').run(function() {!angular.$$csp().noInlineStyle && !angular.$$uibTimepickerCss && angular.element(document).find('head').prepend('<style type="text/css">.uib-time input{width:50px;}</style>'); angular.$$uibTimepickerCss = true; });
 angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInlineStyle && !angular.$$uibTypeaheadCss && angular.element(document).find('head').prepend('<style type="text/css">[uib-typeahead-popup].dropdown-menu{display:block;}</style>'); angular.$$uibTypeaheadCss = true; });
-},{}],44:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 require('./dist/ui-bootstrap-tpls');
 
 module.exports = 'ui.bootstrap';
 
-},{"./dist/ui-bootstrap-tpls":43}],45:[function(require,module,exports){
+},{"./dist/ui-bootstrap-tpls":49}],51:[function(require,module,exports){
 /**
  * @license AngularJS v1.5.3
  * (c) 2010-2016 Google, Inc. http://angularjs.org
@@ -47536,11 +47710,11 @@ $provide.value("$locale", {
 })(window, document);
 
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
-},{}],46:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 require('./angular');
 module.exports = angular;
 
-},{"./angular":45}],47:[function(require,module,exports){
+},{"./angular":51}],53:[function(require,module,exports){
 (function (global){
 /**
  * @license
@@ -63572,7 +63746,7 @@ module.exports = angular;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],48:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 //! moment.js locale configuration
 //! locale : russian (ru)
 //! author : Viktorminator : https://github.com/Viktorminator
@@ -63741,7 +63915,7 @@ module.exports = angular;
     return ru;
 
 }));
-},{"../moment":49}],49:[function(require,module,exports){
+},{"../moment":55}],55:[function(require,module,exports){
 //! moment.js
 //! version : 2.12.0
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
@@ -67430,7 +67604,7 @@ module.exports = angular;
     return _moment;
 
 }));
-},{}]},{},[39])
+},{}]},{},[45])
 
 
 //# sourceMappingURL=all.js.map

@@ -36,17 +36,14 @@ function tabstripDirective($compile, $state, $timeout) {
           if (btn.href) {
             buttons.push('<a class="btn btn-default btn-tab"  ng-href="' + btn.href + '" flex>' + btn.name + '</a>');
           } else if (btn.state && btn.type) {
-            buttons.push('<a class="btn btn-default btn-tab" type="' + btn.type + '" ng-click="activateTab($event)" ng-href="{{getHref(getCurrentEntityState(\'' + btn.state + '\'), {type: \'' + btn.type + '\'})}}" flex>' + btn.name + '</a>');
+            var href = window.getHref(templateAttrs.initial) + '/' + btn.type;
+            buttons.push('<a class="btn btn-default btn-tab" type="' + btn.type + '" ng-click="activateTab($event)" href="'+href+'" flex>' + btn.name + '</a>');
           } else {
             buttons.push('<a class="btn btn-default btn-tab" flex>' + btn.name + '</a>');
           }
         });
         html += buttons.join('');
         html += '</div>';
-        $scope.getCurrentEntityState = function (stateName) {
-          var state = $scope.getCurrentState();
-          return state.indexOf(stateName) > -1 ? state : state + '.' + stateName;
-        };
         var compiled = $compile(html)($scope);
         templateElement.replaceWith(compiled);
         $('#' + $scope.id + ' .btn-tab').removeClass('active');
