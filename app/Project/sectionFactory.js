@@ -1,8 +1,8 @@
 'use strict';
-module.exports = function ($http) {
+module.exports = function ($httpCached) {
   return {
     getById: function getById(id) {
-      return $http.get('data/section?id=' + id);
+      return $httpCached.get('data/section?id=' + id);
     }
   };
 };

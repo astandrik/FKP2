@@ -3,7 +3,12 @@ var crumbs  =
   section:  { label: '{{sectionCutFunction(section.name)}}', toolTip: '{{section.name}}', dependencies: [] },
   subsection: { label: '{{subsectionCutFunction(subsection.name)}}', toolTip: '{{subsection.name}}', dependencies: ['section'] },
   project:  { label: 'Проект {{projectCutFunction(project.cipher) || projectCutFunction(project.name)}}', toolTip: '{{project.name}}', dependencies: ['section','subsection'] },
-  projectSection: { label:  '{{sectionName}}', toolTip: '{{sectionName}}', dependencies: []  }
+  projectSection: { label:  '{{sectionName}}', toolTip: '{{sectionName}}', dependencies: []  },
+
+  complexSection: { label:  '{{section.name}}', toolTip: '{{section.name}}', dependencies: []  },
+  complexSubSection: { label:  '{{subSection.name}}', toolTip: '{{subSection.name}}', dependencies: ['complexSection']  },
+  complex: { label:  '{{complex.name}}', toolTip: '{{complex.name}}', dependencies: ['complexSection', 'complexSubSection']  },
+  complexSectionSection: { label:  '{{sectionName}}', toolTip: '{{sectionName}}', dependencies: []  }
 }
 
 function interpolateTooltips(interpolate, type, scope) {

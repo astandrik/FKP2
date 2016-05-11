@@ -1,8 +1,8 @@
 'use strict';
-function DTS($http) {
+function DTS($httpCached) {
   return {
     getTable: function getTable(url) {
-      return $http.get(url);
+      return $http.httpCached(url);
     }
   };
 }

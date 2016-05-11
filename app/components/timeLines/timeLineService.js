@@ -1,8 +1,8 @@
 'use strict';
-function CS($http) {
+function CS($httpCached) {
   return {
     getData: function getData(url) {
-      return $http.get(url);
+      return $httpCached.get(url);
     }
   };
 }

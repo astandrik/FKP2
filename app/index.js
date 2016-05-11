@@ -3,13 +3,17 @@ require('./router.js');
 require('./Project/project.js');
 require('./SpaceComplex/complex.js');
 require('./Design/design.js');
+require('./cache/cache.js');
 var layout = require('./Layout/layout.js');
 var components = require('./components/components.js');
 var icons = require('./components/Icons/icons.js');
+var activateDir = require('./Layout/sidebar/sidebar.js').activateDir;
+
 
 
 
 var app = angular.module('app', [
+  'cache-custom',
   'ui.router',
   'ngMaterial',
   'ngMdIcons',
@@ -33,7 +37,13 @@ app.config([
   '$routerProvider',
   'calendarConfig',
   '$breadcrumbProvider',
-  function ($urlRouterProvider, $stateProvider, ngMdIconServiceProvider, $routerProvider, calendarConfig,$breadcrumbProvider) {
+  'CacheFactoryProvider',
+  '$provide',
+  function ($urlRouterProvider, $stateProvider, ngMdIconServiceProvider, $routerProvider,
+    calendarConfig, $breadcrumbProvider,CacheFactoryProvider,$provide) {
+    angular.extend(CacheFactoryProvider.defaults, { maxAge: 15 * 60 * 1000 });
+
+
     $breadcrumbProvider.setOptions({
       templateUrl: 'app/components/breadcrumbs.html'
     });
@@ -47,7 +57,8 @@ app.config([
     calendarConfig.dateFormatter = 'moment';  // use moment to format dates
   }
 ]);
-app.run(function ($rootScope, $state) {
+app.run(function ($rootScope, $state,$cacheRunner) {
+  $cacheRunner.startCacheRunner();
   $rootScope.$state = $state;
   $rootScope.getHref = $state.href.bind($state);
   $rootScope.sectionCutFunction = function  sectionCutFunction (section) {
@@ -83,11 +94,17 @@ app.run(function ($rootScope, $state) {
   $rootScope.getCurrentHref = function () {
     return $rootScope.getHref($rootScope.getCurrentState());
   };
+
+  $rootScope.$on('$stateChangeSuccess',
+function(event, toState, toParams, fromState, fromParams){
+  activateDir(toState.name);
+
+ })
   $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, options) {
     //debugger;
   });
   $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
-    //debugger;
+    debugger;
   });
   $rootScope.$on('$stateNotFound', function (event, unfoundState, fromState, fromParams) {
      //debugger;

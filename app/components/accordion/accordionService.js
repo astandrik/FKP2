@@ -1,6 +1,6 @@
 'use strict';
-module.exports = function ($http) {
+module.exports = function ($httpCached) {
   this.getTree = function (url) {
-    return $http.get(url);
-  };
+    return $httpCached.get(url);
+  }; 
 };

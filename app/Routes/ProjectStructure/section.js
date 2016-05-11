@@ -1,4 +1,4 @@
-var breadcrumbs = require('./breadcrumbs.js');
+var breadcrumbs = require('../breadcrumbs.js');
 
 function prepareSection(finance) {
   for(var e in finance) {

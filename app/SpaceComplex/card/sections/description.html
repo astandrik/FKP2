@@ -9,7 +9,24 @@
   </div>
   <div layout="row">
     <div flex="20" class="space-header-name">Количество стартов </div>
-    <div flex="80" class="space-info-name"></div>
+    <div flex="80" class="space-info-name"><table class="table">
+  <thead>
+    <tr>
+      <th>Год</th>
+      <th ng-repeat="y in years track by $index">{{y}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">#</th>
+      <td ng-repeat="l in launches track by $index">{{l}}</td>
+    </tr>
+  </tbody>
+</table></div>
+  </div>
+  <div layout="row">
+    <div flex="20" class="space-header-name">Описание</div>
+    <div flex="80" class="space-info-name">{{complex.description}}</div>
   </div>
   <div layout="row">
     <div flex="20" class="space-header-name">Документы</div>

@@ -1,0 +1,5 @@
+<div  flex="1" layout="column" flex class="complexCard">
+  <ul class="list-group">
+    <li class="list-group-item" ng-repeat="sub in section.children | orderBy: 'name'"><a ng-href="{{initialHref}}/subsection/{{sub.id}}">{{sub.name}}</a></li>
+  </ul>
+</div>

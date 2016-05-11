@@ -8,13 +8,15 @@ function ProjectController($scope, dialogs, $projectFactory, $state, $timeout, t
     'section_id'
   ];
   $scope.specialDict = {
-    type: 'object_type'
+    type: 'object_type',
+    cacheType: 'cacheType',
+    elementId: 'elementId'
   };
-  $scope.create_popup = function () {
+  $scope.create_popup = function (org) {
     var data = {
-      name: 'МЧС',
-      responsible: 'Иванов И.И.',
-      tel: '222-33-22'
+      name: org.name,
+      responsible: org.contact_person,
+      tel: org.phone,
     };
     var dlg = dialogs.create('app/components/popup/popup.html', 'popupController', data, {
       size: 'sm',

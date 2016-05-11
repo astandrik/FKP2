@@ -9,7 +9,7 @@ function DTD() {
     template: '<div ui-grid="gridOptions" ng-style="{\'min-height\': minHeight}" class="grid"></div>',
     controller: function controller($scope, $filter) {
       var minRowsToShow = 5,
-          rowHeight = 70;
+          rowHeight = 60;
       $scope.minHeight = minRowsToShow > $scope.data.length ?  $scope.data.length * rowHeight + 30 + 'px' : minRowsToShow * rowHeight + 30 + 'px';
       var data = _.cloneDeep($scope.data);
       if( Object.prototype.toString.call(data ) === '[object Array]' ) {
@@ -30,19 +30,36 @@ function DTD() {
         };
         b.sort();
         //добавляем первый столбец и формируем окончательный список столбцов, который кладем в переменную $scope.columns
-        var c = [$scope.basename].concat(b);
+        if($scope.basename) {
+          var c = [$scope.basename].concat(b);
+        } else {
+          var c = b;
+        }
         $scope.columns = [];
+        var w = $(window).width();
         c.forEach(function(item){
-          if(item == $scope.basename) {
-            $scope.columns.push({
-              field:item,
-              minWidth: 250,
-              pinnedLeft:true
-            });
+          if(item == $scope.basename ) {
+            if (w < 1370) {
+              $scope.columns.push({
+                field:item,
+                minWidth: 100,
+                maxWidth: 250,
+                cellTemplate: '<div class="ui-grid-cell-contents">{{::row.entity[col.field]}}</div>'
+              });
+            } else {
+              $scope.columns.push({
+                field:item,
+                minWidth: 180,
+                maxWidth: 250,
+                cellTemplate: '<div class="ui-grid-cell-contents">{{::row.entity[col.field]}}</div>'
+              });
+            }
+
           } else {
             $scope.columns.push({
               field:item,
-              width: 90
+              minwidth: 90,
+              cellTemplate: '<div class="ui-grid-cell-contents">{{::row.entity[col.field]}}</div>'
             });
           }
         });
@@ -50,7 +67,17 @@ function DTD() {
       }
       $scope.gridOptions = { data: $scope.gridData, columnDefs : $scope.columns, rowHeight: rowHeight,minimumColumnSize: 5,
         enableHorizontalScrollbar : 1,
-        enableVerticalScrollbar : 1}
+        enableVerticalScrollbar : 1,
+        rowTemplate: '<div>\
+  ng-repeat="(colRenderIndex, col) in colContainer.cols track by col.uid"\
+  ui-grid-one-bind-id-grid="rowRenderIndex + '-' + col.uid + \'-cell\'"\
+  class="ui-grid-cell"\
+  ng-class="{ \'ui-grid-row-header-cell\': ::col.isRowHeader }"\
+  role="{{::col.isRowHeader ? \'rowheader\' : \'gridcell\'}}"\
+  >\
+</div>'
+      //  autoResize :  $scope.columns
+        }
     }
   };
 }

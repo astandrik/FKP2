@@ -37,19 +37,23 @@ function traverseTree(data, initialHref,parentId, parentType) {
       switch (node.object_type) {
         case 2:
           node.href = initialHref + '/section/' + node.id;
+          node.cacheType = 'section';
           break;
         case 1:
           node.href = initialHref + '/subsection/' + node.id;
+          node.cacheType = 'subsection';
           break;
         case 0:
           node.href = initialHref + '/project/' + node.id;
+          node.cacheType = 'project';
           break;
         }
     } else {
       node.href = initialHref.replace(new RegExp('/' + parentId + '$'), '/'+node.id);
+      node.cacheType = parentType == 0 ? 'project' : parentType == 1 ? 'subsection' : parentType == 2 ? 'section' : 'project';
     }
-    parentId = node.id;
-    traverseTree(node.children, node.href, parentId, node.object_type);
+    node.elementId = node.id;
+    traverseTree(node.children, node.href, node.id, node.object_type);
   });
 }
 

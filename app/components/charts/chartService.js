@@ -1,15 +1,15 @@
 'use strict';
-function CS($http) {
+function CS($httpCached) {
   return {
     getData: function getData(url) {
-      return $http.get(url);
+      return $httpCached.get(url);
     }
   };
 }
-function CS1($http) {
+function CS1($httpCached) {
   return {
     getData: function getData(url) {
-      return $http.get(url);
+      return $httpCached.get(url);
     }
   };
 }

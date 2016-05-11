@@ -1,8 +1,8 @@
 'use strict';
-module.exports = function complexFactory($http) {
+module.exports = function complexFactory($httpCached) {
   return {
     getById: function getById(id) {
-      return $http.get('testData/complex.json');
+      return $httpCached.get('data/complex?id=' + id);
     }
   };
 };

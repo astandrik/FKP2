@@ -35,34 +35,51 @@ module.exports = DesignController;
 },{}],3:[function(require,module,exports){
 'use strict';
 
-var sidebarDirective = require('./sidebar/sidebar.js');
+var sidebarDirective = require('./sidebar/sidebar.js').sidebar;
 var currentModule = angular.module('layout', []);
 currentModule.directive('sidebar', sidebarDirective);
 
 },{"./sidebar/sidebar.js":4}],4:[function(require,module,exports){
 'use strict';
 
-module.exports = function () {
-  return {
-    templateUrl: 'app/Layout/sidebar/sidebar.html',
-    replace: true,
-    controller: function controller($scope) {
-      var directories = [{
-        name: 'Структура программы',
-        icon: 'business_center',
-        state: 'home.projectStructure'
-      }, {
-        name: 'Космические комплексы',
-        icon: 'brightness_5',
-        state: 'home.complexStructure'
-      }, { name: 'Финансирование' }, { name: 'Заказчики' }, { name: 'Планирование' }, { name: 'Документация' }, {
-        name: 'События',
-        icon: 'event',
-        state: 'home.events'
-      }];
-      $scope.directories = directories;
+var directories = [{
+  name: 'Структура программы',
+  icon: 'business_center',
+  state: 'home.projectStructure'
+}, {
+  name: 'Космические комплексы',
+  icon: 'brightness_5',
+  state: 'home.spaceComplexStructure'
+}, { name: 'Финансирование',
+  icon: 'money' }, { name: 'Заказчики',
+  icon: 'people' }, { name: 'Планирование',
+  icon: 'access_time' }, { name: 'Документация',
+  icon: 'insert_drive_file' }, {
+  name: 'События',
+  icon: 'event',
+  state: 'home.events'
+}];
+var activateDir = function activateDir(state) {
+  directories.forEach(function (d) {
+    if (d.state && state.indexOf(d.state) > -1 && state != 'home') {
+      d.isActive = true;
+    } else {
+      d.isActive = false;
     }
-  };
+  });
+};
+module.exports = {
+  sidebar: function sidebar() {
+    return {
+      templateUrl: 'app/Layout/sidebar/sidebar.html',
+      replace: true,
+      controller: function controller($scope) {
+
+        $scope.directories = directories;
+      }
+    };
+  },
+  activateDir: activateDir
 };
 
 },{}],5:[function(require,module,exports){
@@ -86,7 +103,7 @@ var projectController = require('./projectController.js');
 var sectionFactory = require('./sectionFactory.js');
 var subsectionFactory = require('./subsectionFactory.js');
 var currentModule = angular.module('project', []);
-currentModule.controller('projectController', projectController);
+currentModule.controller('projectStructureController', projectController);
 currentModule.directive('projectCard', projectCard);
 currentModule.factory('$projectFactory', projectFactory);
 currentModule.factory('$subsectionFactory', subsectionFactory);
@@ -100,13 +117,15 @@ function ProjectController($scope, dialogs, $projectFactory, $state, $timeout, t
   $scope.treeData = treeData;
   $scope.treeParams = ['id', 'object_type', 'section_id'];
   $scope.specialDict = {
-    type: 'object_type'
+    type: 'object_type',
+    cacheType: 'cacheType',
+    elementId: 'elementId'
   };
-  $scope.create_popup = function () {
+  $scope.create_popup = function (org) {
     var data = {
-      name: 'МЧС',
-      responsible: 'Иванов И.И.',
-      tel: '222-33-22'
+      name: org.name,
+      responsible: org.contact_person,
+      tel: org.phone
     };
     var dlg = dialogs.create('app/components/popup/popup.html', 'popupController', data, {
       size: 'sm',
@@ -141,13 +160,13 @@ function ProjectController($scope, dialogs, $projectFactory, $state, $timeout, t
 }
 module.exports = ProjectController;
 
-},{"../components/accordion/treeBuilder.js":28}],8:[function(require,module,exports){
+},{"../components/accordion/treeBuilder.js":38}],8:[function(require,module,exports){
 'use strict';
 
-module.exports = function projectFactory($http) {
+module.exports = function projectFactory($httpCached) {
   return {
     getById: function getById(id) {
-      return $http.get('data/project?id=' + id);
+      return $httpCached.get('data/project?id=' + id);
     }
   };
 };
@@ -155,10 +174,10 @@ module.exports = function projectFactory($http) {
 },{}],9:[function(require,module,exports){
 'use strict';
 
-module.exports = function ($http) {
+module.exports = function ($httpCached) {
   return {
     getById: function getById(id) {
-      return $http.get('data/section?id=' + id);
+      return $httpCached.get('data/section?id=' + id);
     }
   };
 };
@@ -166,10 +185,10 @@ module.exports = function ($http) {
 },{}],10:[function(require,module,exports){
 'use strict';
 
-module.exports = function ($http) {
+module.exports = function ($httpCached) {
   return {
     getById: function getById(id) {
-      return $http.get('data/subsection?id=' + id);
+      return $httpCached.get('data/subsection?id=' + id);
     }
   };
 };
@@ -177,35 +196,9 @@ module.exports = function ($http) {
 },{}],11:[function(require,module,exports){
 'use strict';
 
-var crumbs = {
-  section: { label: '{{sectionCutFunction(section.name)}}', toolTip: '{{section.name}}', dependencies: [] },
-  subsection: { label: '{{subsectionCutFunction(subsection.name)}}', toolTip: '{{subsection.name}}', dependencies: ['section'] },
-  project: { label: 'Проект {{projectCutFunction(project.cipher) || projectCutFunction(project.name)}}', toolTip: '{{project.name}}', dependencies: ['section', 'subsection'] },
-  projectSection: { label: '{{sectionName}}', toolTip: '{{sectionName}}', dependencies: [] }
-};
-
-function interpolateTooltips(interpolate, type, scope) {
-  crumbs[type].dependencies.forEach(function (dep) {
-    interpolateTooltips(interpolate, dep, scope);
-  });
-  crumbs[type].toolTipInterpolated = interpolate(crumbs[type].toolTip)(scope);
-}
-
-function init(interpolate, type, scope) {
-  interpolateTooltips(interpolate, type, scope);
-  return crumbs;
-}
-
-module.exports = {
-  init: init, crumbs: crumbs
-};
-
-},{}],12:[function(require,module,exports){
-'use strict';
-
 var helpers = require('./projectHelper.js');
 
-var breadcrumbs = require('./breadcrumbs.js');
+var breadcrumbs = require('../breadcrumbs.js');
 
 var entity = {
   url: '/project/:projectId',
@@ -213,12 +206,12 @@ var entity = {
     'projectInfo@home.projectStructure': {
       templateUrl: 'app/Project/card/project-card.html',
       controller: function controller($scope, project, pieData, tabstripData, section, subsection, $interpolate) {
+        $scope.project = _.cloneDeep(project);
         $scope.tabstripData = tabstripData;
-        $scope.project = project;
-        project = helpers.prepareValues(project);
+        project = helpers.prepareValues($scope.project);
         $scope.timeLineVerticalData = project.plans;
         $scope.basename = 'Тип';
-        var finObj = helpers.prepareFinance(project.finance, $scope.basename);
+        var finObj = helpers.prepareFinance($scope.project.finance, $scope.basename);
         $scope.start = finObj.start;
         $scope.end = finObj.end;
         project.finance = finObj.finance;
@@ -280,7 +273,7 @@ var entity = {
 
 module.exports = entity;
 
-},{"./breadcrumbs.js":11,"./projectHelper.js":13}],13:[function(require,module,exports){
+},{"../breadcrumbs.js":25,"./projectHelper.js":12}],12:[function(require,module,exports){
 "use strict";
 
 function projectMillionsFunction(project) {
@@ -322,19 +315,23 @@ function traverseTree(data, initialHref, parentId, parentType) {
       switch (node.object_type) {
         case 2:
           node.href = initialHref + '/section/' + node.id;
+          node.cacheType = 'section';
           break;
         case 1:
           node.href = initialHref + '/subsection/' + node.id;
+          node.cacheType = 'subsection';
           break;
         case 0:
           node.href = initialHref + '/project/' + node.id;
+          node.cacheType = 'project';
           break;
       }
     } else {
       node.href = initialHref.replace(new RegExp('/' + parentId + '$'), '/' + node.id);
+      node.cacheType = parentType == 0 ? 'project' : parentType == 1 ? 'subsection' : parentType == 2 ? 'section' : 'project';
     }
-    parentId = node.id;
-    traverseTree(node.children, node.href, parentId, node.object_type);
+    node.elementId = node.id;
+    traverseTree(node.children, node.href, node.id, node.object_type);
   });
 }
 
@@ -350,10 +347,10 @@ module.exports = {
   appendHrefs: appendHrefs
 };
 
-},{}],14:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 'use strict';
 
-var breadcrumbs = require('./breadcrumbs.js');
+var breadcrumbs = require('../breadcrumbs.js');
 
 var section = {
   url: '/:type',
@@ -393,7 +390,50 @@ var section = {
 
 module.exports = section;
 
-},{"./breadcrumbs.js":11}],15:[function(require,module,exports){
+},{"../breadcrumbs.js":25}],14:[function(require,module,exports){
+'use strict';
+
+var breadcrumbs = require('../breadcrumbs.js');
+
+var section = {
+  url: '/:type',
+  views: {
+    'projectSection': {
+      templateUrl: function templateUrl($stateParams) {
+        return 'app/Project/card/sections/' + $stateParams.sectionId + $stateParams.type + '.html';
+      },
+      controller: function controller($stateParams, $scope, $interpolate) {
+        var state = $stateParams;
+        switch (state.type) {
+          case 'general':
+            $scope.sectionName = 'Общие сведения';
+            break;
+          case 'results':
+            $scope.sectionName = 'Результаты';
+            break;
+          case 'finance':
+            $scope.sectionName = 'Финансирование';
+            break;
+          case 'events':
+            $scope.sectionName = 'События';
+            break;
+          case 'relatedProjects':
+            $scope.sectionName = 'Связанные проекты';
+            break;
+          default:
+            $scope.sectionName = 'Общие сведения';
+            break;
+        }
+        breadcrumbs.init($interpolate, 'projectSection', $scope);
+      }
+    }
+  },
+  ncyBreadcrumb: breadcrumbs.crumbs.projectSection
+};
+
+module.exports = section;
+
+},{"../breadcrumbs.js":25}],15:[function(require,module,exports){
 'use strict';
 
 var helpers = require('./projectHelper.js');
@@ -402,7 +442,7 @@ var structure = {
   views: {
     'content@': {
       templateUrl: 'app/Project/project-page.html',
-      controller: 'projectController',
+      controller: 'projectStructureController',
       resolve: {
         treeData: function treeData($accordion) {
           return $accordion.getTree('data/tree').then(function (response) {
@@ -418,10 +458,90 @@ var structure = {
 
 module.exports = structure;
 
-},{"./projectHelper.js":13}],16:[function(require,module,exports){
+},{"./projectHelper.js":12}],16:[function(require,module,exports){
 'use strict';
 
-var breadcrumbs = require('./breadcrumbs.js');
+var helpers = require('./projectHelper.js');
+
+var breadcrumbs = require('../breadcrumbs.js');
+
+var entity = {
+  url: '/project/:projectId',
+  views: {
+    'projectInfo@home.projectStructure': {
+      templateUrl: 'app/Project/card/project-cardThird.html',
+      controller: function controller($scope, project, section, pieData, tabstripData, $interpolate) {
+        $scope.project = _.cloneDeep(project);
+        $scope.project.name = $scope.project.work_description;
+        $scope.tabstripData = tabstripData;
+        project = helpers.prepareValues($scope.project);
+        $scope.timeLineVerticalData = project.plans;
+        $scope.basename = 'Тип';
+        $scope.section = section;
+        var finObj = helpers.prepareFinance($scope.project.finance, $scope.basename);
+        $scope.start = finObj.start;
+        $scope.end = finObj.end;
+        project.finance = finObj.finance;
+        $scope.project.chart = { barLabels: finObj.years, barSeries: ['Бюджет, млн.р.', 'Внебюджет, млн.р'], barData: [finObj.valueBudget, finObj.valueOwnBudget] };
+        $scope.pieChartData = { pieLabels: ["Бюджет", "Внебюджет"], pieData: [finObj.sumBudget, finObj.sumOwnBudget] };
+        breadcrumbs.init($interpolate, 'project', $scope);
+      }
+    }
+  },
+  ncyBreadcrumb: breadcrumbs.crumbs.project,
+  resolve: {
+    projectResource: '$projectFactory',
+    project: function project($http, projectResource, $stateParams) {
+      var id = $stateParams.projectId;
+      return projectResource.getById(id).then(function (data) {
+        return data.data.data;
+      });
+    },
+    pieData: function pieData($chartService1) {
+      return $chartService1.getData('testData/pie.json').then(function (data) {
+        return data.data;
+      });
+    },
+    tabstripData: function tabstripData($stateParams) {
+      var tabs = [];
+      tabs.push({
+        name: 'Общие сведения',
+        state: 'projectSection',
+        type: 'general'
+      });
+      if ($stateParams.sectionId != 2) {
+        tabs.push({
+          name: 'Результаты',
+          state: 'projectSection',
+          type: 'results'
+        });
+      }
+      tabs.push({
+        name: 'Финансирование',
+        state: 'projectSection',
+        type: 'finance'
+      });
+      tabs.push({
+        name: 'Связанные проекты',
+        state: 'projectSection',
+        type: 'relatedProjects'
+      });
+      tabs.push({
+        name: 'События',
+        state: 'projectSection',
+        type: 'events'
+      });
+      return tabs;
+    }
+  }
+};
+
+module.exports = entity;
+
+},{"../breadcrumbs.js":25,"./projectHelper.js":12}],17:[function(require,module,exports){
+'use strict';
+
+var breadcrumbs = require('../breadcrumbs.js');
 
 function prepareSection(finance) {
   for (var e in finance) {
@@ -480,18 +600,54 @@ var entity = {
 
 module.exports = entity;
 
-},{"./breadcrumbs.js":11}],17:[function(require,module,exports){
+},{"../breadcrumbs.js":25}],18:[function(require,module,exports){
 'use strict';
 
-var breadcrumbs = require('./breadcrumbs.js');
+var breadcrumbs = require('../breadcrumbs.js');
+
+function prepareSubSection(finance) {
+  for (var e in finance) {
+    if (isNaN(finance[e])) {
+      prepareSubSection(finance[e]);
+    } else {
+      finance[e] = parseFloat(finance[e]) / 1000000.0;
+    }
+  }
+}
+
+function getFinanceTables(finance) {
+  var projectsBudget = [];
+  var projectsOwn = [];
+  for (var e in finance) {
+    var projectBudget = { 'Название': e };
+    var projectOwn = { 'Название': e };
+    for (var y in finance[e]["Финансирование за счет бюджетных средств"]) {
+      projectBudget[y] = finance[e]["Финансирование за счет бюджетных средств"][y];
+    }
+    for (var y in finance[e]["Финансирование из собственных средств"]) {
+      projectOwn[y] = finance[e]["Финансирование из собственных средств"][y];
+    }
+    projectsBudget.push(projectBudget);
+    projectsOwn.push(projectOwn);
+  }
+  return { 'Budget': projectsBudget, 'Own': projectsOwn };
+}
+
+var breadcrumbs = require('../breadcrumbs.js');
 var entity = {
   url: '/subsection/:subsectionId',
   views: {
     'projectInfo@home.projectStructure': {
       templateUrl: 'app/Project/card/subsection-card.html',
       controller: function controller($scope, subsection, section, $interpolate) {
-        $scope.subsection = subsection;
+        $scope.subsection = _.cloneDeep(subsection);
         $scope.section = section;
+        prepareSubSection($scope.subsection.finance);
+        var tables = getFinanceTables($scope.subsection.finance);
+        $scope.financeBudget = tables.Budget;
+        $scope.financeOwn = tables.Own;
+        breadcrumbs.init($interpolate, 'section', $scope);
+        $scope.basename = 'Название';
         breadcrumbs.init($interpolate, 'subsection', $scope);
       }
     }
@@ -509,7 +665,292 @@ var entity = {
 
 module.exports = entity;
 
-},{"./breadcrumbs.js":11}],18:[function(require,module,exports){
+},{"../breadcrumbs.js":25}],19:[function(require,module,exports){
+'use strict';
+
+var breadcrumbs = require('../breadcrumbs.js');
+function treeFind(root, id, type) {
+  if (root.id == id && root.object_type == type) {
+    return root;
+  }
+  for (var i = 0; i < root.children.length; i++) {
+    var result = treeFind(root.children[i], id, type);
+    if (result) {
+      return result;
+    }
+  }
+  return null;
+}
+var entity = {
+  url: '/complex/:complexId',
+  views: {
+    'complexInfo@home.spaceComplexStructure': {
+      templateUrl: 'app/SpaceComplex/card/complex-card.html',
+      controller: function controller($scope, treeData, $interpolate, complex, $stateParams, projectTreeData) {
+        var id = $stateParams.sectionId;
+        var subid = $stateParams.subsectionId;
+        var complexid = $stateParams.complexId;
+        $scope.section = null;
+        treeData.forEach(function (s) {
+          if (s.id == id) {
+            $scope.section = s;
+          }
+        });
+        $scope.subSection = treeFind($scope.section, subid, 2);
+        $scope.complex = treeFind($scope.subSection, complexid, 3);
+        breadcrumbs.init($interpolate, 'complex', $scope);
+        var years = [];
+        var launches = [];
+        for (var e in complex.starts) {
+          years.push(e);
+          launches.push(complex.starts[e]);
+        }
+        $scope.years = years;
+        $scope.launches = launches;
+        $scope.complexFull = complex;
+      }
+    }
+  },
+  ncyBreadcrumb: breadcrumbs.crumbs.complex,
+  resolve: {
+    treeData: function treeData($accordion) {
+      return $accordion.getTree('data/spacetree').then(function (response) {
+        return response.data.data;
+      });
+    },
+    projectTreeData: function treeData($accordion) {
+      return $accordion.getTree('data/tree').then(function (response) {
+        return response.data.data;
+      });
+    },
+    complex: function project($http, $complexFactory, $stateParams) {
+      var id = $stateParams.complexId;
+      return $complexFactory.getById(id).then(function (data) {
+        return data.data.data;
+      });
+    }
+  }
+};
+
+module.exports = entity;
+
+},{"../breadcrumbs.js":25}],20:[function(require,module,exports){
+'use strict';
+
+var breadcrumbs = require('../breadcrumbs.js');
+
+var section = {
+  url: '/:type',
+  views: {
+    'complexSection': {
+      templateUrl: function templateUrl($stateParams) {
+        return 'app/SpaceComplex/card/sections/' + $stateParams.type + '.html';
+      },
+      controller: function controller($stateParams, $scope, $interpolate) {
+        var state = $stateParams;
+        switch (state.type) {
+          case 'general':
+            $scope.sectionName = 'Общие сведения';
+            break;
+          case 'description':
+            $scope.sectionName = 'Описание';
+            break;
+          case 'relatedProjects':
+            $scope.sectionName = 'Связанные проекты';
+            break;
+          default:
+            $scope.sectionName = 'Общие сведения';
+            break;
+        }
+        breadcrumbs.init($interpolate, 'complexSection', $scope);
+      }
+    }
+  },
+  ncyBreadcrumb: breadcrumbs.crumbs.complexSectionSection
+};
+
+module.exports = section;
+
+},{"../breadcrumbs.js":25}],21:[function(require,module,exports){
+'use strict';
+
+var breadcrumbs = require('../breadcrumbs.js');
+
+var entity = {
+  url: '/section/:sectionId',
+  views: {
+    'complexInfo@home.spaceComplexStructure': {
+      templateUrl: 'app/SpaceComplex/card/section-card.html',
+      controller: function controller($scope, treeData, $interpolate, $stateParams) {
+        var id = $stateParams.sectionId;
+        $scope.section = null;
+        treeData.forEach(function (s) {
+          if (s.id == id) {
+            $scope.section = s;
+          }
+        });
+        $scope.sectionName = $scope.section.name;
+        var initialState = 'home.spaceComplexStructure.spaceComplexSection';
+        $scope.initialHref = window.getHref(initialState);
+      },
+      resolve: {
+        treeData: function treeData($accordion) {
+          return $accordion.getTree('data/spacetree').then(function (response) {
+            return response.data.data;
+          });
+        }
+      }
+    }
+  },
+  ncyBreadcrumb: breadcrumbs.crumbs.complexSection
+};
+
+module.exports = entity;
+
+},{"../breadcrumbs.js":25}],22:[function(require,module,exports){
+'use strict';
+
+function traverseTree(data, initialHref, parentId, parentType) {
+  data.forEach(function (node) {
+    if (node.object_type != parentType) {
+      switch (node.object_type) {
+        case 3:
+          node.href = initialHref + '/complex/' + node.id;
+          break;
+        case 2:
+          node.href = initialHref + '/subsection/' + node.id;
+          break;
+        case 1:
+          node.href = initialHref + '/section/' + node.id;
+          break;
+      }
+    } else {
+      node.href = initialHref.replace(new RegExp('/' + parentId + '$'), '/' + node.id);
+    }
+    traverseTree(node.children, node.href, node.id, node.object_type);
+  });
+}
+
+function appendHrefs(data, initialState) {
+  var initialHref = window.getHref(initialState);
+  var curData = data.data.data;
+  traverseTree(curData, initialHref);
+}
+
+module.exports = {
+  appendHrefs: appendHrefs
+};
+
+},{}],23:[function(require,module,exports){
+'use strict';
+
+var helpers = require('./spaceComplexHelper.js');
+
+var structure = {
+  url: '/SpaceComplexStructure',
+  views: {
+    'content@': {
+      templateUrl: 'app/SpaceComplex/spaceComplex-page.html',
+      controller: 'SpaceComplexStructureController',
+      resolve: {
+        treeData: function treeData($accordion) {
+          return $accordion.getTree('data/spacetree').then(function (response) {
+            helpers.appendHrefs(response, 'home.spaceComplexStructure');
+            return response.data;
+          });
+        }
+      }
+    }
+  },
+  ncyBreadcrumb: { label: 'Космические комплексы', toolTipInterpolated: 'Космические комплексы' }
+};
+
+module.exports = structure;
+
+},{"./spaceComplexHelper.js":22}],24:[function(require,module,exports){
+'use strict';
+
+var breadcrumbs = require('../breadcrumbs.js');
+
+function treeFind(root, id, type) {
+  if (root.id == id && root.object_type == type) {
+    return root;
+  }
+  for (var i = 0; i < root.children.length; i++) {
+    var result = treeFind(root.children[i], id, type);
+    if (result) {
+      return result;
+    }
+  }
+  return null;
+}
+
+var entity = {
+  url: '/subsection/:subsectionId',
+  views: {
+    'complexInfo@home.spaceComplexStructure': {
+      templateUrl: 'app/SpaceComplex/card/subsection-card.html',
+      controller: function controller($scope, treeData, $interpolate, $stateParams) {
+        var id = $stateParams.sectionId;
+        var subid = $stateParams.subsectionId;
+        $scope.section = null;
+        treeData.forEach(function (s) {
+          if (s.id == id) {
+            $scope.section = s;
+          }
+        });
+        $scope.subSection = treeFind($scope.section, subid, 2);
+        var initialState = 'home.spaceComplexStructure.spaceComplexSection.spaceComplexSubSection';
+        var subState = 'home.spaceComplexStructure.spaceComplexSection';
+        $scope.initialHref = window.getHref(initialState);
+        $scope.subHref = window.getHref(subState);
+      },
+      resolve: {
+        treeData: function treeData($accordion) {
+          return $accordion.getTree('data/spacetree').then(function (response) {
+            return response.data.data;
+          });
+        }
+      }
+    }
+  },
+  ncyBreadcrumb: breadcrumbs.crumbs.complexSubSection
+};
+
+module.exports = entity;
+
+},{"../breadcrumbs.js":25}],25:[function(require,module,exports){
+'use strict';
+
+var crumbs = {
+  section: { label: '{{sectionCutFunction(section.name)}}', toolTip: '{{section.name}}', dependencies: [] },
+  subsection: { label: '{{subsectionCutFunction(subsection.name)}}', toolTip: '{{subsection.name}}', dependencies: ['section'] },
+  project: { label: 'Проект {{projectCutFunction(project.cipher) || projectCutFunction(project.name)}}', toolTip: '{{project.name}}', dependencies: ['section', 'subsection'] },
+  projectSection: { label: '{{sectionName}}', toolTip: '{{sectionName}}', dependencies: [] },
+
+  complexSection: { label: '{{section.name}}', toolTip: '{{section.name}}', dependencies: [] },
+  complexSubSection: { label: '{{subSection.name}}', toolTip: '{{subSection.name}}', dependencies: ['complexSection'] },
+  complex: { label: '{{complex.name}}', toolTip: '{{complex.name}}', dependencies: ['complexSection', 'complexSubSection'] },
+  complexSectionSection: { label: '{{sectionName}}', toolTip: '{{sectionName}}', dependencies: [] }
+};
+
+function interpolateTooltips(interpolate, type, scope) {
+  crumbs[type].dependencies.forEach(function (dep) {
+    interpolateTooltips(interpolate, dep, scope);
+  });
+  crumbs[type].toolTipInterpolated = interpolate(crumbs[type].toolTip)(scope);
+}
+
+function init(interpolate, type, scope) {
+  interpolateTooltips(interpolate, type, scope);
+  return crumbs;
+}
+
+module.exports = {
+  init: init, crumbs: crumbs
+};
+
+},{}],26:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -550,7 +991,7 @@ module.exports = {
   ncyBreadcrumb: { label: 'Дизайн-страница' }
 };
 
-},{}],19:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -559,12 +1000,18 @@ module.exports = {
   subsection: require('./ProjectStructure/subsection.js'),
   project: require('./ProjectStructure/project.js'),
   projectSection: require('./ProjectStructure/projectSection.js'),
+  projectSectionThird: require('./ProjectStructure/projectSectionThird.js'),
+  projectThird: require('./ProjectStructure/projectThird.js'),
+  design: require('./design.js'),
 
-  design: require('./design.js')
-
+  spaceComplexStructure: require('./SpaceComplexStructure/spaceComplexStructure.js'),
+  spaceComplexSection: require('./SpaceComplexStructure/section.js'),
+  spaceComplexSubSection: require('./SpaceComplexStructure/subSection.js'),
+  spaceComplexComplex: require('./SpaceComplexStructure/complex.js'),
+  spaceComplexComplexSection: require('./SpaceComplexStructure/complexSection.js')
 };
 
-},{"./ProjectStructure/project.js":12,"./ProjectStructure/projectSection.js":14,"./ProjectStructure/projectStructure.js":15,"./ProjectStructure/section.js":16,"./ProjectStructure/subsection.js":17,"./design.js":18}],20:[function(require,module,exports){
+},{"./ProjectStructure/project.js":11,"./ProjectStructure/projectSection.js":13,"./ProjectStructure/projectSectionThird.js":14,"./ProjectStructure/projectStructure.js":15,"./ProjectStructure/projectThird.js":16,"./ProjectStructure/section.js":17,"./ProjectStructure/subsection.js":18,"./SpaceComplexStructure/complex.js":19,"./SpaceComplexStructure/complexSection.js":20,"./SpaceComplexStructure/section.js":21,"./SpaceComplexStructure/spaceComplexStructure.js":23,"./SpaceComplexStructure/subSection.js":24,"./design.js":26}],28:[function(require,module,exports){
 'use strict';
 
 module.exports = function () {
@@ -576,32 +1023,26 @@ module.exports = function () {
   };
 };
 
-},{}],21:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 'use strict';
 
 var spaceComplexController = require('./complexController.js');
 var factory = require('./complexFactory.js');
 var complexCard = require('./card/complexCardDirective.js');
 var currentModule = angular.module('complex', []);
-currentModule.controller('spaceComplexController', spaceComplexController);
-currentModule.factory('$complex', factory);
+currentModule.controller('SpaceComplexStructureController', spaceComplexController);
+currentModule.factory('$complexFactory', factory);
 currentModule.directive('complexCard', complexCard);
 
-},{"./card/complexCardDirective.js":20,"./complexController.js":22,"./complexFactory.js":23}],22:[function(require,module,exports){
+},{"./card/complexCardDirective.js":28,"./complexController.js":30,"./complexFactory.js":31}],30:[function(require,module,exports){
 'use strict';
 
-function CC($scope, treeData, dialogs) {
+var highlightNode = require('../components/accordion/treeBuilder.js').highlight;
+function CC($scope, treeData, dialogs, $timeout, $state) {
   $scope.treeData = treeData;
-  $scope.create_popup = function () {
-    var data = {
-      name: 'МЧС',
-      responsible: 'Иванов И.И.',
-      tel: '222-33-22'
-    };
-    var dlg = dialogs.create('app/components/popup/popup.html', 'popupController', data, {
-      size: 'sm',
-      animation: true
-    });
+  $scope.treeParams = ['id', 'object_type'];
+  $scope.specialDict = {
+    type: 'object_type'
   };
   $scope.tabstripData = [{
     name: 'Общие сведения',
@@ -616,30 +1057,106 @@ function CC($scope, treeData, dialogs) {
     state: 'complexSection',
     type: 'relatedProjects'
   }];
+  $scope.$on('$viewContentLoaded', function (event) {
+    $timeout(function () {
+      if ($state.params.complexId) {
+        highlightNode({
+          id: $state.params.complexId,
+          object_type: 3
+        }, $scope.treeParams);
+      } else if ($state.params.subsectionId) {
+        highlightNode({
+          id: $state.params.subsectionId,
+          object_type: 2
+        }, $scope.treeParams);
+      } else if ($state.params.sectionId) {
+        highlightNode({
+          id: $state.params.sectionId,
+          object_type: 1
+        }, $scope.treeParams);
+      } else {
+        highlightNode(-1, []);
+      }
+    });
+  });
 }
 module.exports = CC;
 
-},{}],23:[function(require,module,exports){
+},{"../components/accordion/treeBuilder.js":38}],31:[function(require,module,exports){
 'use strict';
 
-module.exports = function complexFactory($http) {
+module.exports = function complexFactory($httpCached) {
   return {
     getById: function getById(id) {
-      return $http.get('testData/complex.json');
+      return $httpCached.get('data/complex?id=' + id);
     }
   };
 };
 
-},{}],24:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
+'use strict';
+
+var runner = require('./cacheRunner.js');
+
+var currentModule = angular.module('cache-custom', ['angular-cache']);
+
+currentModule.service('$cacheRunner', runner);
+
+currentModule.factory('$httpCached', function ($http, CacheFactory) {
+  return {
+    get: function get(url, params) {
+      if (!CacheFactory.get(url)) {
+        CacheFactory.createCache(url, {
+          deleteOnExpire: 'passive',
+          recycleFreq: 6000000
+        });
+      }
+      var Cache = CacheFactory.get(url);
+      var par = params;
+      if (!params) {
+        params = { cache: Cache };
+      } else {
+        params['cache'] = Cache;
+      }
+      return $http.get(url, params);
+    }
+  };
+});
+
+},{"./cacheRunner.js":33}],33:[function(require,module,exports){
+'use strict';
+
+function runner($timeout, $sectionFactory, $interval, $subsectionFactory, $projectFactory) {
+  var entities = [{ type: 'section', factory: $sectionFactory }, { type: 'subsection', factory: $subsectionFactory }, { type: 'project', factory: $projectFactory }];
+  this.startCacheRunner = function () {
+    $interval(function () {
+      var entitiesArrs = {};
+      entities.forEach(function (item) {
+        entitiesArrs[item.type] = { elements: $('[cacheType="' + item.type + '"]:visible'), factory: item.factory };
+      });
+      for (var e in entitiesArrs) {
+        for (var i = 0; i < entitiesArrs[e].elements.length; i++) {
+          entitiesArrs[e].factory.getById($(entitiesArrs[e].elements[i]).attr('elementid'));
+        }
+      }
+    }, 2000);
+  };
+}
+
+module.exports = runner;
+
+},{}],34:[function(require,module,exports){
 'use strict';
 
 var icons = {
   wheelChair: '<path d="M19 13v-2c-1.54.02-3.09-.75-4.07-1.83l-1.29-1.43c-.17-.19-.38-.34-.61-.45-.01 0-.01-.01-.02-.01H13c-.35-.2-.75-.3-1.19-.26C10.76 7.11 10 8.04 10 9.09V15c0 1.1.9 2 2 2h5v5h2v-5.5c0-1.1-.9-2-2-2h-3v-3.45c1.29 1.07 3.25 1.94 5 1.95zm-6.17 5c-.41 1.16-1.52 2-2.83 2-1.66 0-3-1.34-3-3 0-1.31.84-2.41 2-2.83V12.1c-2.28.46-4 2.48-4 4.9 0 2.76 2.24 5 5 5 2.42 0 4.44-1.72 4.9-4h-2.07z"></path>',
-  business_center: '<path d="M10 16v-1H3.01L3 19c0 1.11.89 2 2 2h14c1.11 0 2-.89 2-2v-4h-7v1h-4zm10-9h-4.01V5l-2-2h-4l-2 2v2H4c-1.1 0-2 .9-2 2v3c0 1.11.89 2 2 2h6v-2h4v2h6c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zm-6 0h-4V5h4v2z"></path>'
+  business_center: '<path d="M10 16v-1H3.01L3 19c0 1.11.89 2 2 2h14c1.11 0 2-.89 2-2v-4h-7v1h-4zm10-9h-4.01V5l-2-2h-4l-2 2v2H4c-1.1 0-2 .9-2 2v3c0 1.11.89 2 2 2h6v-2h4v2h6c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zm-6 0h-4V5h4v2z"></path>',
+  money: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" width="24" height="24"><path d="M372.3,143.75c62,0,108.7-24.1,108.7-56.1s-46.7-56.1-108.7-56.1s-108.7,24.1-108.7,56.1    C263.6,119.65,310.3,143.75,372.3,143.75z M372.3,55.65c51.7,0,84.7,19,84.7,32.1s-33,32.1-84.7,32.1s-84.7-19-84.7-32.1    S320.6,55.65,372.3,55.65z"/><path d="M471.9,144.85c-6.2-2.3-13.1,0.9-15.4,7.1c-5.1,13.9-38.7,28.9-84.1,28.9c-44.2,0-77.3-14.2-83.7-27.9    c-2.8-6-10-8.6-16-5.8s-8.6,10-5.8,16c11.7,25,54.1,41.7,105.5,41.7c24.5,0,48.3-4,67.2-11.4c20.8-8.1,34.5-19.6,39.5-33.3    C481.3,154.05,478.1,147.15,471.9,144.85z"/><path d="M471.9,206.05c-6.2-2.3-13.1,0.9-15.4,7.1c-5.1,13.9-38.7,28.9-84.1,28.9c-44.2,0-77.3-14.2-83.7-27.9    c-2.8-6-10-8.6-16-5.8s-8.6,10-5.8,16c11.7,25,54.1,41.7,105.5,41.7c24.5,0,48.3-4,67.2-11.4c20.8-8.1,34.5-19.6,39.5-33.3    C481.3,215.25,478.1,208.35,471.9,206.05z"/><path d="M471.9,267.15c-6.2-2.3-13.1,0.9-15.4,7.1c-5.1,13.9-38.7,28.9-84.1,28.9c-44.2,0-77.3-14.2-83.7-27.9    c-2.8-6-10-8.6-16-5.8c-6,2.8-8.6,10-5.8,16c11.7,25,54.1,41.7,105.5,41.7c24.5,0,48.3-4,67.2-11.4c20.8-8.1,34.5-19.6,39.5-33.3    C481.3,276.35,478.1,269.45,471.9,267.15z"/><path d="M471.9,328.35c-6.2-2.3-13.1,0.9-15.4,7.1c-5.1,13.9-38.7,28.9-84.1,28.9c-44.2,0-77.3-14.2-83.7-27.9    c-2.8-6-10-8.6-16-5.8c-6,2.8-8.6,10-5.8,16c11.7,25,54.1,41.7,105.5,41.7c24.5,0,48.3-4,67.2-11.4c20.8-8.1,34.5-19.6,39.5-33.3    C481.3,337.45,478.1,330.55,471.9,328.35z"/><path d="M471.9,389.45c-6.2-2.3-13.1,0.9-15.4,7.1c-5.1,13.9-38.7,28.9-84.1,28.9c-44.2,0-77.3-14.2-83.7-27.9    c-2.8-6-10-8.6-16-5.8c-6,2.8-8.6,10-5.8,16c11.7,25,54.1,41.7,105.5,41.7c24.5,0,48.3-4,67.2-11.4c20.8-8.1,34.5-19.6,39.5-33.3    C481.3,398.65,478.1,391.75,471.9,389.45z"/><path d="M208.2,267.15c-6.2-2.3-13.1,0.9-15.4,7.1c-5.1,13.9-38.7,28.9-84.1,28.9c-44.2,0-77.3-14.2-83.7-27.9    c-2.8-6-10-8.6-16-5.8c-6,2.8-8.6,10-5.8,16c11.7,25,54.1,41.7,105.5,41.7c24.5,0,48.3-4,67.2-11.4c20.8-8.1,34.5-19.6,39.5-33.3    C217.6,276.35,214.4,269.45,208.2,267.15z"/><path d="M208.2,328.35c-6.2-2.3-13.1,0.9-15.4,7.1c-5.1,13.9-38.7,28.9-84.1,28.9c-44.2,0-77.3-14.2-83.7-27.9    c-2.8-6-10-8.6-16-5.8c-6,2.8-8.6,10-5.8,16c11.7,25,54.1,41.7,105.5,41.7c24.5,0,48.3-4,67.2-11.4c20.8-8.1,34.5-19.6,39.5-33.3    C217.6,337.45,214.4,330.55,208.2,328.35z"/><path d="M208.2,389.45c-6.2-2.3-13.1,0.9-15.4,7.1c-5.1,13.9-38.7,28.9-84.1,28.9c-44.2,0-77.3-14.2-83.7-27.9    c-2.8-6-10-8.6-16-5.8c-6,2.8-8.6,10-5.8,16c11.7,25,54.1,41.7,105.5,41.7c24.5,0,48.3-4,67.2-11.4c20.8-8.1,34.5-19.6,39.5-33.3    C217.6,398.65,214.4,391.75,208.2,389.45z"/><path d="M108.7,153.85c-62,0-108.7,24.1-108.7,56.1s46.7,56.1,108.7,56.1s108.7-24.1,108.7-56.1S170.7,153.85,108.7,153.85z     M108.7,242.05c-51.7,0-84.7-19-84.7-32.1s33-32.1,84.7-32.1s84.7,19,84.7,32.1S160.4,242.05,108.7,242.05z"/></svg>'
+
 };
 module.exports = icons;
 
-},{}],25:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 'use strict';
 
 var accordionDirective = require('./accordionDirective.js');
@@ -648,7 +1165,7 @@ var currentModule = angular.module('accordion', []);
 currentModule.directive('accordionTree', accordionDirective);
 currentModule.service('$accordion', accordionService);
 
-},{"./accordionDirective.js":26,"./accordionService.js":27}],26:[function(require,module,exports){
+},{"./accordionDirective.js":36,"./accordionService.js":37}],36:[function(require,module,exports){
 'use strict';
 
 var treeBuilder = require('./treeBuilder.js').treeHtml;
@@ -691,16 +1208,16 @@ module.exports = function ($compile, $accordion, $state) {
   };
 };
 
-},{"./treeBuilder.js":28}],27:[function(require,module,exports){
+},{"./treeBuilder.js":38}],37:[function(require,module,exports){
 'use strict';
 
-module.exports = function ($http) {
+module.exports = function ($httpCached) {
   this.getTree = function (url) {
-    return $http.get(url);
+    return $httpCached.get(url);
   };
 };
 
-},{}],28:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 'use strict';
 
 function buildTree() {
@@ -792,14 +1309,14 @@ module.exports = {
   highlight: highlightNode
 };
 
-},{}],29:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 'use strict';
 
 var calendarDirective = require('./calendarDirective.js');
 var currentModule = angular.module('calendar', [require('angular-bootstrap-calendar')]);
 currentModule.directive('calendar', calendarDirective);
 
-},{"./calendarDirective.js":30,"angular-bootstrap-calendar":47}],30:[function(require,module,exports){
+},{"./calendarDirective.js":40,"angular-bootstrap-calendar":57}],40:[function(require,module,exports){
 'use strict';
 
 function C() {
@@ -838,7 +1355,7 @@ function C() {
 }
 module.exports = C;
 
-},{"../../../node_modules/moment/locale/ru":54,"moment":55}],31:[function(require,module,exports){
+},{"../../../node_modules/moment/locale/ru":64,"moment":65}],41:[function(require,module,exports){
 'use strict';
 
 function CD($timeout, $compile) {
@@ -884,20 +1401,20 @@ module.exports = {
   pieChart: CD1
 };
 
-},{}],32:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 'use strict';
 
-function CS($http) {
+function CS($httpCached) {
   return {
     getData: function getData(url) {
-      return $http.get(url);
+      return $httpCached.get(url);
     }
   };
 }
-function CS1($http) {
+function CS1($httpCached) {
   return {
     getData: function getData(url) {
-      return $http.get(url);
+      return $httpCached.get(url);
     }
   };
 }
@@ -906,7 +1423,7 @@ module.exports = {
   pieChart: CS1
 };
 
-},{}],33:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 'use strict';
 
 var chartDirective = require('./chartDirective.js');
@@ -917,7 +1434,7 @@ currentModule.directive('pieChart', chartDirective.pieChart);
 currentModule.factory('$chartService', chartService.barChart);
 currentModule.factory('$chartService1', chartService.pieChart);
 
-},{"./chartDirective.js":31,"./chartService.js":32}],34:[function(require,module,exports){
+},{"./chartDirective.js":41,"./chartService.js":42}],44:[function(require,module,exports){
 'use strict';
 
 require('./accordion/accordion.js');
@@ -1007,7 +1524,7 @@ currentModule.controller('DatepickerDemoCtrl', function ($scope) {
   }
 });
 
-},{"../Project/card/projectCardDirective.js":5,"./accordion/accordion.js":25,"./calendar/calendar.js":29,"./charts/charts.js":33,"./dataTable/dataTable.js":35,"./popup/popupController.js":38,"./split/split.js":39,"./tabstrip/tabstrip.js":40,"./timeLines/timeLines.js":44}],35:[function(require,module,exports){
+},{"../Project/card/projectCardDirective.js":5,"./accordion/accordion.js":35,"./calendar/calendar.js":39,"./charts/charts.js":43,"./dataTable/dataTable.js":45,"./popup/popupController.js":48,"./split/split.js":49,"./tabstrip/tabstrip.js":50,"./timeLines/timeLines.js":54}],45:[function(require,module,exports){
 'use strict';
 
 var dataTableDirective = require('./dataTableDirective.js');
@@ -1016,7 +1533,7 @@ var currentModule = angular.module('dataTable', ['ui.grid', 'ui.grid.pinning']);
 currentModule.directive('cDataTable', dataTableDirective);
 currentModule.factory('$dataTableService', dataTableService);
 
-},{"./dataTableDirective.js":36,"./dataTableService.js":37}],36:[function(require,module,exports){
+},{"./dataTableDirective.js":46,"./dataTableService.js":47}],46:[function(require,module,exports){
 'use strict';
 
 var _ = require('lodash');
@@ -1028,7 +1545,7 @@ function DTD() {
     template: '<div ui-grid="gridOptions" ng-style="{\'min-height\': minHeight}" class="grid"></div>',
     controller: function controller($scope, $filter) {
       var minRowsToShow = 5,
-          rowHeight = 70;
+          rowHeight = 60;
       $scope.minHeight = minRowsToShow > $scope.data.length ? $scope.data.length * rowHeight + 30 + 'px' : minRowsToShow * rowHeight + 30 + 'px';
       var data = _.cloneDeep($scope.data);
       if (Object.prototype.toString.call(data) === '[object Array]') {
@@ -1049,19 +1566,35 @@ function DTD() {
         };
         b.sort();
         //добавляем первый столбец и формируем окончательный список столбцов, который кладем в переменную $scope.columns
-        var c = [$scope.basename].concat(b);
+        if ($scope.basename) {
+          var c = [$scope.basename].concat(b);
+        } else {
+          var c = b;
+        }
         $scope.columns = [];
+        var w = $(window).width();
         c.forEach(function (item) {
           if (item == $scope.basename) {
-            $scope.columns.push({
-              field: item,
-              minWidth: 250,
-              pinnedLeft: true
-            });
+            if (w < 1370) {
+              $scope.columns.push({
+                field: item,
+                minWidth: 100,
+                maxWidth: 250,
+                cellTemplate: '<div class="ui-grid-cell-contents">{{::row.entity[col.field]}}</div>'
+              });
+            } else {
+              $scope.columns.push({
+                field: item,
+                minWidth: 180,
+                maxWidth: 250,
+                cellTemplate: '<div class="ui-grid-cell-contents">{{::row.entity[col.field]}}</div>'
+              });
+            }
           } else {
             $scope.columns.push({
               field: item,
-              width: 90
+              minwidth: 90,
+              cellTemplate: '<div class="ui-grid-cell-contents">{{::row.entity[col.field]}}</div>'
             });
           }
         });
@@ -1069,25 +1602,35 @@ function DTD() {
       }
       $scope.gridOptions = { data: $scope.gridData, columnDefs: $scope.columns, rowHeight: rowHeight, minimumColumnSize: 5,
         enableHorizontalScrollbar: 1,
-        enableVerticalScrollbar: 1 };
+        enableVerticalScrollbar: 1,
+        rowTemplate: '<div>\
+  ng-repeat="(colRenderIndex, col) in colContainer.cols track by col.uid"\
+  ui-grid-one-bind-id-grid="rowRenderIndex + ' - ' + col.uid + \'-cell\'"\
+  class="ui-grid-cell"\
+  ng-class="{ \'ui-grid-row-header-cell\': ::col.isRowHeader }"\
+  role="{{::col.isRowHeader ? \'rowheader\' : \'gridcell\'}}"\
+  >\
+</div>'
+        //  autoResize :  $scope.columns
+      };
     }
   };
 }
 module.exports = DTD;
 
-},{"lodash":53}],37:[function(require,module,exports){
+},{"lodash":63}],47:[function(require,module,exports){
 'use strict';
 
-function DTS($http) {
+function DTS($httpCached) {
   return {
     getTable: function getTable(url) {
-      return $http.get(url);
+      return $http.httpCached(url);
     }
   };
 }
 module.exports = DTS;
 
-},{}],38:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 'use strict';
 
 module.exports = function ($scope, $uibModalInstance, data) {
@@ -1102,7 +1645,7 @@ module.exports = function ($scope, $uibModalInstance, data) {
   };
 };
 
-},{}],39:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 'use strict';
 
 function compile(templateElement, templateAttrs) {
@@ -1134,7 +1677,7 @@ module.exports = function () {
   };
 };
 
-},{}],40:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 'use strict';
 
 var tabstripDirective = require('./tabstripDirective.js');
@@ -1148,7 +1691,7 @@ currentModule.directive('tabStrip', tabstripDirective); /*
                                                         2) type - parameter "type" that will be passed to that state
                                                         */
 
-},{"./tabstripDirective.js":41}],41:[function(require,module,exports){
+},{"./tabstripDirective.js":51}],51:[function(require,module,exports){
 'use strict';
 
 function reActivate(event) {
@@ -1207,7 +1750,7 @@ function tabstripDirective($compile, $state, $timeout) {
 }
 module.exports = tabstripDirective;
 
-},{}],42:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 'use strict';
 
 var _ = require('lodash');
@@ -1351,19 +1894,19 @@ module.exports = {
   horizontal: Horizontal
 };
 
-},{"../../../node_modules/moment/locale/ru":54,"lodash":53,"moment":55}],43:[function(require,module,exports){
+},{"../../../node_modules/moment/locale/ru":64,"lodash":63,"moment":65}],53:[function(require,module,exports){
 'use strict';
 
-function CS($http) {
+function CS($httpCached) {
   return {
     getData: function getData(url) {
-      return $http.get(url);
+      return $httpCached.get(url);
     }
   };
 }
 module.exports = CS;
 
-},{}],44:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 'use strict';
 
 var timeLineDirective = require('./timeLineDirective.js');
@@ -1373,20 +1916,24 @@ currentModule.directive('timeLineVertical', timeLineDirective.vertical);
 currentModule.directive('timeLineHorizontal', timeLineDirective.horizontal);
 currentModule.factory('$timelineService', timeLineService);
 
-},{"./timeLineDirective.js":42,"./timeLineService.js":43}],45:[function(require,module,exports){
+},{"./timeLineDirective.js":52,"./timeLineService.js":53}],55:[function(require,module,exports){
 'use strict';
 
 require('./router.js');
 require('./Project/project.js');
 require('./SpaceComplex/complex.js');
 require('./Design/design.js');
+require('./cache/cache.js');
 var layout = require('./Layout/layout.js');
 var components = require('./components/components.js');
 var icons = require('./components/Icons/icons.js');
+var activateDir = require('./Layout/sidebar/sidebar.js').activateDir;
 
-var app = angular.module('app', ['ui.router', 'ngMaterial', 'ngMdIcons', 'ncy-angular-breadcrumb', 'ngSanitize', 'dialogs.main', 'layout', 'components', 'router', 'project', 'complex', 'design', require('angular-ui-bootstrap')]);
+var app = angular.module('app', ['cache-custom', 'ui.router', 'ngMaterial', 'ngMdIcons', 'ncy-angular-breadcrumb', 'ngSanitize', 'dialogs.main', 'layout', 'components', 'router', 'project', 'complex', 'design', require('angular-ui-bootstrap')]);
 
-app.config(['$urlRouterProvider', '$stateProvider', 'ngMdIconServiceProvider', '$routerProvider', 'calendarConfig', '$breadcrumbProvider', function ($urlRouterProvider, $stateProvider, ngMdIconServiceProvider, $routerProvider, calendarConfig, $breadcrumbProvider) {
+app.config(['$urlRouterProvider', '$stateProvider', 'ngMdIconServiceProvider', '$routerProvider', 'calendarConfig', '$breadcrumbProvider', 'CacheFactoryProvider', '$provide', function ($urlRouterProvider, $stateProvider, ngMdIconServiceProvider, $routerProvider, calendarConfig, $breadcrumbProvider, CacheFactoryProvider, $provide) {
+  angular.extend(CacheFactoryProvider.defaults, { maxAge: 15 * 60 * 1000 });
+
   $breadcrumbProvider.setOptions({
     templateUrl: 'app/components/breadcrumbs.html'
   });
@@ -1399,7 +1946,8 @@ app.config(['$urlRouterProvider', '$stateProvider', 'ngMdIconServiceProvider', '
   }
   calendarConfig.dateFormatter = 'moment'; // use moment to format dates
 }]);
-app.run(function ($rootScope, $state) {
+app.run(function ($rootScope, $state, $cacheRunner) {
+  $cacheRunner.startCacheRunner();
   $rootScope.$state = $state;
   $rootScope.getHref = $state.href.bind($state);
   $rootScope.sectionCutFunction = function sectionCutFunction(section) {
@@ -1435,18 +1983,22 @@ app.run(function ($rootScope, $state) {
   $rootScope.getCurrentHref = function () {
     return $rootScope.getHref($rootScope.getCurrentState());
   };
+
+  $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
+    activateDir(toState.name);
+  });
   $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, options) {
     //debugger;
   });
   $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
-    //debugger;
+    debugger;
   });
   $rootScope.$on('$stateNotFound', function (event, unfoundState, fromState, fromParams) {
     //debugger;
   });
 });
 
-},{"./Design/design.js":1,"./Layout/layout.js":3,"./Project/project.js":6,"./SpaceComplex/complex.js":21,"./components/Icons/icons.js":24,"./components/components.js":34,"./router.js":46,"angular-ui-bootstrap":50}],46:[function(require,module,exports){
+},{"./Design/design.js":1,"./Layout/layout.js":3,"./Layout/sidebar/sidebar.js":4,"./Project/project.js":6,"./SpaceComplex/complex.js":29,"./cache/cache.js":32,"./components/Icons/icons.js":34,"./components/components.js":44,"./router.js":56,"angular-ui-bootstrap":60}],56:[function(require,module,exports){
 'use strict';
 
 var routes = require('./Routes/routes.js');
@@ -1464,9 +2016,17 @@ angular.module('router', []).provider('$router', function () {
 
       'home.projectStructure': routes.projectStructure,
       'home.projectStructure.section': routes.section,
+      'home.projectStructure.section.project': routes.projectThird,
+      'home.projectStructure.section.project.tab': routes.projectSectionThird,
       'home.projectStructure.section.subSection': routes.subsection,
       'home.projectStructure.section.subSection.project': routes.project,
       'home.projectStructure.section.subSection.project.tab': routes.projectSection,
+
+      'home.spaceComplexStructure': routes.spaceComplexStructure,
+      'home.spaceComplexStructure.spaceComplexSection': routes.spaceComplexSection,
+      'home.spaceComplexStructure.spaceComplexSection.spaceComplexSubSection': routes.spaceComplexSubSection,
+      'home.spaceComplexStructure.spaceComplexSection.spaceComplexSubSection.spaceComplexComplex': routes.spaceComplexComplex,
+      'home.spaceComplexStructure.spaceComplexSection.spaceComplexSubSection.spaceComplexComplex.spaceComplexComplexSection': routes.spaceComplexComplexSection,
       'home.events': {
         url: '/Events',
         views: { 'content@': { templateUrl: 'app/Events/events.html' } }
@@ -1476,7 +2036,7 @@ angular.module('router', []).provider('$router', function () {
   }();
 });
 
-},{"./Routes/routes.js":19}],47:[function(require,module,exports){
+},{"./Routes/routes.js":27}],57:[function(require,module,exports){
 /**
  * angular-bootstrap-calendar - A pure AngularJS bootstrap themed responsive calendar that can display events and has views for year, month, week and day
  * @version v0.19.5
@@ -3615,7 +4175,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ ])
 });
 ;
-},{"angular":52,"interact.js":48,"moment":55}],48:[function(require,module,exports){
+},{"angular":62,"interact.js":58,"moment":65}],58:[function(require,module,exports){
 /**
  * interact.js v1.2.6
  *
@@ -9593,7 +10153,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 } (typeof window === 'undefined'? undefined : window));
 
-},{}],49:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 /*
  * angular-ui-bootstrap
  * http://angular-ui.github.io/bootstrap/
@@ -16990,12 +17550,12 @@ angular.module('ui.bootstrap.datepicker').run(function() {!angular.$$csp().noInl
 angular.module('ui.bootstrap.tooltip').run(function() {!angular.$$csp().noInlineStyle && !angular.$$uibTooltipCss && angular.element(document).find('head').prepend('<style type="text/css">[uib-tooltip-popup].tooltip.top-left > .tooltip-arrow,[uib-tooltip-popup].tooltip.top-right > .tooltip-arrow,[uib-tooltip-popup].tooltip.bottom-left > .tooltip-arrow,[uib-tooltip-popup].tooltip.bottom-right > .tooltip-arrow,[uib-tooltip-popup].tooltip.left-top > .tooltip-arrow,[uib-tooltip-popup].tooltip.left-bottom > .tooltip-arrow,[uib-tooltip-popup].tooltip.right-top > .tooltip-arrow,[uib-tooltip-popup].tooltip.right-bottom > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.top-left > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.top-right > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.bottom-left > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.bottom-right > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.left-top > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.left-bottom > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.right-top > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.right-bottom > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.top-left > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.top-right > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.bottom-left > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.bottom-right > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.left-top > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.left-bottom > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.right-top > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.right-bottom > .tooltip-arrow,[uib-popover-popup].popover.top-left > .arrow,[uib-popover-popup].popover.top-right > .arrow,[uib-popover-popup].popover.bottom-left > .arrow,[uib-popover-popup].popover.bottom-right > .arrow,[uib-popover-popup].popover.left-top > .arrow,[uib-popover-popup].popover.left-bottom > .arrow,[uib-popover-popup].popover.right-top > .arrow,[uib-popover-popup].popover.right-bottom > .arrow,[uib-popover-html-popup].popover.top-left > .arrow,[uib-popover-html-popup].popover.top-right > .arrow,[uib-popover-html-popup].popover.bottom-left > .arrow,[uib-popover-html-popup].popover.bottom-right > .arrow,[uib-popover-html-popup].popover.left-top > .arrow,[uib-popover-html-popup].popover.left-bottom > .arrow,[uib-popover-html-popup].popover.right-top > .arrow,[uib-popover-html-popup].popover.right-bottom > .arrow,[uib-popover-template-popup].popover.top-left > .arrow,[uib-popover-template-popup].popover.top-right > .arrow,[uib-popover-template-popup].popover.bottom-left > .arrow,[uib-popover-template-popup].popover.bottom-right > .arrow,[uib-popover-template-popup].popover.left-top > .arrow,[uib-popover-template-popup].popover.left-bottom > .arrow,[uib-popover-template-popup].popover.right-top > .arrow,[uib-popover-template-popup].popover.right-bottom > .arrow{top:auto;bottom:auto;left:auto;right:auto;margin:0;}[uib-popover-popup].popover,[uib-popover-html-popup].popover,[uib-popover-template-popup].popover{display:block !important;}</style>'); angular.$$uibTooltipCss = true; });
 angular.module('ui.bootstrap.timepicker').run(function() {!angular.$$csp().noInlineStyle && !angular.$$uibTimepickerCss && angular.element(document).find('head').prepend('<style type="text/css">.uib-time input{width:50px;}</style>'); angular.$$uibTimepickerCss = true; });
 angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInlineStyle && !angular.$$uibTypeaheadCss && angular.element(document).find('head').prepend('<style type="text/css">[uib-typeahead-popup].dropdown-menu{display:block;}</style>'); angular.$$uibTypeaheadCss = true; });
-},{}],50:[function(require,module,exports){
+},{}],60:[function(require,module,exports){
 require('./dist/ui-bootstrap-tpls');
 
 module.exports = 'ui.bootstrap';
 
-},{"./dist/ui-bootstrap-tpls":49}],51:[function(require,module,exports){
+},{"./dist/ui-bootstrap-tpls":59}],61:[function(require,module,exports){
 /**
  * @license AngularJS v1.5.3
  * (c) 2010-2016 Google, Inc. http://angularjs.org
@@ -47710,11 +48270,11 @@ $provide.value("$locale", {
 })(window, document);
 
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
-},{}],52:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 require('./angular');
 module.exports = angular;
 
-},{"./angular":51}],53:[function(require,module,exports){
+},{"./angular":61}],63:[function(require,module,exports){
 (function (global){
 /**
  * @license
@@ -63746,7 +64306,7 @@ module.exports = angular;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],54:[function(require,module,exports){
+},{}],64:[function(require,module,exports){
 //! moment.js locale configuration
 //! locale : russian (ru)
 //! author : Viktorminator : https://github.com/Viktorminator
@@ -63915,7 +64475,7 @@ module.exports = angular;
     return ru;
 
 }));
-},{"../moment":55}],55:[function(require,module,exports){
+},{"../moment":65}],65:[function(require,module,exports){
 //! moment.js
 //! version : 2.12.0
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
@@ -67604,7 +68164,7 @@ module.exports = angular;
     return _moment;
 
 }));
-},{}]},{},[45])
+},{}]},{},[55])
 
 
 //# sourceMappingURL=all.js.map

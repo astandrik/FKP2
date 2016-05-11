@@ -3,9 +3,9 @@ var breadcrumbs = require('../breadcrumbs.js');
 var section = {
   url: '/:type',
   views: {
-    'projectSection': {
+    'complexSection': {
       templateUrl: function templateUrl($stateParams) {
-        return 'app/Project/card/sections/' + $stateParams.sectionId + $stateParams.type + '.html';
+        return 'app/SpaceComplex/card/sections/' +  $stateParams.type + '.html';
       },
       controller: function controller($stateParams, $scope,$interpolate) {
         var state = $stateParams;
@@ -13,14 +13,8 @@ var section = {
         case 'general':
           $scope.sectionName = 'Общие сведения';
           break;
-        case 'results':
-          $scope.sectionName = 'Результаты';
-          break;
-        case 'finance':
-          $scope.sectionName = 'Финансирование';
-          break;
-        case 'events':
-          $scope.sectionName = 'События';
+        case 'description':
+          $scope.sectionName = 'Описание';
           break;
         case 'relatedProjects':
             $scope.sectionName = 'Связанные проекты';
@@ -29,11 +23,11 @@ var section = {
           $scope.sectionName = 'Общие сведения';
           break;
         }
-        breadcrumbs.init($interpolate,'projectSection',$scope);
+        breadcrumbs.init($interpolate,'complexSection',$scope);
       }
     }
   },
-  ncyBreadcrumb: breadcrumbs.crumbs.projectSection
+  ncyBreadcrumb: breadcrumbs.crumbs.complexSectionSection
 };
 
 module.exports = section;

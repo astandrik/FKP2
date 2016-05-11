@@ -1,16 +1,13 @@
 'use strict';
-function CC($scope, treeData, dialogs) {
+var highlightNode = require('../components/accordion/treeBuilder.js').highlight;
+function CC($scope, treeData, dialogs,$timeout,$state) {
   $scope.treeData = treeData;
-  $scope.create_popup = function () {
-    var data = {
-      name: 'МЧС',
-      responsible: 'Иванов И.И.',
-      tel: '222-33-22'
-    };
-    var dlg = dialogs.create('app/components/popup/popup.html', 'popupController', data, {
-      size: 'sm',
-      animation: true
-    });
+  $scope.treeParams = [
+    'id',
+    'object_type'
+  ];
+  $scope.specialDict = {
+    type: 'object_type'
   };
   $scope.tabstripData = [
     {
@@ -29,5 +26,28 @@ function CC($scope, treeData, dialogs) {
       type: 'relatedProjects'
     }
   ];
+  $scope.$on('$viewContentLoaded', function (event) {
+    $timeout(function () {
+      if($state.params.complexId) {
+       highlightNode({
+         id: $state.params.complexId,
+         object_type: 3,
+       }, $scope.treeParams);
+     }
+      else if($state.params.subsectionId) {
+        highlightNode({
+          id: $state.params.subsectionId,
+          object_type: 2,
+        }, $scope.treeParams);
+      } else if ($state.params.sectionId) {
+        highlightNode({
+          id: $state.params.sectionId,
+          object_type: 1
+        }, $scope.treeParams);
+      } else {
+        highlightNode(-1, []);
+      }
+    });
+  });
 }
 module.exports = CC;
