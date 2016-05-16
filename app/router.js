@@ -28,7 +28,8 @@ angular.module('router', []).provider('$router', function () {
       'home.events': {
         url: '/Events',
         views: { 'content@': { templateUrl: 'app/Events/events.html' } }
-      }
+      },
+      'home.financeStructure' : routes.financeStructure    
     };
     return this;
   }();

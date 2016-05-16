@@ -23,9 +23,12 @@ function DTD() {
         }
         //Проходим по именам столбцов и сортируем годы
         var b = [];
+        var others = [];
         for (var p in data[0]) {
           if (isNaN(p) == false) {
             b.push(p);
+          } else {
+            others.push(p);
           }
         };
         b.sort();
@@ -35,6 +38,7 @@ function DTD() {
         } else {
           var c = b;
         }
+        c = c.concat(others);
         $scope.columns = [];
         var w = $(window).width();
         c.forEach(function(item){

@@ -1,14 +1,18 @@
 	<md-content flex layout-padding>
 		      <div layout="row">
-		      <div flex="20" class="space-header-name">Заказчики </div>
-		      <div flex="80" class="space-info-name">	<a ng-click="create_popup()"> МЧС России </a> {{project.organizations}} </div>
+		      <div flex="20" class="space-header-name">Назначение </div>
+		      <div flex="80" class="space-info-name"></div>
 	    </div>
 	    <div layout="row">
-	        <div flex="20" class="space-header-name">Головной исполнитель </div>
-	        <div flex="80" class="space-info-name">ИСС</div>
+	        <div flex="20" class="space-header-name">Ракета-носитель </div>
+	        <div flex="80" class="space-info-name">{{complexFull.launches[0].booster_complex.name}}</div>
       </div>
 			<div layout="row">
-        <div flex="20" class="space-header-name">Оператор </div>
-        <div flex="80" class="space-info-name">	Спутниковая система "Голд" </div>
+        <div flex="20" class="space-header-name">Разгонный блок </div>
+        <div flex="80" class="space-info-name">{{complexFull.launches[0].stage_complex.name}}	</div>
+      </div>
+			<div layout="row">
+        <div flex="20" class="space-header-name">Космодром </div>
+        <div flex="80" class="space-info-name"> {{complexFull.launches[0].spaceport.name}} </div>
       </div>
   </md-content>

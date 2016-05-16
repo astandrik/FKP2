@@ -1,13 +1,13 @@
 var runner = require('./cacheRunner.js');
 
-var currentModule = angular.module('cache-custom', ['angular-cache'])
+var currentModule = angular.module('cache-custom', ['angular-cache','errorsModule'])
 
 
 currentModule.service('$cacheRunner', runner);
 
 currentModule.factory('$httpCached', function($http, CacheFactory) {
   return {
-    get: function(url, params) {
+    get: function(url, params, errorHandler) {
         if (!CacheFactory.get(url)) {
           CacheFactory.createCache(url, {
             deleteOnExpire: 'passive',

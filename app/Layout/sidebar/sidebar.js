@@ -11,7 +11,9 @@ var directories = [
     state: 'home.spaceComplexStructure'
   },
   { name: 'Финансирование',
-    icon: 'money' },
+    icon: 'money',
+    state: 'home.financeStructure'},
+
   { name: 'Заказчики',
     icon: 'people' },
   { name: 'Планирование',

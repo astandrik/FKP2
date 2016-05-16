@@ -3,7 +3,9 @@ require('./router.js');
 require('./Project/project.js');
 require('./SpaceComplex/complex.js');
 require('./Design/design.js');
-require('./cache/cache.js');
+require('./core/cache/cache.js');
+require('./core/dialogs/dialogs.js');
+require('./core/errorHandler/errors.js');
 var layout = require('./Layout/layout.js');
 var components = require('./components/components.js');
 var icons = require('./components/Icons/icons.js');
@@ -11,9 +13,10 @@ var activateDir = require('./Layout/sidebar/sidebar.js').activateDir;
 
 
 
-
 var app = angular.module('app', [
   'cache-custom',
+  'dialogWorker',
+  'errorsModule',
   'ui.router',
   'ngMaterial',
   'ngMdIcons',
@@ -57,8 +60,15 @@ app.config([
     calendarConfig.dateFormatter = 'moment';  // use moment to format dates
   }
 ]);
-app.run(function ($rootScope, $state,$cacheRunner) {
+app.run(function ($rootScope, $state,$cacheRunner, $errorDialogService,$errorHandler) {
+  $cacheRunner.setOptions(
+    {
+      checkRate: 2000,
+      cacheRate: 400
+    }
+  )
   $cacheRunner.startCacheRunner();
+  $cacheRunner.runCacheProcess();
   $rootScope.$state = $state;
   $rootScope.getHref = $state.href.bind($state);
   $rootScope.sectionCutFunction = function  sectionCutFunction (section) {
@@ -96,15 +106,20 @@ app.run(function ($rootScope, $state,$cacheRunner) {
   };
 
   $rootScope.$on('$stateChangeSuccess',
-function(event, toState, toParams, fromState, fromParams){
-  activateDir(toState.name);
+  function(event, toState, toParams, fromState, fromParams){
+    activateDir(toState.name);
 
- })
+  })
   $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, options) {
     //debugger;
   });
   $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
-    debugger;
+    //debugger;
+    if(error && error.config && error.config.url) {
+      $errorHandler.handleError(event.name,`Ошибка перехода по пути ${error.config.url}. Обратитесь к системному администратору.`);
+    } else {
+      $errorHandler.handleError(event.name,`Неизвестная ошибка. Обратитесь к системному администратору.`);
+    }
   });
   $rootScope.$on('$stateNotFound', function (event, unfoundState, fromState, fromParams) {
      //debugger;

@@ -1,8 +1,9 @@
 'use strict';
-module.exports = function projectFactory($httpCached) {
+module.exports = function projectFactory($httpCached, $errorHandler) {
   return {
     getById: function getById(id) {
-      return $httpCached.get('data/project?id=' + id);
+      var url = 'data/project?id=' + id;
+      return $httpCached.get(url);
     }
   };
 };

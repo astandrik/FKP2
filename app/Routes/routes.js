@@ -14,5 +14,7 @@ spaceComplexStructure: require('./SpaceComplexStructure/spaceComplexStructure.js
 spaceComplexSection: require('./SpaceComplexStructure/section.js'),
 spaceComplexSubSection: require('./SpaceComplexStructure/subSection.js'),
 spaceComplexComplex: require('./SpaceComplexStructure/complex.js'),
-spaceComplexComplexSection: require('./SpaceComplexStructure/complexSection.js')
+spaceComplexComplexSection: require('./SpaceComplexStructure/complexSection.js'),
+
+financeStructure: require('./FinanceStructure/financeStructure.js')
 }
