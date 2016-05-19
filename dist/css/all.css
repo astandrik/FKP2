@@ -167,6 +167,12 @@ div[ui-view="content"] {
 .ui-grid-cell-contents {
   white-space: normal !important;
 }
+div.ui-grid-row:hover div {
+  background-color: #66d9ff!important;
+}
+div[role="rowgroup"].ui-grid-viewport {
+  overflow-x: auto!important;
+}
 
 .popup1 {
   background-color: #ffb833;
@@ -257,6 +263,9 @@ tab-strip {
 }
 .btn-group-tab {
   min-height: 30px;
+}
+.btn-group > .btn.active {
+  z-index: 0!important;
 }
 
 #timeline {
@@ -521,7 +530,7 @@ tab-strip {
   padding: 2% 0 0 10%;
 }
 .projectCard #table-finance > .grid {
-  height: 100px !important;
+  max-height: 20vh !important;
 }
 .projectCard #table-finance {
   padding: 20px;
@@ -537,10 +546,22 @@ tab-strip {
 .projectCard .organizations {
   padding: 10px;
 }
-.projectCard div.ui-grid-row:hover div {
+
+.complexCard .complexTableAlign {
+  text-align: center;
+}
+.complexCard .rowRight {
+  margin-right: 238px!important;
+}
+.complexCard .rowHover:hover {
   background-color: #66d9ff!important;
 }
-
+.complexCard .complexcharact {
+  padding: 8px;
+}
+.complexCard .complexValueAlign {
+  text-align: right;
+}
 .complexCard .size {
   font-size: 24px;
   padding: 0 0 20px 0;

@@ -1,1 +1,7 @@
-<c-data-table data="finance" basename="basename" id="table-finance"></c-data-table>
+<div class="btn-group" role="group" aria-label="...">
+  <button type="button" style="width:200px;font-weight:bold" ng-class="{active: budgetShown}" ng-click="showBudget()" class="btn btn-default">Бюджет</button>
+  <button type="button" style="margin-left:10px;width:200px;font-weight:bold" ng-class="{active: !budgetShown}" ng-click="showOwn()" class="btn btn-default">Внебюджет</button>
+</div>
+
+<c-data-table need-all-count="true" ng-if="budgetShown"  grid-height="calc(100vh - 153px)" need-links=true link-blocker=project data="financeBudget" basename="basename" id="table-finance"></c-data-table>
+<c-data-table need-all-count="true" ng-if="!budgetShown"  grid-height="calc(100vh - 153px)" need-links=true link-blocker=project data="financeOwn" basename="basename" id="table-finance"></c-data-table>

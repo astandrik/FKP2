@@ -16,7 +16,7 @@ function ProjectController($scope, dialogs, $projectFactory, $state, $timeout, t
     var data = {
       name: org.name,
       responsible: org.contact_person,
-      tel: org.phone,
+      tel: org.phone
     };
     var dlg = dialogs.create('app/components/popup/popup.html', 'popupController', data, {
       size: 'sm',
@@ -25,7 +25,7 @@ function ProjectController($scope, dialogs, $projectFactory, $state, $timeout, t
   };
   $scope.$on('$viewContentLoaded', function (event) {
     $timeout(function () {
-      if($state.params.projectId) {
+      if ($state.params.projectId) {
         highlightNode({
           id: $state.params.projectId,
           object_type: 0,
@@ -37,7 +37,7 @@ function ProjectController($scope, dialogs, $projectFactory, $state, $timeout, t
           object_type: 1,
           section_id: $state.params.sectionId
         }, $scope.treeParams);
-      }  else if ($state.params.sectionId) {
+      } else if ($state.params.sectionId) {
         highlightNode({
           id: $state.params.sectionId,
           object_type: 2,

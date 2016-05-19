@@ -1,5 +1,5 @@
+'use strict';
 var breadcrumbs = require('../breadcrumbs.js');
-
 var section = {
   url: '/:type',
   views: {
@@ -7,7 +7,7 @@ var section = {
       templateUrl: function templateUrl($stateParams) {
         return 'app/Project/card/sections/' + $stateParams.sectionId + $stateParams.type + '.html';
       },
-      controller: function controller($stateParams, $scope,$interpolate) {
+      controller: function controller($stateParams, $scope, $interpolate) {
         var state = $stateParams;
         switch (state.type) {
         case 'general':
@@ -23,17 +23,16 @@ var section = {
           $scope.sectionName = 'События';
           break;
         case 'relatedProjects':
-            $scope.sectionName = 'Связанные проекты';
-            break;
+          $scope.sectionName = 'Связанные проекты';
+          break;
         default:
           $scope.sectionName = 'Общие сведения';
           break;
         }
-        breadcrumbs.init($interpolate,'projectSection',$scope);
+        breadcrumbs.init($interpolate, 'projectSection', $scope);
       }
     }
   },
   ncyBreadcrumb: breadcrumbs.crumbs.projectSection
 };
-
 module.exports = section;

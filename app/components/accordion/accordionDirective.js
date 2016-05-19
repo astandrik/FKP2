@@ -27,7 +27,7 @@ module.exports = function ($compile, $accordion, $state) {
             throw 'define data attribute for tree';
           }
           treeData.data.forEach(function (item) {
-            elements.push(treeBuilder.buildNode(item, paramList,specialDict));
+            elements.push(treeBuilder.buildNode(item, paramList, specialDict));
           });
           var treeHtml = html + elements.join('') + '</ul></div>';
           templateElement.replaceWith($compile(treeHtml)($scope));

@@ -55,7 +55,7 @@ function traverseTree(data, initialHref, parentId, parentType, $projectsDict) {
         node.cacheType = 'subsection';
         break;
       case 0:
-          node.href = initialHref + '/project/' + node.id + '/general';
+        node.href = initialHref + '/project/' + node.id;
         node.cacheType = 'project';
         break;
       }

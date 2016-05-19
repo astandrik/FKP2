@@ -1,9 +1,11 @@
 'use strict';
 var breadcrumbs = require('../breadcrumbs.js');
-function prepareSection(finance) {
+
+var helpers = require('./financeStructureHelper');
+function prepareSubSection(finance) {
   for (var e in finance) {
     if (isNaN(finance[e])) {
-      prepareSection(finance[e]);
+      prepareSubSection(finance[e]);
     } else {
       finance[e] = parseFloat(finance[e]) / 1000000;
     }
@@ -29,27 +31,34 @@ function getFinanceTables(finance) {
     'Own': projectsOwn
   };
 }
+var breadcrumbs = require('../breadcrumbs.js');
 var entity = {
-  url: '/section/:sectionId',
+  url: '/subsection/:subsectionId',
   views: {
-    'projectInfo@home.projectStructure': {
-      templateUrl: 'app/Project/card/section-card.html',
-      controller: function controller($scope, section, $interpolate) {
-        $scope.section = _.cloneDeep(section);
-        prepareSection($scope.section.finance);
-        var tables = getFinanceTables($scope.section.finance);
+      'content@': {
+        templateUrl: 'app/Finance/finance.html',
+      controller: function controller($scope, financeSubsection, financeSection, $interpolate,treeData,$projectsDict) {
+        $scope.budgetShown=true;
+        $scope.showBudget = () => $scope.budgetShown=true;
+        $scope.showOwn = () => $scope.budgetShown=false;
+
+        $scope.subsection = _.cloneDeep(financeSubsection);
+        $scope.section = financeSection;
+        prepareSubSection($scope.subsection.finance);
+        var tables = getFinanceTables($scope.subsection.finance);
         $scope.financeBudget = tables.Budget;
         $scope.financeOwn = tables.Own;
-        breadcrumbs.init($interpolate, 'section', $scope);
+        $scope.finance = tables.Budget;
         $scope.basename = 'Название';
+        breadcrumbs.init($interpolate, 'financeSubSection', $scope);
       }
     }
   },
-  ncyBreadcrumb: breadcrumbs.crumbs.section,
+  ncyBreadcrumb: breadcrumbs.crumbs.financeSubSection,
   resolve: {
-    section: function section($http, $stateParams, $sectionFactory) {
-      var id = $stateParams.sectionId;
-      return $sectionFactory.getById(id).then(function (data) {
+    financeSubsection: function subsection($http, $stateParams, $subsectionFactory) {
+      var id = $stateParams.subsectionId;
+      return $subsectionFactory.getById(id).then(function (data) {
         return data.data.data;
       });
     }

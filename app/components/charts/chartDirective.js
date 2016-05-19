@@ -6,7 +6,10 @@ function CD($timeout, $compile) {
     compile: function compile(templateElement, templateAttrs) {
       return {
         pre: function pre($scope) {
-          window.Chart.defaults.global.colours = ["#4997cd", "#d76e00"]
+          window.Chart.defaults.global.colours = [
+            '#4997cd',
+            '#d76e00'
+          ];
           $scope.labels = $scope.data.barLabels;
           $scope.series = $scope.data.barSeries;
           $scope.chartData = $scope.data.barData;

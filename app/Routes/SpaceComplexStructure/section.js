@@ -1,20 +1,19 @@
+'use strict';
 var breadcrumbs = require('../breadcrumbs.js');
-
-
 var entity = {
   url: '/section/:sectionId',
   views: {
     'complexInfo@home.spaceComplexStructure': {
       templateUrl: 'app/SpaceComplex/card/section-card.html',
-      controller: function controller($scope, treeData,$interpolate, $stateParams) {
-        var id =  $stateParams.sectionId;
+      controller: function controller($scope, treeData, $interpolate, $stateParams) {
+        var id = $stateParams.sectionId;
         $scope.section = null;
-        treeData.forEach((s) => {
-          if(s.id == id) {
+        treeData.forEach(function (s) {
+          if (s.id == id) {
             $scope.section = s;
           }
         });
-        $scope.sectionName =  $scope.section.name;
+        $scope.sectionName = $scope.section.name;
         var initialState = 'home.spaceComplexStructure.spaceComplexSection';
         $scope.initialHref = window.getHref(initialState);
       },
@@ -28,6 +27,5 @@ var entity = {
     }
   },
   ncyBreadcrumb: breadcrumbs.crumbs.complexSection
-}
-
+};
 module.exports = entity;

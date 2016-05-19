@@ -50,12 +50,20 @@ var directories = [{
   name: 'Космические комплексы',
   icon: 'brightness_5',
   state: 'home.spaceComplexStructure'
-}, { name: 'Финансирование',
+}, {
+  name: 'Финансирование',
   icon: 'money',
-  state: 'home.financeStructure' }, { name: 'Заказчики',
-  icon: 'people' }, { name: 'Планирование',
-  icon: 'access_time' }, { name: 'Документация',
-  icon: 'insert_drive_file' }, {
+  state: 'home.financeStructure'
+}, {
+  name: 'Заказчики',
+  icon: 'people'
+}, {
+  name: 'Планирование',
+  icon: 'access_time'
+}, {
+  name: 'Документация',
+  icon: 'insert_drive_file'
+}, {
   name: 'События',
   icon: 'event',
   state: 'home.events'
@@ -75,7 +83,6 @@ module.exports = {
       templateUrl: 'app/Layout/sidebar/sidebar.html',
       replace: true,
       controller: function controller($scope) {
-
         $scope.directories = directories;
       }
     };
@@ -109,6 +116,7 @@ currentModule.directive('projectCard', projectCard);
 currentModule.factory('$projectFactory', projectFactory);
 currentModule.factory('$subsectionFactory', subsectionFactory);
 currentModule.factory('$sectionFactory', sectionFactory);
+currentModule.value('$projectsDict', { dict: {} });
 
 },{"./card/projectCardDirective.js":5,"./projectController.js":7,"./projectFactory.js":8,"./sectionFactory.js":9,"./subsectionFactory.js":10}],7:[function(require,module,exports){
 'use strict';
@@ -161,7 +169,7 @@ function ProjectController($scope, dialogs, $projectFactory, $state, $timeout, t
 }
 module.exports = ProjectController;
 
-},{"../components/accordion/treeBuilder.js":37}],8:[function(require,module,exports){
+},{"../components/accordion/treeBuilder.js":40}],8:[function(require,module,exports){
 'use strict';
 
 module.exports = function projectFactory($httpCached, $errorHandler) {
@@ -179,7 +187,8 @@ module.exports = function projectFactory($httpCached, $errorHandler) {
 module.exports = function ($httpCached) {
   return {
     getById: function getById(id) {
-      return $httpCached.get('data/section?id=' + id);
+      var url = 'data/section?id=' + id;
+      return $httpCached.get(url);
     }
   };
 };
@@ -190,13 +199,89 @@ module.exports = function ($httpCached) {
 module.exports = function ($httpCached) {
   return {
     getById: function getById(id) {
-      return $httpCached.get('data/subsection?id=' + id);
+      var url = 'data/subsection?id=' + id;
+      return $httpCached.get(url);
     }
   };
 };
 
 },{}],11:[function(require,module,exports){
 'use strict';
+
+var helpers = require('./financeStructureHelper');
+function prepareSection(finance) {
+  for (var e in finance) {
+    if (isNaN(finance[e])) {
+      prepareSection(finance[e]);
+    } else {
+      finance[e] = parseFloat(finance[e]) / 1000000;
+    }
+  }
+}
+function getFinanceTables(finance) {
+  var projectsBudget = [];
+  var projectsOwn = [];
+  for (var e in finance) {
+    var projectBudget = { 'Название': e };
+    var projectOwn = { 'Название': e };
+    for (var y in finance[e]['Финансирование за счет бюджетных средств']) {
+      projectBudget[y] = finance[e]['Финансирование за счет бюджетных средств'][y];
+    }
+    for (var y in finance[e]['Финансирование из собственных средств']) {
+      projectOwn[y] = finance[e]['Финансирование из собственных средств'][y];
+    }
+    projectsBudget.push(projectBudget);
+    projectsOwn.push(projectOwn);
+  }
+  return {
+    'Budget': projectsBudget,
+    'Own': projectsOwn
+  };
+}
+
+var breadcrumbs = require('../breadcrumbs.js');
+var entity = {
+  url: '/section/:sectionId',
+  views: {
+    'content@': {
+      templateUrl: 'app/Finance/finance.html',
+      controller: function controller($scope, treeData, $interpolate, $stateParams, $projectsDict, financeSection) {
+        $scope.budgetShown = true;
+        $scope.showBudget = function () {
+          return $scope.budgetShown = true;
+        };
+        $scope.showOwn = function () {
+          return $scope.budgetShown = false;
+        };
+
+        $scope.section = _.cloneDeep(financeSection);
+        prepareSection($scope.section.finance);
+        var tables = getFinanceTables($scope.section.finance);
+        $scope.financeBudget = tables.Budget;
+        $scope.financeOwn = tables.Own;
+
+        $scope.basename = 'Название';
+        breadcrumbs.init($interpolate, 'financeSection', $scope);
+      }
+    }
+  },
+  ncyBreadcrumb: breadcrumbs.crumbs.financeSection,
+  resolve: {
+    financeSection: function section($http, $stateParams, $sectionFactory) {
+      var id = $stateParams.sectionId;
+      return $sectionFactory.getById(id).then(function (data) {
+        return data.data.data;
+      });
+    }
+  }
+};
+
+module.exports = entity;
+
+},{"../breadcrumbs.js":29,"./financeStructureHelper":13}],12:[function(require,module,exports){
+'use strict';
+
+var helpers = require('./financeStructureHelper');
 
 function sumObject(obj) {
   var sum = 0;
@@ -206,56 +291,239 @@ function sumObject(obj) {
   return sum;
 }
 
+function prepareSection(finance) {
+  for (var e in finance) {
+    if (isNaN(finance[e])) {
+      prepareSection(finance[e]);
+    } else {
+      finance[e] = parseFloat(finance[e]) / 1000000;
+    }
+  }
+}
+function getFinanceTables(finance) {
+  var projectsBudget = [];
+  var projectsOwn = [];
+  for (var e in finance) {
+    var projectBudget = { 'Название': e };
+    var projectOwn = { 'Название': e };
+    for (var y in finance[e]['Финансирование за счет бюджетных средств']) {
+      projectBudget[y] = finance[e]['Финансирование за счет бюджетных средств'][y];
+    }
+    for (var y in finance[e]['Финансирование из собственных средств']) {
+      projectOwn[y] = finance[e]['Финансирование из собственных средств'][y];
+    }
+    projectsBudget.push(projectBudget);
+    projectsOwn.push(projectOwn);
+  }
+  return {
+    'Budget': projectsBudget,
+    'Own': projectsOwn
+  };
+}
+
 var structure = {
   url: '/financeStructure',
   views: {
     'content@': {
       templateUrl: 'app/Finance/finance.html',
-      controller: function controller($scope) {
-        $scope.basename = "ФКП";
-        $scope.finance = [{
-          "2016": 3332,
-          "2017": 3332,
-          "2018": 3332,
-          "2019": 3321,
-          "2020": 12332,
-          "2021": 3242,
-          "2022": 45435,
-          "2023": 12332,
-          "2024": 3242,
-          "2025": 45435
-        }, {
-          "2016": 3332,
-          "2017": 3332,
-          "2018": 3332,
-          "2019": 3321,
-          "2020": 12332,
-          "2021": 3242,
-          "2022": 45435,
-          "2023": 12332,
-          "2024": 3242,
-          "2025": 45435
-        }];
+      controller: function controller($scope, treeData, sectionsData) {
+        $scope.section = _.cloneDeep(sectionsData);
+        $scope.budgetShown = true;
+        $scope.showBudget = function () {
+          return $scope.budgetShown = true;
+        };
+        $scope.showOwn = function () {
+          return $scope.budgetShown = false;
+        };
 
-        var a = 0;
-        for (var i = 0; i < $scope.finance.length; i++) {
-          a = sumObject($scope.finance[i]);
-          $scope.finance[i]['Всего'] = a;
-        }
+        prepareSection($scope.section);
+        var tables = getFinanceTables($scope.section);
+        $scope.financeBudget = tables.Budget;
+        $scope.financeOwn = tables.Own;
+        $scope.basename = 'Название';
       }
     }
   },
-  ncyBreadcrumb: { label: 'Финансирование', toolTipInterpolated: 'Финансирование' }
+  ncyBreadcrumb: {
+    label: 'Финансирование',
+    toolTipInterpolated: 'Финансирование'
+  },
+  resolve: {
+    treeData: function treeData($accordion, $projectsDict) {
+      return $accordion.getTree('data/tree').then(function (response) {
+        helpers.appendHrefs(response, 'home.financeStructure', $projectsDict);
+        return response.data;
+      });
+    },
+    sectionsData: function sectionsData($httpCached) {
+      var url = '/data/finance';
+      return $httpCached.get(url).then(function (data) {
+        return data.data.data;
+      });
+    }
+  }
 };
 module.exports = structure;
 
-},{}],12:[function(require,module,exports){
+},{"./financeStructureHelper":13}],13:[function(require,module,exports){
 'use strict';
 
-var helpers = require('./projectHelper.js');
+function projectMillionsFunction(project) {
+  for (var type in project.finance) {
+    for (var val in project.finance[type]) {
+      project.finance[type][val] = project.finance[type][val] / 1000000;
+    }
+  }
+  return project;
+}
+function prepareFinance(finance, baseName) {
+  var years = [];
+  var valueBudget = [];
+  var valueOwnBudget = [];
+  var sumBudget = 0;
+  var sumOwnBudget = 0;
+  for (var p in finance['Финансирование из собственных средств']) {
+    years.push(p);
+    valueOwnBudget.push(finance['Финансирование из собственных средств'][p]);
+    sumOwnBudget = sumOwnBudget + finance['Финансирование из собственных средств'][p];
+  }
+  for (var p in finance['Финансирование за счет бюджетных средств']) {
+    valueBudget.push(finance['Финансирование за счет бюджетных средств'][p]);
+    sumBudget = sumBudget + finance['Финансирование за счет бюджетных средств'][p];
+  }
+  years.sort();
+  var start = years[0];
+  var end = years[years.length - 1];
+  finance['Финансирование из собственных средств'][baseName] = 'Внебюджет, млн.р.';
+  finance['Финансирование за счет бюджетных средств'][baseName] = 'Бюджет, млн.р.';
+  var a = [finance['Финансирование из собственных средств'], finance['Финансирование за счет бюджетных средств']];
+  return {
+    finance: a,
+    start: start,
+    end: end,
+    years: years,
+    valueBudget: valueBudget,
+    valueOwnBudget: valueOwnBudget,
+    sumBudget: sumBudget,
+    sumOwnBudget: sumOwnBudget
+  };
+}
+function traverseTree(data, initialHref, parentId, parentType, $projectsDict) {
+  data.forEach(function (node) {
+    if (node.object_type != parentType) {
+      switch (node.object_type) {
+        case 2:
+          node.href = initialHref + '/section/' + node.id;
+          node.cacheType = 'section';
+          break;
+        case 1:
+          node.href = initialHref + '/subsection/' + node.id;
+          node.cacheType = 'subsection';
+          break;
+        case 0:
+          node.href = initialHref + '/project/' + node.id;
+          node.cacheType = 'project';
+          break;
+      }
+    } else {
+      node.href = initialHref.replace(new RegExp('/' + parentId + '$'), '/' + node.id);
+      node.cacheType = parentType == 0 ? 'project' : parentType == 1 ? 'subsection' : parentType == 2 ? 'section' : 'project';
+    }
+    node.elementId = node.id;
+    $projectsDict.dict[node.name] = node;
+    traverseTree(node.children, node.href, node.id, node.object_type, $projectsDict);
+  });
+}
+function appendHrefs(data, initialState, $projectsDict) {
+  var initialHref = window.getHref(initialState);
+  var curData = data.data.data;
+  traverseTree(curData, initialHref, null, null, $projectsDict);
+}
+module.exports = {
+  prepareValues: projectMillionsFunction,
+  prepareFinance: prepareFinance,
+  appendHrefs: appendHrefs
+};
+
+},{}],14:[function(require,module,exports){
+'use strict';
 
 var breadcrumbs = require('../breadcrumbs.js');
 
+var helpers = require('./financeStructureHelper');
+function prepareSubSection(finance) {
+  for (var e in finance) {
+    if (isNaN(finance[e])) {
+      prepareSubSection(finance[e]);
+    } else {
+      finance[e] = parseFloat(finance[e]) / 1000000;
+    }
+  }
+}
+function getFinanceTables(finance) {
+  var projectsBudget = [];
+  var projectsOwn = [];
+  for (var e in finance) {
+    var projectBudget = { 'Название': e };
+    var projectOwn = { 'Название': e };
+    for (var y in finance[e]['Финансирование за счет бюджетных средств']) {
+      projectBudget[y] = finance[e]['Финансирование за счет бюджетных средств'][y];
+    }
+    for (var y in finance[e]['Финансирование из собственных средств']) {
+      projectOwn[y] = finance[e]['Финансирование из собственных средств'][y];
+    }
+    projectsBudget.push(projectBudget);
+    projectsOwn.push(projectOwn);
+  }
+  return {
+    'Budget': projectsBudget,
+    'Own': projectsOwn
+  };
+}
+var breadcrumbs = require('../breadcrumbs.js');
+var entity = {
+  url: '/subsection/:subsectionId',
+  views: {
+    'content@': {
+      templateUrl: 'app/Finance/finance.html',
+      controller: function controller($scope, financeSubsection, financeSection, $interpolate, treeData, $projectsDict) {
+        $scope.budgetShown = true;
+        $scope.showBudget = function () {
+          return $scope.budgetShown = true;
+        };
+        $scope.showOwn = function () {
+          return $scope.budgetShown = false;
+        };
+
+        $scope.subsection = _.cloneDeep(financeSubsection);
+        $scope.section = financeSection;
+        prepareSubSection($scope.subsection.finance);
+        var tables = getFinanceTables($scope.subsection.finance);
+        $scope.financeBudget = tables.Budget;
+        $scope.financeOwn = tables.Own;
+        $scope.finance = tables.Budget;
+        $scope.basename = 'Название';
+        breadcrumbs.init($interpolate, 'financeSubSection', $scope);
+      }
+    }
+  },
+  ncyBreadcrumb: breadcrumbs.crumbs.financeSubSection,
+  resolve: {
+    financeSubsection: function subsection($http, $stateParams, $subsectionFactory) {
+      var id = $stateParams.subsectionId;
+      return $subsectionFactory.getById(id).then(function (data) {
+        return data.data.data;
+      });
+    }
+  }
+};
+module.exports = entity;
+
+},{"../breadcrumbs.js":29,"./financeStructureHelper":13}],15:[function(require,module,exports){
+'use strict';
+
+var helpers = require('./projectHelper.js');
+var breadcrumbs = require('../breadcrumbs.js');
 var entity = {
   url: '/project/:projectId',
   views: {
@@ -271,8 +539,15 @@ var entity = {
         $scope.start = finObj.start;
         $scope.end = finObj.end;
         project.finance = finObj.finance;
-        $scope.project.chart = { barLabels: finObj.years, barSeries: ['Бюджет, млн.р.', 'Внебюджет, млн.р'], barData: [finObj.valueBudget, finObj.valueOwnBudget] };
-        $scope.pieChartData = { pieLabels: ["Бюджет", "Внебюджет"], pieData: [finObj.sumBudget, finObj.sumOwnBudget] };
+        $scope.project.chart = {
+          barLabels: finObj.years,
+          barSeries: ['Бюджет, млн.р.', 'Внебюджет, млн.р'],
+          barData: [finObj.valueBudget, finObj.valueOwnBudget]
+        };
+        $scope.pieChartData = {
+          pieLabels: ['Бюджет', 'Внебюджет'],
+          pieData: [finObj.sumBudget, finObj.sumOwnBudget]
+        };
         $scope.section = section;
         $scope.subsection = subsection;
         breadcrumbs.init($interpolate, 'project', $scope);
@@ -326,46 +601,52 @@ var entity = {
     }
   }
 };
-
 module.exports = entity;
 
-},{"../breadcrumbs.js":26,"./projectHelper.js":13}],13:[function(require,module,exports){
-"use strict";
+},{"../breadcrumbs.js":29,"./projectHelper.js":16}],16:[function(require,module,exports){
+'use strict';
 
 function projectMillionsFunction(project) {
   for (var type in project.finance) {
     for (var val in project.finance[type]) {
-      project.finance[type][val] = project.finance[type][val] / 1000000.0;
+      project.finance[type][val] = project.finance[type][val] / 1000000;
     }
   }
   return project;
 }
-
 function prepareFinance(finance, baseName) {
   var years = [];
   var valueBudget = [];
   var valueOwnBudget = [];
   var sumBudget = 0;
   var sumOwnBudget = 0;
-  for (var p in finance["Финансирование из собственных средств"]) {
+  for (var p in finance['Финансирование из собственных средств']) {
     years.push(p);
-    valueOwnBudget.push(finance["Финансирование из собственных средств"][p]);
-    sumOwnBudget = sumOwnBudget + finance["Финансирование из собственных средств"][p];
-  };
-  for (var p in finance["Финансирование за счет бюджетных средств"]) {
-    valueBudget.push(finance["Финансирование за счет бюджетных средств"][p]);
-    sumBudget = sumBudget + finance["Финансирование за счет бюджетных средств"][p];
-  };
+    valueOwnBudget.push(finance['Финансирование из собственных средств'][p]);
+    sumOwnBudget = sumOwnBudget + finance['Финансирование из собственных средств'][p];
+  }
+  for (var p in finance['Финансирование за счет бюджетных средств']) {
+    valueBudget.push(finance['Финансирование за счет бюджетных средств'][p]);
+    sumBudget = sumBudget + finance['Финансирование за счет бюджетных средств'][p];
+  }
   years.sort();
   var start = years[0];
   var end = years[years.length - 1];
-  finance["Финансирование из собственных средств"][baseName] = 'Внебюджет, млн.р.';
-  finance["Финансирование за счет бюджетных средств"][baseName] = 'Бюджет, млн.р.';
-  var a = [finance["Финансирование из собственных средств"], finance["Финансирование за счет бюджетных средств"]];
-  return { finance: a, start: start, end: end, years: years, valueBudget: valueBudget, valueOwnBudget: valueOwnBudget, sumBudget: sumBudget, sumOwnBudget: sumOwnBudget };
+  finance['Финансирование из собственных средств'][baseName] = 'Внебюджет, млн.р.';
+  finance['Финансирование за счет бюджетных средств'][baseName] = 'Бюджет, млн.р.';
+  var a = [finance['Финансирование из собственных средств'], finance['Финансирование за счет бюджетных средств']];
+  return {
+    finance: a,
+    start: start,
+    end: end,
+    years: years,
+    valueBudget: valueBudget,
+    valueOwnBudget: valueOwnBudget,
+    sumBudget: sumBudget,
+    sumOwnBudget: sumOwnBudget
+  };
 }
-
-function traverseTree(data, initialHref, parentId, parentType) {
+function traverseTree(data, initialHref, parentId, parentType, $projectsDict) {
   data.forEach(function (node) {
     if (node.object_type != parentType) {
       switch (node.object_type) {
@@ -378,7 +659,7 @@ function traverseTree(data, initialHref, parentId, parentType) {
           node.cacheType = 'subsection';
           break;
         case 0:
-          node.href = initialHref + '/project/' + node.id;
+          node.href = initialHref + '/project/' + node.id + '/general';
           node.cacheType = 'project';
           break;
       }
@@ -387,27 +668,25 @@ function traverseTree(data, initialHref, parentId, parentType) {
       node.cacheType = parentType == 0 ? 'project' : parentType == 1 ? 'subsection' : parentType == 2 ? 'section' : 'project';
     }
     node.elementId = node.id;
-    traverseTree(node.children, node.href, node.id, node.object_type);
+    $projectsDict.dict[node.name] = node;
+    traverseTree(node.children, node.href, node.id, node.object_type, $projectsDict);
   });
 }
-
-function appendHrefs(data, initialState) {
+function appendHrefs(data, initialState, $projectsDict) {
   var initialHref = window.getHref(initialState);
   var curData = data.data.data;
-  traverseTree(curData, initialHref);
+  traverseTree(curData, initialHref, null, null, $projectsDict);
 }
-
 module.exports = {
   prepareValues: projectMillionsFunction,
   prepareFinance: prepareFinance,
   appendHrefs: appendHrefs
 };
 
-},{}],14:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 'use strict';
 
 var breadcrumbs = require('../breadcrumbs.js');
-
 var section = {
   url: '/:type',
   views: {
@@ -443,14 +722,12 @@ var section = {
   },
   ncyBreadcrumb: breadcrumbs.crumbs.projectSection
 };
-
 module.exports = section;
 
-},{"../breadcrumbs.js":26}],15:[function(require,module,exports){
+},{"../breadcrumbs.js":29}],18:[function(require,module,exports){
 'use strict';
 
 var breadcrumbs = require('../breadcrumbs.js');
-
 var section = {
   url: '/:type',
   views: {
@@ -486,10 +763,9 @@ var section = {
   },
   ncyBreadcrumb: breadcrumbs.crumbs.projectSection
 };
-
 module.exports = section;
 
-},{"../breadcrumbs.js":26}],16:[function(require,module,exports){
+},{"../breadcrumbs.js":29}],19:[function(require,module,exports){
 'use strict';
 
 var helpers = require('./projectHelper.js');
@@ -500,27 +776,27 @@ var structure = {
       templateUrl: 'app/Project/project-page.html',
       controller: 'projectStructureController',
       resolve: {
-        treeData: function treeData($accordion) {
+        treeData: function treeData($accordion, $projectsDict) {
           return $accordion.getTree('data/tree').then(function (response) {
-            helpers.appendHrefs(response, 'home.projectStructure');
+            helpers.appendHrefs(response, 'home.projectStructure', $projectsDict);
             return response.data;
           });
         }
       }
     }
   },
-  ncyBreadcrumb: { label: 'Структура программы', toolTipInterpolated: 'Структура программы' }
+  ncyBreadcrumb: {
+    label: 'Структура программы',
+    toolTipInterpolated: 'Структура программы'
+  }
 };
-
 module.exports = structure;
 
-},{"./projectHelper.js":13}],17:[function(require,module,exports){
+},{"./projectHelper.js":16}],20:[function(require,module,exports){
 'use strict';
 
 var helpers = require('./projectHelper.js');
-
 var breadcrumbs = require('../breadcrumbs.js');
-
 var entity = {
   url: '/project/:projectId',
   views: {
@@ -538,8 +814,15 @@ var entity = {
         $scope.start = finObj.start;
         $scope.end = finObj.end;
         project.finance = finObj.finance;
-        $scope.project.chart = { barLabels: finObj.years, barSeries: ['Бюджет, млн.р.', 'Внебюджет, млн.р'], barData: [finObj.valueBudget, finObj.valueOwnBudget] };
-        $scope.pieChartData = { pieLabels: ["Бюджет", "Внебюджет"], pieData: [finObj.sumBudget, finObj.sumOwnBudget] };
+        $scope.project.chart = {
+          barLabels: finObj.years,
+          barSeries: ['Бюджет, млн.р.', 'Внебюджет, млн.р'],
+          barData: [finObj.valueBudget, finObj.valueOwnBudget]
+        };
+        $scope.pieChartData = {
+          pieLabels: ['Бюджет', 'Внебюджет'],
+          pieData: [finObj.sumBudget, finObj.sumOwnBudget]
+        };
         breadcrumbs.init($interpolate, 'project', $scope);
       }
     }
@@ -591,42 +874,41 @@ var entity = {
     }
   }
 };
-
 module.exports = entity;
 
-},{"../breadcrumbs.js":26,"./projectHelper.js":13}],18:[function(require,module,exports){
+},{"../breadcrumbs.js":29,"./projectHelper.js":16}],21:[function(require,module,exports){
 'use strict';
 
 var breadcrumbs = require('../breadcrumbs.js');
-
 function prepareSection(finance) {
   for (var e in finance) {
     if (isNaN(finance[e])) {
       prepareSection(finance[e]);
     } else {
-      finance[e] = parseFloat(finance[e]) / 1000000.0;
+      finance[e] = parseFloat(finance[e]) / 1000000;
     }
   }
 }
-
 function getFinanceTables(finance) {
   var projectsBudget = [];
   var projectsOwn = [];
   for (var e in finance) {
     var projectBudget = { 'Название': e };
     var projectOwn = { 'Название': e };
-    for (var y in finance[e]["Финансирование за счет бюджетных средств"]) {
-      projectBudget[y] = finance[e]["Финансирование за счет бюджетных средств"][y];
+    for (var y in finance[e]['Финансирование за счет бюджетных средств']) {
+      projectBudget[y] = finance[e]['Финансирование за счет бюджетных средств'][y];
     }
-    for (var y in finance[e]["Финансирование из собственных средств"]) {
-      projectOwn[y] = finance[e]["Финансирование из собственных средств"][y];
+    for (var y in finance[e]['Финансирование из собственных средств']) {
+      projectOwn[y] = finance[e]['Финансирование из собственных средств'][y];
     }
     projectsBudget.push(projectBudget);
     projectsOwn.push(projectOwn);
   }
-  return { 'Budget': projectsBudget, 'Own': projectsOwn };
+  return {
+    'Budget': projectsBudget,
+    'Own': projectsOwn
+  };
 }
-
 var entity = {
   url: '/section/:sectionId',
   views: {
@@ -653,42 +935,41 @@ var entity = {
     }
   }
 };
-
 module.exports = entity;
 
-},{"../breadcrumbs.js":26}],19:[function(require,module,exports){
+},{"../breadcrumbs.js":29}],22:[function(require,module,exports){
 'use strict';
 
 var breadcrumbs = require('../breadcrumbs.js');
-
 function prepareSubSection(finance) {
   for (var e in finance) {
     if (isNaN(finance[e])) {
       prepareSubSection(finance[e]);
     } else {
-      finance[e] = parseFloat(finance[e]) / 1000000.0;
+      finance[e] = parseFloat(finance[e]) / 1000000;
     }
   }
 }
-
 function getFinanceTables(finance) {
   var projectsBudget = [];
   var projectsOwn = [];
   for (var e in finance) {
     var projectBudget = { 'Название': e };
     var projectOwn = { 'Название': e };
-    for (var y in finance[e]["Финансирование за счет бюджетных средств"]) {
-      projectBudget[y] = finance[e]["Финансирование за счет бюджетных средств"][y];
+    for (var y in finance[e]['Финансирование за счет бюджетных средств']) {
+      projectBudget[y] = finance[e]['Финансирование за счет бюджетных средств'][y];
     }
-    for (var y in finance[e]["Финансирование из собственных средств"]) {
-      projectOwn[y] = finance[e]["Финансирование из собственных средств"][y];
+    for (var y in finance[e]['Финансирование из собственных средств']) {
+      projectOwn[y] = finance[e]['Финансирование из собственных средств'][y];
     }
     projectsBudget.push(projectBudget);
     projectsOwn.push(projectOwn);
   }
-  return { 'Budget': projectsBudget, 'Own': projectsOwn };
+  return {
+    'Budget': projectsBudget,
+    'Own': projectsOwn
+  };
 }
-
 var breadcrumbs = require('../breadcrumbs.js');
 var entity = {
   url: '/subsection/:subsectionId',
@@ -718,10 +999,9 @@ var entity = {
     }
   }
 };
-
 module.exports = entity;
 
-},{"../breadcrumbs.js":26}],20:[function(require,module,exports){
+},{"../breadcrumbs.js":29}],23:[function(require,module,exports){
 'use strict';
 
 var breadcrumbs = require('../breadcrumbs.js');
@@ -742,7 +1022,7 @@ var entity = {
   views: {
     'complexInfo@home.spaceComplexStructure': {
       templateUrl: 'app/SpaceComplex/card/complex-card.html',
-      controller: function controller($scope, treeData, $interpolate, complex, $stateParams, projectTreeData) {
+      controller: function controller($scope, treeData, $interpolate, complex, $stateParams, projectTreeData, $complexDict) {
         var id = $stateParams.sectionId;
         var subid = $stateParams.subsectionId;
         var complexid = $stateParams.complexId;
@@ -763,6 +1043,11 @@ var entity = {
         }
         $scope.years = years;
         $scope.launches = launches;
+        var sumlaunches = 0;
+        for (var i = 0; i < launches.length; i++) {
+          sumlaunches = launches[i] + sumlaunches;
+        }
+        $scope.sumlaunches = sumlaunches;
         $scope.complexFull = complex;
       }
     }
@@ -787,14 +1072,12 @@ var entity = {
     }
   }
 };
-
 module.exports = entity;
 
-},{"../breadcrumbs.js":26}],21:[function(require,module,exports){
+},{"../breadcrumbs.js":29}],24:[function(require,module,exports){
 'use strict';
 
 var breadcrumbs = require('../breadcrumbs.js');
-
 var section = {
   url: '/:type',
   views: {
@@ -824,14 +1107,12 @@ var section = {
   },
   ncyBreadcrumb: breadcrumbs.crumbs.complexSectionSection
 };
-
 module.exports = section;
 
-},{"../breadcrumbs.js":26}],22:[function(require,module,exports){
+},{"../breadcrumbs.js":29}],25:[function(require,module,exports){
 'use strict';
 
 var breadcrumbs = require('../breadcrumbs.js');
-
 var entity = {
   url: '/section/:sectionId',
   views: {
@@ -860,18 +1141,17 @@ var entity = {
   },
   ncyBreadcrumb: breadcrumbs.crumbs.complexSection
 };
-
 module.exports = entity;
 
-},{"../breadcrumbs.js":26}],23:[function(require,module,exports){
+},{"../breadcrumbs.js":29}],26:[function(require,module,exports){
 'use strict';
 
-function traverseTree(data, initialHref, parentId, parentType) {
+function traverseTree(data, initialHref, parentId, parentType, $complexDict) {
   data.forEach(function (node) {
     if (node.object_type != parentType) {
       switch (node.object_type) {
         case 3:
-          node.href = initialHref + '/complex/' + node.id;
+          node.href = initialHref + '/complex/' + node.id + '/general';
           break;
         case 2:
           node.href = initialHref + '/subsection/' + node.id;
@@ -883,25 +1163,21 @@ function traverseTree(data, initialHref, parentId, parentType) {
     } else {
       node.href = initialHref.replace(new RegExp('/' + parentId + '$'), '/' + node.id);
     }
-    traverseTree(node.children, node.href, node.id, node.object_type);
+    $complexDict.dict[node.name] = node;
+    traverseTree(node.children, node.href, node.id, node.object_type, $complexDict);
   });
 }
-
-function appendHrefs(data, initialState) {
+function appendHrefs(data, initialState, $complexDict) {
   var initialHref = window.getHref(initialState);
   var curData = data.data.data;
-  traverseTree(curData, initialHref);
+  traverseTree(curData, initialHref, null, null, $complexDict);
 }
+module.exports = { appendHrefs: appendHrefs };
 
-module.exports = {
-  appendHrefs: appendHrefs
-};
-
-},{}],24:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 'use strict';
 
 var helpers = require('./spaceComplexHelper.js');
-
 var structure = {
   url: '/SpaceComplexStructure',
   views: {
@@ -909,25 +1185,26 @@ var structure = {
       templateUrl: 'app/SpaceComplex/spaceComplex-page.html',
       controller: 'SpaceComplexStructureController',
       resolve: {
-        treeData: function treeData($accordion) {
+        treeData: function treeData($accordion, $complexDict) {
           return $accordion.getTree('data/spacetree').then(function (response) {
-            helpers.appendHrefs(response, 'home.spaceComplexStructure');
+            helpers.appendHrefs(response, 'home.spaceComplexStructure', $complexDict);
             return response.data;
           });
         }
       }
     }
   },
-  ncyBreadcrumb: { label: 'Космические комплексы', toolTipInterpolated: 'Космические комплексы' }
+  ncyBreadcrumb: {
+    label: 'Космические комплексы',
+    toolTipInterpolated: 'Космические комплексы'
+  }
 };
-
 module.exports = structure;
 
-},{"./spaceComplexHelper.js":23}],25:[function(require,module,exports){
+},{"./spaceComplexHelper.js":26}],28:[function(require,module,exports){
 'use strict';
 
 var breadcrumbs = require('../breadcrumbs.js');
-
 function treeFind(root, id, type) {
   if (root.id == id && root.object_type == type) {
     return root;
@@ -940,7 +1217,6 @@ function treeFind(root, id, type) {
   }
   return null;
 }
-
 var entity = {
   url: '/subsection/:subsectionId',
   views: {
@@ -972,41 +1248,79 @@ var entity = {
   },
   ncyBreadcrumb: breadcrumbs.crumbs.complexSubSection
 };
-
 module.exports = entity;
 
-},{"../breadcrumbs.js":26}],26:[function(require,module,exports){
+},{"../breadcrumbs.js":29}],29:[function(require,module,exports){
 'use strict';
 
 var crumbs = {
-  section: { label: '{{sectionCutFunction(section.name)}}', toolTip: '{{section.name}}', dependencies: [] },
-  subsection: { label: '{{subsectionCutFunction(subsection.name)}}', toolTip: '{{subsection.name}}', dependencies: ['section'] },
-  project: { label: 'Проект {{projectCutFunction(project.cipher) || projectCutFunction(project.name)}}', toolTip: '{{project.name}}', dependencies: ['section', 'subsection'] },
-  projectSection: { label: '{{sectionName}}', toolTip: '{{sectionName}}', dependencies: [] },
-
-  complexSection: { label: '{{section.name}}', toolTip: '{{section.name}}', dependencies: [] },
-  complexSubSection: { label: '{{subSection.name}}', toolTip: '{{subSection.name}}', dependencies: ['complexSection'] },
-  complex: { label: '{{complex.name}}', toolTip: '{{complex.name}}', dependencies: ['complexSection', 'complexSubSection'] },
-  complexSectionSection: { label: '{{sectionName}}', toolTip: '{{sectionName}}', dependencies: [] }
+  section: {
+    label: '{{sectionCutFunction(section.name)}}',
+    toolTip: '{{section.name}}',
+    dependencies: []
+  },
+  subsection: {
+    label: '{{subsectionCutFunction(subsection.name)}}',
+    toolTip: '{{subsection.name}}',
+    dependencies: ['section']
+  },
+  project: {
+    label: 'Проект {{projectCutFunction(project.cipher) || projectCutFunction(project.name)}}',
+    toolTip: '{{project.name}}',
+    dependencies: ['section', 'subsection']
+  },
+  projectSection: {
+    label: '{{sectionName}}',
+    toolTip: '{{sectionName}}',
+    dependencies: []
+  },
+  complexSection: {
+    label: '{{section.name}}',
+    toolTip: '{{section.name}}',
+    dependencies: []
+  },
+  complexSubSection: {
+    label: '{{subSection.name}}',
+    toolTip: '{{subSection.name}}',
+    dependencies: ['complexSection']
+  },
+  complex: {
+    label: '{{complex.name}}',
+    toolTip: '{{complex.name}}',
+    dependencies: ['complexSection', 'complexSubSection']
+  },
+  complexSectionSection: {
+    label: '{{sectionName}}',
+    toolTip: '{{sectionName}}',
+    dependencies: []
+  },
+  financeSection: {
+    label: '{{sectionCutFunction(section.name)}}',
+    toolTip: '{{section.name}}',
+    dependencies: []
+  },
+  financeSubSection: {
+    label: '{{subsectionCutFunction(subsection.name)}}',
+    toolTip: '{{subsection.name}}',
+    dependencies: ['financeSection']
+  }
 };
-
 function interpolateTooltips(interpolate, type, scope) {
   crumbs[type].dependencies.forEach(function (dep) {
     interpolateTooltips(interpolate, dep, scope);
   });
   crumbs[type].toolTipInterpolated = interpolate(crumbs[type].toolTip)(scope);
 }
-
 function init(interpolate, type, scope) {
   interpolateTooltips(interpolate, type, scope);
   return crumbs;
 }
-
 module.exports = {
-  init: init, crumbs: crumbs
+  init: init,
+  crumbs: crumbs
 };
 
-},{}],27:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -1047,7 +1361,7 @@ module.exports = {
   ncyBreadcrumb: { label: 'Дизайн-страница' }
 };
 
-},{}],28:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 'use strict';
 
 module.exports = {
@@ -1059,17 +1373,17 @@ module.exports = {
   projectSectionThird: require('./ProjectStructure/projectSectionThird.js'),
   projectThird: require('./ProjectStructure/projectThird.js'),
   design: require('./design.js'),
-
   spaceComplexStructure: require('./SpaceComplexStructure/spaceComplexStructure.js'),
   spaceComplexSection: require('./SpaceComplexStructure/section.js'),
   spaceComplexSubSection: require('./SpaceComplexStructure/subSection.js'),
   spaceComplexComplex: require('./SpaceComplexStructure/complex.js'),
   spaceComplexComplexSection: require('./SpaceComplexStructure/complexSection.js'),
-
-  financeStructure: require('./FinanceStructure/financeStructure.js')
+  financeStructure: require('./FinanceStructure/financeStructure.js'),
+  financeSection: require('./FinanceStructure/financeSection.js'),
+  financeSubSection: require('./FinanceStructure/financeSubsection')
 };
 
-},{"./FinanceStructure/financeStructure.js":11,"./ProjectStructure/project.js":12,"./ProjectStructure/projectSection.js":14,"./ProjectStructure/projectSectionThird.js":15,"./ProjectStructure/projectStructure.js":16,"./ProjectStructure/projectThird.js":17,"./ProjectStructure/section.js":18,"./ProjectStructure/subsection.js":19,"./SpaceComplexStructure/complex.js":20,"./SpaceComplexStructure/complexSection.js":21,"./SpaceComplexStructure/section.js":22,"./SpaceComplexStructure/spaceComplexStructure.js":24,"./SpaceComplexStructure/subSection.js":25,"./design.js":27}],29:[function(require,module,exports){
+},{"./FinanceStructure/financeSection.js":11,"./FinanceStructure/financeStructure.js":12,"./FinanceStructure/financeSubsection":14,"./ProjectStructure/project.js":15,"./ProjectStructure/projectSection.js":17,"./ProjectStructure/projectSectionThird.js":18,"./ProjectStructure/projectStructure.js":19,"./ProjectStructure/projectThird.js":20,"./ProjectStructure/section.js":21,"./ProjectStructure/subsection.js":22,"./SpaceComplexStructure/complex.js":23,"./SpaceComplexStructure/complexSection.js":24,"./SpaceComplexStructure/section.js":25,"./SpaceComplexStructure/spaceComplexStructure.js":27,"./SpaceComplexStructure/subSection.js":28,"./design.js":30}],32:[function(require,module,exports){
 'use strict';
 
 module.exports = function () {
@@ -1081,7 +1395,7 @@ module.exports = function () {
   };
 };
 
-},{}],30:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 'use strict';
 
 var spaceComplexController = require('./complexController.js');
@@ -1091,17 +1405,16 @@ var currentModule = angular.module('complex', []);
 currentModule.controller('SpaceComplexStructureController', spaceComplexController);
 currentModule.factory('$complexFactory', factory);
 currentModule.directive('complexCard', complexCard);
+currentModule.value('$complexDict', { dict: {} });
 
-},{"./card/complexCardDirective.js":29,"./complexController.js":31,"./complexFactory.js":32}],31:[function(require,module,exports){
+},{"./card/complexCardDirective.js":32,"./complexController.js":34,"./complexFactory.js":35}],34:[function(require,module,exports){
 'use strict';
 
 var highlightNode = require('../components/accordion/treeBuilder.js').highlight;
-function CC($scope, treeData, dialogs, $timeout, $state) {
+function CC($scope, treeData, dialogs, $timeout, $state, $complexDict) {
   $scope.treeData = treeData;
   $scope.treeParams = ['id', 'object_type'];
-  $scope.specialDict = {
-    type: 'object_type'
-  };
+  $scope.specialDict = { type: 'object_type' };
   $scope.tabstripData = [{
     name: 'Общие сведения',
     state: 'complexSection',
@@ -1115,6 +1428,7 @@ function CC($scope, treeData, dialogs, $timeout, $state) {
     state: 'complexSection',
     type: 'relatedProjects'
   }];
+  $scope.dict = $complexDict.dict;
   $scope.$on('$viewContentLoaded', function (event) {
     $timeout(function () {
       if ($state.params.complexId) {
@@ -1140,7 +1454,7 @@ function CC($scope, treeData, dialogs, $timeout, $state) {
 }
 module.exports = CC;
 
-},{"../components/accordion/treeBuilder.js":37}],32:[function(require,module,exports){
+},{"../components/accordion/treeBuilder.js":40}],35:[function(require,module,exports){
 'use strict';
 
 module.exports = function complexFactory($httpCached) {
@@ -1151,18 +1465,17 @@ module.exports = function complexFactory($httpCached) {
   };
 };
 
-},{}],33:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 'use strict';
 
 var icons = {
   wheelChair: '<path d="M19 13v-2c-1.54.02-3.09-.75-4.07-1.83l-1.29-1.43c-.17-.19-.38-.34-.61-.45-.01 0-.01-.01-.02-.01H13c-.35-.2-.75-.3-1.19-.26C10.76 7.11 10 8.04 10 9.09V15c0 1.1.9 2 2 2h5v5h2v-5.5c0-1.1-.9-2-2-2h-3v-3.45c1.29 1.07 3.25 1.94 5 1.95zm-6.17 5c-.41 1.16-1.52 2-2.83 2-1.66 0-3-1.34-3-3 0-1.31.84-2.41 2-2.83V12.1c-2.28.46-4 2.48-4 4.9 0 2.76 2.24 5 5 5 2.42 0 4.44-1.72 4.9-4h-2.07z"></path>',
   business_center: '<path d="M10 16v-1H3.01L3 19c0 1.11.89 2 2 2h14c1.11 0 2-.89 2-2v-4h-7v1h-4zm10-9h-4.01V5l-2-2h-4l-2 2v2H4c-1.1 0-2 .9-2 2v3c0 1.11.89 2 2 2h6v-2h4v2h6c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zm-6 0h-4V5h4v2z"></path>',
   money: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" width="24" height="24"><path d="M372.3,143.75c62,0,108.7-24.1,108.7-56.1s-46.7-56.1-108.7-56.1s-108.7,24.1-108.7,56.1    C263.6,119.65,310.3,143.75,372.3,143.75z M372.3,55.65c51.7,0,84.7,19,84.7,32.1s-33,32.1-84.7,32.1s-84.7-19-84.7-32.1    S320.6,55.65,372.3,55.65z"/><path d="M471.9,144.85c-6.2-2.3-13.1,0.9-15.4,7.1c-5.1,13.9-38.7,28.9-84.1,28.9c-44.2,0-77.3-14.2-83.7-27.9    c-2.8-6-10-8.6-16-5.8s-8.6,10-5.8,16c11.7,25,54.1,41.7,105.5,41.7c24.5,0,48.3-4,67.2-11.4c20.8-8.1,34.5-19.6,39.5-33.3    C481.3,154.05,478.1,147.15,471.9,144.85z"/><path d="M471.9,206.05c-6.2-2.3-13.1,0.9-15.4,7.1c-5.1,13.9-38.7,28.9-84.1,28.9c-44.2,0-77.3-14.2-83.7-27.9    c-2.8-6-10-8.6-16-5.8s-8.6,10-5.8,16c11.7,25,54.1,41.7,105.5,41.7c24.5,0,48.3-4,67.2-11.4c20.8-8.1,34.5-19.6,39.5-33.3    C481.3,215.25,478.1,208.35,471.9,206.05z"/><path d="M471.9,267.15c-6.2-2.3-13.1,0.9-15.4,7.1c-5.1,13.9-38.7,28.9-84.1,28.9c-44.2,0-77.3-14.2-83.7-27.9    c-2.8-6-10-8.6-16-5.8c-6,2.8-8.6,10-5.8,16c11.7,25,54.1,41.7,105.5,41.7c24.5,0,48.3-4,67.2-11.4c20.8-8.1,34.5-19.6,39.5-33.3    C481.3,276.35,478.1,269.45,471.9,267.15z"/><path d="M471.9,328.35c-6.2-2.3-13.1,0.9-15.4,7.1c-5.1,13.9-38.7,28.9-84.1,28.9c-44.2,0-77.3-14.2-83.7-27.9    c-2.8-6-10-8.6-16-5.8c-6,2.8-8.6,10-5.8,16c11.7,25,54.1,41.7,105.5,41.7c24.5,0,48.3-4,67.2-11.4c20.8-8.1,34.5-19.6,39.5-33.3    C481.3,337.45,478.1,330.55,471.9,328.35z"/><path d="M471.9,389.45c-6.2-2.3-13.1,0.9-15.4,7.1c-5.1,13.9-38.7,28.9-84.1,28.9c-44.2,0-77.3-14.2-83.7-27.9    c-2.8-6-10-8.6-16-5.8c-6,2.8-8.6,10-5.8,16c11.7,25,54.1,41.7,105.5,41.7c24.5,0,48.3-4,67.2-11.4c20.8-8.1,34.5-19.6,39.5-33.3    C481.3,398.65,478.1,391.75,471.9,389.45z"/><path d="M208.2,267.15c-6.2-2.3-13.1,0.9-15.4,7.1c-5.1,13.9-38.7,28.9-84.1,28.9c-44.2,0-77.3-14.2-83.7-27.9    c-2.8-6-10-8.6-16-5.8c-6,2.8-8.6,10-5.8,16c11.7,25,54.1,41.7,105.5,41.7c24.5,0,48.3-4,67.2-11.4c20.8-8.1,34.5-19.6,39.5-33.3    C217.6,276.35,214.4,269.45,208.2,267.15z"/><path d="M208.2,328.35c-6.2-2.3-13.1,0.9-15.4,7.1c-5.1,13.9-38.7,28.9-84.1,28.9c-44.2,0-77.3-14.2-83.7-27.9    c-2.8-6-10-8.6-16-5.8c-6,2.8-8.6,10-5.8,16c11.7,25,54.1,41.7,105.5,41.7c24.5,0,48.3-4,67.2-11.4c20.8-8.1,34.5-19.6,39.5-33.3    C217.6,337.45,214.4,330.55,208.2,328.35z"/><path d="M208.2,389.45c-6.2-2.3-13.1,0.9-15.4,7.1c-5.1,13.9-38.7,28.9-84.1,28.9c-44.2,0-77.3-14.2-83.7-27.9    c-2.8-6-10-8.6-16-5.8c-6,2.8-8.6,10-5.8,16c11.7,25,54.1,41.7,105.5,41.7c24.5,0,48.3-4,67.2-11.4c20.8-8.1,34.5-19.6,39.5-33.3    C217.6,398.65,214.4,391.75,208.2,389.45z"/><path d="M108.7,153.85c-62,0-108.7,24.1-108.7,56.1s46.7,56.1,108.7,56.1s108.7-24.1,108.7-56.1S170.7,153.85,108.7,153.85z     M108.7,242.05c-51.7,0-84.7-19-84.7-32.1s33-32.1,84.7-32.1s84.7,19,84.7,32.1S160.4,242.05,108.7,242.05z"/></svg>'
-
 };
 module.exports = icons;
 
-},{}],34:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 'use strict';
 
 var accordionDirective = require('./accordionDirective.js');
@@ -1171,7 +1484,7 @@ var currentModule = angular.module('accordion', []);
 currentModule.directive('accordionTree', accordionDirective);
 currentModule.service('$accordion', accordionService);
 
-},{"./accordionDirective.js":35,"./accordionService.js":36}],35:[function(require,module,exports){
+},{"./accordionDirective.js":38,"./accordionService.js":39}],38:[function(require,module,exports){
 'use strict';
 
 var treeBuilder = require('./treeBuilder.js').treeHtml;
@@ -1214,7 +1527,7 @@ module.exports = function ($compile, $accordion, $state) {
   };
 };
 
-},{"./treeBuilder.js":37}],36:[function(require,module,exports){
+},{"./treeBuilder.js":40}],39:[function(require,module,exports){
 'use strict';
 
 module.exports = function ($httpCached) {
@@ -1223,7 +1536,7 @@ module.exports = function ($httpCached) {
   };
 };
 
-},{}],37:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 'use strict';
 
 function buildTree() {
@@ -1266,8 +1579,7 @@ function bindToggleEvents() {
     var elemParent = $this.parent().parent().parent().children('a');
     while (elemParent.length > 0) {
       elemParent.addClass('selected');
-      elemParent = elemParent.parent().parent().parent().children('a');
-      //  debugger;
+      elemParent = elemParent.parent().parent().parent().children('a'); //  debugger;
     }
   });
   $('.toggleOpen').click(function (e) {
@@ -1301,8 +1613,7 @@ function highlightNode(node, paramList) {
   while (elemParent.length > 0) {
     elemParent.addClass('selected');
     elemParent.find('ng-md-icon>svg').addClass('show');
-    elemParent = elemParent.parent().parent().parent().children('a');
-    //  debugger;
+    elemParent = elemParent.parent().parent().parent().children('a'); //  debugger;
   }
   while (elem.parent().closest('.inner').length > 0) {
     elem = elem.parent().closest('.inner');
@@ -1315,14 +1626,14 @@ module.exports = {
   highlight: highlightNode
 };
 
-},{}],38:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 'use strict';
 
 var calendarDirective = require('./calendarDirective.js');
 var currentModule = angular.module('calendar', [require('angular-bootstrap-calendar')]);
 currentModule.directive('calendar', calendarDirective);
 
-},{"./calendarDirective.js":39,"angular-bootstrap-calendar":60}],39:[function(require,module,exports){
+},{"./calendarDirective.js":42,"angular-bootstrap-calendar":63}],42:[function(require,module,exports){
 'use strict';
 
 function C() {
@@ -1361,7 +1672,7 @@ function C() {
 }
 module.exports = C;
 
-},{"../../../node_modules/moment/locale/ru":67,"moment":68}],40:[function(require,module,exports){
+},{"../../../node_modules/moment/locale/ru":70,"moment":71}],43:[function(require,module,exports){
 'use strict';
 
 function CD($timeout, $compile) {
@@ -1371,7 +1682,7 @@ function CD($timeout, $compile) {
     compile: function compile(templateElement, templateAttrs) {
       return {
         pre: function pre($scope) {
-          window.Chart.defaults.global.colours = ["#4997cd", "#d76e00"];
+          window.Chart.defaults.global.colours = ['#4997cd', '#d76e00'];
           $scope.labels = $scope.data.barLabels;
           $scope.series = $scope.data.barSeries;
           $scope.chartData = $scope.data.barData;
@@ -1407,7 +1718,7 @@ module.exports = {
   pieChart: CD1
 };
 
-},{}],41:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 'use strict';
 
 function CS($httpCached) {
@@ -1429,7 +1740,7 @@ module.exports = {
   pieChart: CS1
 };
 
-},{}],42:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 'use strict';
 
 var chartDirective = require('./chartDirective.js');
@@ -1440,7 +1751,7 @@ currentModule.directive('pieChart', chartDirective.pieChart);
 currentModule.factory('$chartService', chartService.barChart);
 currentModule.factory('$chartService1', chartService.pieChart);
 
-},{"./chartDirective.js":40,"./chartService.js":41}],43:[function(require,module,exports){
+},{"./chartDirective.js":43,"./chartService.js":44}],46:[function(require,module,exports){
 'use strict';
 
 require('./accordion/accordion.js');
@@ -1530,7 +1841,7 @@ currentModule.controller('DatepickerDemoCtrl', function ($scope) {
   }
 });
 
-},{"../Project/card/projectCardDirective.js":5,"./accordion/accordion.js":34,"./calendar/calendar.js":38,"./charts/charts.js":42,"./dataTable/dataTable.js":44,"./popup/popupController.js":47,"./split/split.js":48,"./tabstrip/tabstrip.js":49,"./timeLines/timeLines.js":53}],44:[function(require,module,exports){
+},{"../Project/card/projectCardDirective.js":5,"./accordion/accordion.js":37,"./calendar/calendar.js":41,"./charts/charts.js":45,"./dataTable/dataTable.js":47,"./popup/popupController.js":50,"./split/split.js":51,"./tabstrip/tabstrip.js":52,"./timeLines/timeLines.js":56}],47:[function(require,module,exports){
 'use strict';
 
 var dataTableDirective = require('./dataTableDirective.js');
@@ -1539,22 +1850,40 @@ var currentModule = angular.module('dataTable', ['ui.grid', 'ui.grid.pinning']);
 currentModule.directive('cDataTable', dataTableDirective);
 currentModule.factory('$dataTableService', dataTableService);
 
-},{"./dataTableDirective.js":45,"./dataTableService.js":46}],45:[function(require,module,exports){
+},{"./dataTableDirective.js":48,"./dataTableService.js":49}],48:[function(require,module,exports){
 'use strict';
 
 var _ = require('lodash');
-
 function DTD() {
   return {
-    scope: { data: '=', 'basename': '=' },
+    scope: {
+      data: '=',
+      'basename': '=',
+      needLinks: '=',
+      'linkBlocker': '@',
+      'gridHeight': '@',
+      'needAllCount': '@',
+      'fitContent': '@'
+    },
     restrict: 'E',
-    template: '<div ui-grid="gridOptions" ng-style="{\'min-height\': minHeight}" class="grid"></div>',
-    controller: function controller($scope, $filter) {
-      var minRowsToShow = 5,
-          rowHeight = 60;
+    template: '<div ui-grid="gridOptions" ui-grid-pinning ng-style="{\'min-height\': minHeight, height: gridHeight}" class="grid"></div>',
+    controller: function controller($scope, $filter, $projectsDict, $timeout) {
+      var minRowsToShow = 4,
+          rowHeight = 100;
       $scope.minHeight = minRowsToShow > $scope.data.length ? $scope.data.length * rowHeight + 30 + 'px' : minRowsToShow * rowHeight + 30 + 'px';
       var data = _.cloneDeep($scope.data);
       if (Object.prototype.toString.call(data) === '[object Array]') {
+        if ($scope.needAllCount) {
+          data.forEach(function (row) {
+            var count = 0;
+            for (var e in row) {
+              if (!isNaN(row[e])) {
+                count += parseFloat(row[e]);
+              }
+            }
+            row["Всего"] = count;
+          });
+        }
         //Переводим всё в тип валюты.
         for (var i = 0; i < data.length; i++) {
           for (var p in data[i]) {
@@ -1566,13 +1895,19 @@ function DTD() {
         //Проходим по именам столбцов и сортируем годы
         var b = [];
         var others = [];
+        if ($scope.fitContent) {
+          $scope.gridHeight = rowHeight * $scope.data.length + 59 + 'px';
+        }
         for (var p in data[0]) {
           if (isNaN(p) == false) {
             b.push(p);
           } else {
-            others.push(p);
+            if (p != $scope.basename) {
+              others.push(p);
+            }
           }
-        };
+        }
+        ;
         b.sort();
         //добавляем первый столбец и формируем окончательный список столбцов, который кладем в переменную $scope.columns
         if ($scope.basename) {
@@ -1580,55 +1915,77 @@ function DTD() {
         } else {
           var c = b;
         }
+        $scope.getProjectHrefByName = function (name) {
+          return $projectsDict.dict[name].href;
+        };
+        $scope.getCachingInfoByName = function (name) {
+          return { cacheType: $projectsDict.dict[name] ? $projectsDict.dict[name].cacheType : null,
+            elementId: $projectsDict.dict[name] ? $projectsDict.dict[name].elementId : null };
+        };
         c = c.concat(others);
         $scope.columns = [];
         var w = $(window).width();
         c.forEach(function (item) {
           if (item == $scope.basename) {
+            var ctmplt = '<div class="ui-grid-cell-contents">{{::row.entity[col.field]}}</div>';
+            if ($scope.needLinks) {
+              if ($scope.linkBlocker) {
+                ctmplt = '<a cacheType={{::grid.appScope.getCachingInfoByName(row.entity[col.field]).cacheType}} elementId={{::grid.appScope.getCachingInfoByName(row.entity[col.field]).elementId}} ng-hide="::grid.appScope.getProjectHrefByName(row.entity[col.field]).indexOf(\'' + $scope.linkBlocker + '\') > -1"\
+                ng-href={{::grid.appScope.getProjectHrefByName(row.entity[col.field])}}><div class="ui-grid-cell-contents">{{::row.entity[col.field]}}</div></a>\
+                <div ng-hide="::grid.appScope.getProjectHrefByName(row.entity[col.field]).indexOf(\'' + $scope.linkBlocker + '\') == -1" class="ui-grid-cell-contents">{{::row.entity[col.field]}}</div>';
+              } else {
+                ctmplt = '<a cacheType={{::grid.appScope.getCachingInfoByName(row.entity[col.field]).cacheType}} elementId={{::grid.appScope.getCachingInfoByName(row.entity[col.field]).elementId}} ng-href={{::grid.appScope.getProjectHrefByName(row.entity[col.field])}}><div class="ui-grid-cell-contents">{{::row.entity[col.field]}}</div></a>';
+              }
+            }
             if (w < 1370) {
               $scope.columns.push({
                 field: item,
                 minWidth: 100,
                 maxWidth: 250,
-                cellTemplate: '<div class="ui-grid-cell-contents">{{::row.entity[col.field]}}</div>'
+                cellTemplate: ctmplt,
+                pinnedLeft: true
               });
             } else {
               $scope.columns.push({
                 field: item,
-                minWidth: 180,
+                minWidth: 230,
                 maxWidth: 250,
-                cellTemplate: '<div class="ui-grid-cell-contents">{{::row.entity[col.field]}}</div>'
+                cellTemplate: ctmplt,
+                pinnedLeft: true
               });
             }
           } else {
             $scope.columns.push({
               field: item,
-              minwidth: 90,
+              minWidth: 100,
               cellTemplate: '<div class="ui-grid-cell-contents">{{::row.entity[col.field]}}</div>'
             });
           }
         });
         $scope.gridData = data;
       }
-      $scope.gridOptions = { data: $scope.gridData, columnDefs: $scope.columns, rowHeight: rowHeight, minimumColumnSize: 5,
-        enableHorizontalScrollbar: 1,
+      $scope.gridOptions = {
+        onRegisterApi: function onRegisterApi(gridApi) {
+          $scope.gridApi = gridApi;
+          $timeout(function () {
+            return $scope.gridApi.core.handleWindowResize();
+          }, 500);
+        },
+        data: $scope.gridData,
+        columnDefs: $scope.columns,
+        rowHeight: rowHeight,
+        minimumColumnSize: 5,
+        enableHorizontalScrollbar: 0,
         enableVerticalScrollbar: 1,
-        rowTemplate: '<div>\
-  ng-repeat="(colRenderIndex, col) in colContainer.cols track by col.uid"\
-  ui-grid-one-bind-id-grid="rowRenderIndex + ' - ' + col.uid + \'-cell\'"\
-  class="ui-grid-cell"\
-  ng-class="{ \'ui-grid-row-header-cell\': ::col.isRowHeader }"\
-  role="{{::col.isRowHeader ? \'rowheader\' : \'gridcell\'}}"\
-  >\
-</div>'
-        //  autoResize :  $scope.columns
+        enableSorting: false,
+        rowTemplate: ' <div  ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.uid"  ui-grid-one-bind-id-grid="rowRenderIndex + \'-\' + col.uid + \'-cell\'"  class="ui-grid-cell"  ng-class="::{ \'ui-grid-row-header-cell\': col.isRowHeader }"  role="{::{col.isRowHeader ? \'rowheader\' : \'gridcell\'}}"  ui-grid-cell></div>' //  autoResize :  $scope.columns
       };
     }
   };
 }
 module.exports = DTD;
 
-},{"lodash":66}],46:[function(require,module,exports){
+},{"lodash":69}],49:[function(require,module,exports){
 'use strict';
 
 function DTS($httpCached) {
@@ -1640,7 +1997,7 @@ function DTS($httpCached) {
 }
 module.exports = DTS;
 
-},{}],47:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 'use strict';
 
 module.exports = function ($scope, $uibModalInstance, data) {
@@ -1655,7 +2012,7 @@ module.exports = function ($scope, $uibModalInstance, data) {
   };
 };
 
-},{}],48:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 'use strict';
 
 function compile(templateElement, templateAttrs) {
@@ -1687,7 +2044,7 @@ module.exports = function () {
   };
 };
 
-},{}],49:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 'use strict';
 
 var tabstripDirective = require('./tabstripDirective.js');
@@ -1701,7 +2058,7 @@ currentModule.directive('tabStrip', tabstripDirective); /*
                                                         2) type - parameter "type" that will be passed to that state
                                                         */
 
-},{"./tabstripDirective.js":50}],50:[function(require,module,exports){
+},{"./tabstripDirective.js":53}],53:[function(require,module,exports){
 'use strict';
 
 function reActivate(event) {
@@ -1760,11 +2117,10 @@ function tabstripDirective($compile, $state, $timeout) {
 }
 module.exports = tabstripDirective;
 
-},{}],51:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 'use strict';
 
 var _ = require('lodash');
-
 function groupData(data) {
   var grouped = _.groupBy(data, 'time_period_start');
   var groupedData = [];
@@ -1784,20 +2140,16 @@ function groupData(data) {
   }
   return groupedData;
 }
-
 function generateElement(header, text, messageDate) {
   var htmlHeader = '<li><span class="importo">' + header + '</span></li>';
   var htmlText = '<li><span class="causale">' + text + '</span> </li>';
-  var htmlDate = '		<li><p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>' + messageDate + '</small></p> </li>';
-  var start = '<div class="col-sm-6  timeline-item right">	<div class="row">\
-        <div class="col-sm-11">\
-            <div class="timeline-panel credits right">\
-                <ul class="timeline-panel-ul right">';
-  start += htmlHeader + htmlText; // + htmlDate;
+  var htmlDate = '\t\t<li><p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>' + messageDate + '</small></p> </li>';
+  var start = '<div class="col-sm-6  timeline-item right">\t<div class="row">        <div class="col-sm-11">            <div class="timeline-panel credits right">                <ul class="timeline-panel-ul right">';
+  start += htmlHeader + htmlText;
+  // + htmlDate;
   start += '</ul></div></div></div></div>';
   return start;
 }
-
 function generateBadge(date) {
   var moment = require('moment');
   require('../../../node_modules/moment/locale/ru');
@@ -1810,24 +2162,20 @@ function generateBadge(date) {
   html += yearHtml + '</div>';
   return html;
 }
-
 function generateDate(date) {
   var moment = require('moment');
   require('../../../node_modules/moment/locale/ru');
   var d = moment(new Date(date));
   var dayHtml = d.format('DD');
   var monthHtml = d.format('MM');
-  var dateHtml = '<li layout="row"   layout-align="center center" ><span class="importo">' + dayHtml + "." + monthHtml + '</span><ng-md-icon icon="remove" class="icon"></ng-md-icon></li>';
+  var dateHtml = '<li layout="row"   layout-align="center center" ><span class="importo">' + dayHtml + '.' + monthHtml + '</span><ng-md-icon icon="remove" class="icon"></ng-md-icon></li>';
   // var html = '<div class=" timeline-movement">' + dateHtml+ '</div>';
-  var start = '<div class="col-sm-6  timeline-item left">	<div class="row">\
-         <div class="col-sm-11">\
-             <div class="timeline-panel credits left">\
-                 <ul class="timeline-panel-ul left">';
-  start += dateHtml; //+ htmlText + htmlDate;
+  var start = '<div class="col-sm-6  timeline-item left">\t<div class="row">         <div class="col-sm-11">             <div class="timeline-panel credits left">                 <ul class="timeline-panel-ul left">';
+  start += dateHtml;
+  //+ htmlText + htmlDate;
   start += '</ul></div></div></div></div>';
   return start;
 }
-
 function generateBlock(date, events, needDate) {
   var html = '<div class="row timeline-movement">';
   html += generateBadge(date);
@@ -1838,7 +2186,6 @@ function generateBlock(date, events, needDate) {
   html += '</div>';
   return html;
 }
-
 function generateTimeline(data, needDate) {
   var html = '<div class="container">';
   data.forEach(function (e) {
@@ -1847,7 +2194,6 @@ function generateTimeline(data, needDate) {
   html += '</div>';
   return html;
 }
-
 function Vertical($compile) {
   return {
     restrict: 'E',
@@ -1855,7 +2201,7 @@ function Vertical($compile) {
     compile: function compile(templateElement, templateAttrs) {
       return {
         pre: function pre($scope) {
-          var needDate = templateAttrs.nodate == "true" ? true : false;
+          var needDate = templateAttrs.nodate == 'true' ? true : false;
           var data = groupData($scope.data);
           var html = '<div id="timeline">';
           html += generateTimeline(data, needDate);
@@ -1865,8 +2211,7 @@ function Vertical($compile) {
       };
     }
   };
-};
-
+}
 function Horizontal() {
   return {
     restrict: 'E',
@@ -1877,9 +2222,9 @@ function Horizontal() {
           var data = [];
           var events = $scope.data.events;
           var options = {
-            "width": "100%",
-            "height": "150px",
-            "style": "box",
+            'width': '100%',
+            'height': '150px',
+            'style': 'box',
             showCurrentTime: false
           };
           var moment = require('moment');
@@ -1898,13 +2243,12 @@ function Horizontal() {
     }
   };
 }
-
 module.exports = {
   vertical: Vertical,
   horizontal: Horizontal
 };
 
-},{"../../../node_modules/moment/locale/ru":67,"lodash":66,"moment":68}],52:[function(require,module,exports){
+},{"../../../node_modules/moment/locale/ru":70,"lodash":69,"moment":71}],55:[function(require,module,exports){
 'use strict';
 
 function CS($httpCached) {
@@ -1916,7 +2260,7 @@ function CS($httpCached) {
 }
 module.exports = CS;
 
-},{}],53:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 'use strict';
 
 var timeLineDirective = require('./timeLineDirective.js');
@@ -1926,15 +2270,12 @@ currentModule.directive('timeLineVertical', timeLineDirective.vertical);
 currentModule.directive('timeLineHorizontal', timeLineDirective.horizontal);
 currentModule.factory('$timelineService', timeLineService);
 
-},{"./timeLineDirective.js":51,"./timeLineService.js":52}],54:[function(require,module,exports){
+},{"./timeLineDirective.js":54,"./timeLineService.js":55}],57:[function(require,module,exports){
 'use strict';
 
 var runner = require('./cacheRunner.js');
-
 var currentModule = angular.module('cache-custom', ['angular-cache', 'errorsModule']);
-
 currentModule.service('$cacheRunner', runner);
-
 currentModule.factory('$httpCached', function ($http, CacheFactory) {
   return {
     get: function get(url, params, errorHandler) {
@@ -1949,36 +2290,45 @@ currentModule.factory('$httpCached', function ($http, CacheFactory) {
       if (!params) {
         params = { cache: Cache };
       } else {
-        params['cache'] = Cache;
+        params.cache = Cache;
       }
       return $http.get(url, params);
     }
   };
 });
 
-},{"./cacheRunner.js":55}],55:[function(require,module,exports){
+},{"./cacheRunner.js":58}],58:[function(require,module,exports){
 'use strict';
 
 function runner($timeout, $sectionFactory, $interval, $subsectionFactory, $projectFactory, $errorHandler) {
   var self = this;
-  var entities = [{ type: 'section', factory: $sectionFactory }, { type: 'subsection', factory: $subsectionFactory }, { type: 'project', factory: $projectFactory }];
+  var entities = [{
+    type: 'section',
+    factory: $sectionFactory
+  }, {
+    type: 'subsection',
+    factory: $subsectionFactory
+  }, {
+    type: 'project',
+    factory: $projectFactory
+  }];
   var actionsLIFO = [];
   var workerId = -1;
   var errorHandler = $errorHandler.handleError;
-
   var $$options = {};
-
   this.setOptions = function (options) {
     angular.extend($$options, options);
   };
   this.startCacheRunner = function () {
     var _this = this;
-
     var cached = {};
     $interval(function () {
       var entitiesArrs = {};
       entities.forEach(function (item) {
-        entitiesArrs[item.type] = { elements: $('[cacheType="' + item.type + '"]:visible'), factory: item.factory };
+        entitiesArrs[item.type] = {
+          elements: $('[cacheType="' + item.type + '"]:visible'),
+          factory: item.factory
+        };
       });
       for (var e in entitiesArrs) {
         for (var i = 0; i < entitiesArrs[e].elements.length; i++) {
@@ -1986,7 +2336,8 @@ function runner($timeout, $sectionFactory, $interval, $subsectionFactory, $proje
           if (!cached['type:' + e + '||id:' + id]) {
             actionsLIFO.unshift(function (elType, elId) {
               entitiesArrs[elType].factory.getById(elId).then(function (data) {
-                console.log(elType + ' with id ' + elId + ' cached successfully');return data;
+                console.log(elType + ' with id ' + elId + ' cached successfully');
+                return data;
               }, function (message) {
                 if (errorHandler) message.config && message.config.url ? errorHandler('httpGet', message.config.url) : errorHandler('unknown', 'Неизвестная ошибка');
                 self.stopCacheProcess();
@@ -2010,14 +2361,12 @@ function runner($timeout, $sectionFactory, $interval, $subsectionFactory, $proje
     $interval.cancel(workerId);
   };
 }
-
 module.exports = runner;
 
-},{}],56:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 'use strict';
 
 var currentModule = angular.module('dialogWorker', ['ngMaterial']);
-
 currentModule.service('$errorDialogService', function ($mdDialog, $mdMedia) {
   this.showError = function (message) {
     // Appending dialog to document.body to cover sidenav in docs app
@@ -2027,11 +2376,10 @@ currentModule.service('$errorDialogService', function ($mdDialog, $mdMedia) {
   };
 });
 
-},{}],57:[function(require,module,exports){
+},{}],60:[function(require,module,exports){
 'use strict';
 
 var currentModule = angular.module('errorsModule', ['dialogWorker']);
-
 function errorRouter($errorDialogService, type, message) {
   switch (type) {
     case '$stateChangeError':
@@ -2044,14 +2392,12 @@ function errorRouter($errorDialogService, type, message) {
       console.log('Неизвестная ошибка');
   }
 }
-
 function errorHandler($errorDialogService) {
   this.handleError = errorRouter.bind(this, $errorDialogService);
 }
-
 currentModule.service('$errorHandler', errorHandler);
 
-},{}],58:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 'use strict';
 
 require('./router.js');
@@ -2065,15 +2411,11 @@ var layout = require('./Layout/layout.js');
 var components = require('./components/components.js');
 var icons = require('./components/Icons/icons.js');
 var activateDir = require('./Layout/sidebar/sidebar.js').activateDir;
-
+window.angular = angular;
 var app = angular.module('app', ['cache-custom', 'dialogWorker', 'errorsModule', 'ui.router', 'ngMaterial', 'ngMdIcons', 'ncy-angular-breadcrumb', 'ngSanitize', 'dialogs.main', 'layout', 'components', 'router', 'project', 'complex', 'design', require('angular-ui-bootstrap')]);
-
-app.config(['$urlRouterProvider', '$stateProvider', 'ngMdIconServiceProvider', '$routerProvider', 'calendarConfig', '$breadcrumbProvider', 'CacheFactoryProvider', '$provide', function ($urlRouterProvider, $stateProvider, ngMdIconServiceProvider, $routerProvider, calendarConfig, $breadcrumbProvider, CacheFactoryProvider, $provide) {
+app.config(['$locationProvider', '$urlRouterProvider', '$stateProvider', 'ngMdIconServiceProvider', '$routerProvider', 'calendarConfig', '$breadcrumbProvider', 'CacheFactoryProvider', '$provide', function ($locationProvider, $urlRouterProvider, $stateProvider, ngMdIconServiceProvider, $routerProvider, calendarConfig, $breadcrumbProvider, CacheFactoryProvider, $provide) {
   angular.extend(CacheFactoryProvider.defaults, { maxAge: 15 * 60 * 1000 });
-
-  $breadcrumbProvider.setOptions({
-    templateUrl: 'app/components/breadcrumbs.html'
-  });
+  $breadcrumbProvider.setOptions({ templateUrl: 'app/components/breadcrumbs.html' });
   for (var e in icons) {
     ngMdIconServiceProvider.addShape(e, icons[e]);
   }
@@ -2086,7 +2428,7 @@ app.config(['$urlRouterProvider', '$stateProvider', 'ngMdIconServiceProvider', '
 app.run(function ($rootScope, $state, $cacheRunner, $errorDialogService, $errorHandler) {
   $cacheRunner.setOptions({
     checkRate: 2000,
-    cacheRate: 400
+    cacheRate: 500
   });
   $cacheRunner.startCacheRunner();
   $cacheRunner.runCacheProcess();
@@ -2095,7 +2437,7 @@ app.run(function ($rootScope, $state, $cacheRunner, $errorDialogService, $errorH
   $rootScope.sectionCutFunction = function sectionCutFunction(section) {
     if (section && section.length > 30) {
       var p = section;
-      p = p.slice(0, p.indexOf("."));
+      p = p.slice(0, p.indexOf('.'));
       return p;
     } else {
       return section;
@@ -2110,7 +2452,6 @@ app.run(function ($rootScope, $state, $cacheRunner, $errorDialogService, $errorH
       return subsection;
     }
   };
-
   $rootScope.projectCutFunction = function projectCutFunction(project) {
     if (project && project.length > 30) {
       return project.slice(0, 30).concat('...');
@@ -2125,14 +2466,15 @@ app.run(function ($rootScope, $state, $cacheRunner, $errorDialogService, $errorH
   $rootScope.getCurrentHref = function () {
     return $rootScope.getHref($rootScope.getCurrentState());
   };
-
   $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
     activateDir(toState.name);
+    $rootScope.isLoading = false;
   });
   $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, options) {
-    //debugger;
+    $rootScope.isLoading = true;
   });
   $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
+    $rootScope.isLoading = false;
     //debugger;
     if (error && error.config && error.config.url) {
       $errorHandler.handleError(event.name, 'Ошибка перехода по пути ' + error.config.url + '. Обратитесь к системному администратору.');
@@ -2141,15 +2483,14 @@ app.run(function ($rootScope, $state, $cacheRunner, $errorDialogService, $errorH
     }
   });
   $rootScope.$on('$stateNotFound', function (event, unfoundState, fromState, fromParams) {
-    //debugger;
+    $rootScope.isLoading = false;
   });
 });
 
-},{"./Design/design.js":1,"./Layout/layout.js":3,"./Layout/sidebar/sidebar.js":4,"./Project/project.js":6,"./SpaceComplex/complex.js":30,"./components/Icons/icons.js":33,"./components/components.js":43,"./core/cache/cache.js":54,"./core/dialogs/dialogs.js":56,"./core/errorHandler/errors.js":57,"./router.js":59,"angular-ui-bootstrap":63}],59:[function(require,module,exports){
+},{"./Design/design.js":1,"./Layout/layout.js":3,"./Layout/sidebar/sidebar.js":4,"./Project/project.js":6,"./SpaceComplex/complex.js":33,"./components/Icons/icons.js":36,"./components/components.js":46,"./core/cache/cache.js":57,"./core/dialogs/dialogs.js":59,"./core/errorHandler/errors.js":60,"./router.js":62,"angular-ui-bootstrap":66}],62:[function(require,module,exports){
 'use strict';
 
 var routes = require('./Routes/routes.js');
-
 angular.module('router', []).provider('$router', function () {
   this.$get = new function () {
     var self = this;
@@ -2160,7 +2501,6 @@ angular.module('router', []).provider('$router', function () {
         ncyBreadcrumb: { label: 'ФКП' }
       },
       'home.design': routes.design,
-
       'home.projectStructure': routes.projectStructure,
       'home.projectStructure.section': routes.section,
       'home.projectStructure.section.project': routes.projectThird,
@@ -2168,7 +2508,6 @@ angular.module('router', []).provider('$router', function () {
       'home.projectStructure.section.subSection': routes.subsection,
       'home.projectStructure.section.subSection.project': routes.project,
       'home.projectStructure.section.subSection.project.tab': routes.projectSection,
-
       'home.spaceComplexStructure': routes.spaceComplexStructure,
       'home.spaceComplexStructure.spaceComplexSection': routes.spaceComplexSection,
       'home.spaceComplexStructure.spaceComplexSection.spaceComplexSubSection': routes.spaceComplexSubSection,
@@ -2178,13 +2517,15 @@ angular.module('router', []).provider('$router', function () {
         url: '/Events',
         views: { 'content@': { templateUrl: 'app/Events/events.html' } }
       },
-      'home.financeStructure': routes.financeStructure
+      'home.financeStructure': routes.financeStructure,
+      'home.financeStructure.section': routes.financeSection,
+      'home.financeStructure.section.subsection': routes.financeSubSection
     };
     return this;
   }();
 });
 
-},{"./Routes/routes.js":28}],60:[function(require,module,exports){
+},{"./Routes/routes.js":31}],63:[function(require,module,exports){
 /**
  * angular-bootstrap-calendar - A pure AngularJS bootstrap themed responsive calendar that can display events and has views for year, month, week and day
  * @version v0.19.5
@@ -4323,7 +4664,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ ])
 });
 ;
-},{"angular":65,"interact.js":61,"moment":68}],61:[function(require,module,exports){
+},{"angular":68,"interact.js":64,"moment":71}],64:[function(require,module,exports){
 /**
  * interact.js v1.2.6
  *
@@ -10301,7 +10642,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 } (typeof window === 'undefined'? undefined : window));
 
-},{}],62:[function(require,module,exports){
+},{}],65:[function(require,module,exports){
 /*
  * angular-ui-bootstrap
  * http://angular-ui.github.io/bootstrap/
@@ -17698,12 +18039,12 @@ angular.module('ui.bootstrap.datepicker').run(function() {!angular.$$csp().noInl
 angular.module('ui.bootstrap.tooltip').run(function() {!angular.$$csp().noInlineStyle && !angular.$$uibTooltipCss && angular.element(document).find('head').prepend('<style type="text/css">[uib-tooltip-popup].tooltip.top-left > .tooltip-arrow,[uib-tooltip-popup].tooltip.top-right > .tooltip-arrow,[uib-tooltip-popup].tooltip.bottom-left > .tooltip-arrow,[uib-tooltip-popup].tooltip.bottom-right > .tooltip-arrow,[uib-tooltip-popup].tooltip.left-top > .tooltip-arrow,[uib-tooltip-popup].tooltip.left-bottom > .tooltip-arrow,[uib-tooltip-popup].tooltip.right-top > .tooltip-arrow,[uib-tooltip-popup].tooltip.right-bottom > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.top-left > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.top-right > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.bottom-left > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.bottom-right > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.left-top > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.left-bottom > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.right-top > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.right-bottom > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.top-left > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.top-right > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.bottom-left > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.bottom-right > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.left-top > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.left-bottom > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.right-top > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.right-bottom > .tooltip-arrow,[uib-popover-popup].popover.top-left > .arrow,[uib-popover-popup].popover.top-right > .arrow,[uib-popover-popup].popover.bottom-left > .arrow,[uib-popover-popup].popover.bottom-right > .arrow,[uib-popover-popup].popover.left-top > .arrow,[uib-popover-popup].popover.left-bottom > .arrow,[uib-popover-popup].popover.right-top > .arrow,[uib-popover-popup].popover.right-bottom > .arrow,[uib-popover-html-popup].popover.top-left > .arrow,[uib-popover-html-popup].popover.top-right > .arrow,[uib-popover-html-popup].popover.bottom-left > .arrow,[uib-popover-html-popup].popover.bottom-right > .arrow,[uib-popover-html-popup].popover.left-top > .arrow,[uib-popover-html-popup].popover.left-bottom > .arrow,[uib-popover-html-popup].popover.right-top > .arrow,[uib-popover-html-popup].popover.right-bottom > .arrow,[uib-popover-template-popup].popover.top-left > .arrow,[uib-popover-template-popup].popover.top-right > .arrow,[uib-popover-template-popup].popover.bottom-left > .arrow,[uib-popover-template-popup].popover.bottom-right > .arrow,[uib-popover-template-popup].popover.left-top > .arrow,[uib-popover-template-popup].popover.left-bottom > .arrow,[uib-popover-template-popup].popover.right-top > .arrow,[uib-popover-template-popup].popover.right-bottom > .arrow{top:auto;bottom:auto;left:auto;right:auto;margin:0;}[uib-popover-popup].popover,[uib-popover-html-popup].popover,[uib-popover-template-popup].popover{display:block !important;}</style>'); angular.$$uibTooltipCss = true; });
 angular.module('ui.bootstrap.timepicker').run(function() {!angular.$$csp().noInlineStyle && !angular.$$uibTimepickerCss && angular.element(document).find('head').prepend('<style type="text/css">.uib-time input{width:50px;}</style>'); angular.$$uibTimepickerCss = true; });
 angular.module('ui.bootstrap.typeahead').run(function() {!angular.$$csp().noInlineStyle && !angular.$$uibTypeaheadCss && angular.element(document).find('head').prepend('<style type="text/css">[uib-typeahead-popup].dropdown-menu{display:block;}</style>'); angular.$$uibTypeaheadCss = true; });
-},{}],63:[function(require,module,exports){
+},{}],66:[function(require,module,exports){
 require('./dist/ui-bootstrap-tpls');
 
 module.exports = 'ui.bootstrap';
 
-},{"./dist/ui-bootstrap-tpls":62}],64:[function(require,module,exports){
+},{"./dist/ui-bootstrap-tpls":65}],67:[function(require,module,exports){
 /**
  * @license AngularJS v1.5.3
  * (c) 2010-2016 Google, Inc. http://angularjs.org
@@ -48418,11 +48759,11 @@ $provide.value("$locale", {
 })(window, document);
 
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
-},{}],65:[function(require,module,exports){
+},{}],68:[function(require,module,exports){
 require('./angular');
 module.exports = angular;
 
-},{"./angular":64}],66:[function(require,module,exports){
+},{"./angular":67}],69:[function(require,module,exports){
 (function (global){
 /**
  * @license
@@ -64454,7 +64795,7 @@ module.exports = angular;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],67:[function(require,module,exports){
+},{}],70:[function(require,module,exports){
 //! moment.js locale configuration
 //! locale : russian (ru)
 //! author : Viktorminator : https://github.com/Viktorminator
@@ -64623,7 +64964,7 @@ module.exports = angular;
     return ru;
 
 }));
-},{"../moment":68}],68:[function(require,module,exports){
+},{"../moment":71}],71:[function(require,module,exports){
 //! moment.js
 //! version : 2.12.0
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
@@ -68312,7 +68653,7 @@ module.exports = angular;
     return _moment;
 
 }));
-},{}]},{},[58])
+},{}]},{},[61])
 
 
 //# sourceMappingURL=all.js.map

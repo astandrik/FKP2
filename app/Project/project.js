@@ -10,3 +10,4 @@ currentModule.directive('projectCard', projectCard);
 currentModule.factory('$projectFactory', projectFactory);
 currentModule.factory('$subsectionFactory', subsectionFactory);
 currentModule.factory('$sectionFactory', sectionFactory);
+currentModule.value('$projectsDict', { dict: {} });

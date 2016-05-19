@@ -2,10 +2,10 @@
   <div flex class="size">{{section.name}}</div>
   <div style="padding-top:20px;" layout="column">
     <h4 style=" padding-left:20px">Финансирование из бюджетных средств</h5>
-    <c-data-table data="financeBudget" basename="basename" id="table-finance"></c-data-table>
+    <c-data-table need-all-count="true" data="financeBudget" need-links="true" basename="basename" id="table-finance"></c-data-table>
   </div>
   <div style="padding-top:40px" layout="column">
     <h4 style=" padding-left:20px">Финансирование из собственных средств</h5>
-    <c-data-table data="financeOwn" basename="basename"  id="table-finance"></c-data-table>
+    <c-data-table need-all-count="true" data="financeOwn" need-links="true" basename="basename"  id="table-finance"></c-data-table>
   </div>
 </div>

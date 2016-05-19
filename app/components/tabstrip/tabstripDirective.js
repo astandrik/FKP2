@@ -37,7 +37,7 @@ function tabstripDirective($compile, $state, $timeout) {
             buttons.push('<a class="btn btn-default btn-tab"  ng-href="' + btn.href + '" flex>' + btn.name + '</a>');
           } else if (btn.state && btn.type) {
             var href = window.getHref(templateAttrs.initial) + '/' + btn.type;
-            buttons.push('<a class="btn btn-default btn-tab" type="' + btn.type + '" ng-click="activateTab($event)" href="'+href+'" flex>' + btn.name + '</a>');
+            buttons.push('<a class="btn btn-default btn-tab" type="' + btn.type + '" ng-click="activateTab($event)" href="' + href + '" flex>' + btn.name + '</a>');
           } else {
             buttons.push('<a class="btn btn-default btn-tab" flex>' + btn.name + '</a>');
           }

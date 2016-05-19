@@ -8,29 +8,26 @@ function buildTree() {
       return sum + current + element[current];
     }, 'node_');
     var special = '';
-    for(var p in specialDict) {
+    for (var p in specialDict) {
       var row = p + '="';
       row += element[specialDict[p]].toString();
       row += '"';
       special += row + ' ';
     }
-    return '<li><a layout="row" layout-align="space-between center" '+(special? special : '')
-    +' class="toggle ' + (!hasChildren ? 'fullWidth' : '') + '" id="' + elemId + '" href="'+element.href+'"><span>' 
-    + element.name + (hasChildren ? '</span><ng-md-icon class="toggleOpen" size=30 layout="column" layout-align="center center" icon="keyboard_arrow_right"></ng-md-icon></a>' : '')
-    + nested + '</li>';
+    return '<li><a layout="row" layout-align="space-between center" ' + (special ? special : '') + ' class="toggle ' + (!hasChildren ? 'fullWidth' : '') + '" id="' + elemId + '" href="' + element.href + '"><span>' + element.name + (hasChildren ? '</span><ng-md-icon class="toggleOpen" size=30 layout="column" layout-align="center center" icon="keyboard_arrow_right"></ng-md-icon></a>' : '') + nested + '</li>';
   };
-  this.buildNode = function (root, paramList,specialDict) {
+  this.buildNode = function (root, paramList, specialDict) {
     var inner = '';
     if (root.children) {
       inner = '<ul class="inner">';
       root.children.forEach(function (item) {
-        inner += self.buildNode(item, paramList,specialDict);
+        inner += self.buildNode(item, paramList, specialDict);
       });
       inner += '</ul>';
     } else {
-      return self.elementHtml(root, null, paramList,specialDict);
+      return self.elementHtml(root, null, paramList, specialDict);
     }
-    return self.elementHtml(root, inner, paramList,specialDict);
+    return self.elementHtml(root, inner, paramList, specialDict);
   };
   return this;
 }
@@ -40,11 +37,10 @@ function bindToggleEvents() {
     $('.toggle').removeClass('selected');
     $this.addClass('selected');
     var elemParent = $this.parent().parent().parent().children('a');
-    while (elemParent.length>0) {
-        elemParent.addClass('selected');
-        elemParent = elemParent.parent().parent().parent().children('a');
-      //  debugger;
-      }
+    while (elemParent.length > 0) {
+      elemParent.addClass('selected');
+      elemParent = elemParent.parent().parent().parent().children('a');  //  debugger;
+    }
   });
   $('.toggleOpen').click(function (e) {
     e.preventDefault();
@@ -74,13 +70,12 @@ function highlightNode(node, paramList) {
   $('.accordion a').removeClass('selected');
   elem.addClass('selected');
   var elemParent = elem.parent().parent().parent().children('a');
-  while (elemParent.length>0) {
-      elemParent.addClass('selected');
-      elemParent.find('ng-md-icon>svg').addClass('show');
-      elemParent = elemParent.parent().parent().parent().children('a');
-    //  debugger;
-    }
-    while (elem.parent().closest('.inner').length > 0) {
+  while (elemParent.length > 0) {
+    elemParent.addClass('selected');
+    elemParent.find('ng-md-icon>svg').addClass('show');
+    elemParent = elemParent.parent().parent().parent().children('a');  //  debugger;
+  }
+  while (elem.parent().closest('.inner').length > 0) {
     elem = elem.parent().closest('.inner');
     elem.addClass('show');
   }

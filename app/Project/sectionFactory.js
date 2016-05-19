@@ -2,7 +2,8 @@
 module.exports = function ($httpCached) {
   return {
     getById: function getById(id) {
-      return $httpCached.get('data/section?id=' + id);
+      var url = 'data/section?id=' + id;
+      return $httpCached.get(url);
     }
   };
 };

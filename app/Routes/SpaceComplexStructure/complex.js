@@ -1,11 +1,10 @@
 'use strict';
-
 var breadcrumbs = require('../breadcrumbs.js');
 function treeFind(root, id, type) {
-  if(root.id == id && root.object_type == type) {
+  if (root.id == id && root.object_type == type) {
     return root;
   }
-  for(var i = 0; i < root.children.length; i++) {
+  for (var i = 0; i < root.children.length; i++) {
     var result = treeFind(root.children[i], id, type);
     if (result) {
       return result;
@@ -18,27 +17,32 @@ var entity = {
   views: {
     'complexInfo@home.spaceComplexStructure': {
       templateUrl: 'app/SpaceComplex/card/complex-card.html',
-      controller: function controller($scope, treeData,$interpolate,complex,$stateParams,projectTreeData) {
-        var id =  $stateParams.sectionId;
+      controller: function controller($scope, treeData, $interpolate, complex, $stateParams, projectTreeData, $complexDict) {
+        var id = $stateParams.sectionId;
         var subid = $stateParams.subsectionId;
-        var complexid  = $stateParams.complexId;
+        var complexid = $stateParams.complexId;
         $scope.section = null;
-        treeData.forEach((s) => {
-          if(s.id == id) {
+        treeData.forEach(function (s) {
+          if (s.id == id) {
             $scope.section = s;
           }
         });
         $scope.subSection = treeFind($scope.section, subid, 2);
-        $scope.complex = treeFind($scope.subSection,complexid,3);
-        breadcrumbs.init($interpolate,'complex',$scope);
+        $scope.complex = treeFind($scope.subSection, complexid, 3);
+        breadcrumbs.init($interpolate, 'complex', $scope);
         var years = [];
         var launches = [];
-        for(var e in complex.starts) {
+        for (var e in complex.starts) {
           years.push(e);
           launches.push(complex.starts[e]);
         }
         $scope.years = years;
         $scope.launches = launches;
+        var sumlaunches = 0;
+        for (var i = 0; i < launches.length; i++) {
+          sumlaunches = launches[i] + sumlaunches;
+        }
+        $scope.sumlaunches = sumlaunches;
         $scope.complexFull = complex;
       }
     }
@@ -60,8 +64,7 @@ var entity = {
       return $complexFactory.getById(id).then(function (data) {
         return data.data.data;
       });
-    },
+    }
   }
 };
-
 module.exports = entity;

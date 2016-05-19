@@ -1,18 +1,14 @@
 'use strict';
-
 var helpers = require('./projectHelper.js');
-
-
 var breadcrumbs = require('../breadcrumbs.js');
-
 var entity = {
   url: '/project/:projectId',
   views: {
     'projectInfo@home.projectStructure': {
       templateUrl: 'app/Project/card/project-cardThird.html',
-      controller: function controller($scope, project, section,pieData, tabstripData,$interpolate) {
+      controller: function controller($scope, project, section, pieData, tabstripData, $interpolate) {
         $scope.project = _.cloneDeep(project);
-        $scope.project.name =   $scope.project.work_description;
+        $scope.project.name = $scope.project.work_description;
         $scope.tabstripData = tabstripData;
         project = helpers.prepareValues($scope.project);
         $scope.timeLineVerticalData = project.plans;
@@ -22,9 +18,28 @@ var entity = {
         $scope.start = finObj.start;
         $scope.end = finObj.end;
         project.finance = finObj.finance;
-        $scope.project.chart = {barLabels: finObj.years, barSeries: ['Бюджет, млн.р.','Внебюджет, млн.р'], barData: [finObj.valueBudget, finObj.valueOwnBudget]};
-        $scope.pieChartData = {pieLabels: ["Бюджет", "Внебюджет"], pieData: [finObj.sumBudget, finObj.sumOwnBudget]};
-        breadcrumbs.init($interpolate,'project',$scope);
+        $scope.project.chart = {
+          barLabels: finObj.years,
+          barSeries: [
+            'Бюджет, млн.р.',
+            'Внебюджет, млн.р'
+          ],
+          barData: [
+            finObj.valueBudget,
+            finObj.valueOwnBudget
+          ]
+        };
+        $scope.pieChartData = {
+          pieLabels: [
+            'Бюджет',
+            'Внебюджет'
+          ],
+          pieData: [
+            finObj.sumBudget,
+            finObj.sumOwnBudget
+          ]
+        };
+        breadcrumbs.init($interpolate, 'project', $scope);
       }
     }
   },
@@ -75,5 +90,4 @@ var entity = {
     }
   }
 };
-
 module.exports = entity;

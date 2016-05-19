@@ -1,5 +1,7 @@
 'use strict';
-var breadcrumbs = require('../breadcrumbs.js');
+
+
+var helpers = require('./financeStructureHelper');
 function prepareSection(finance) {
   for (var e in finance) {
     if (isNaN(finance[e])) {
@@ -29,25 +31,32 @@ function getFinanceTables(finance) {
     'Own': projectsOwn
   };
 }
+
+var breadcrumbs = require('../breadcrumbs.js');
 var entity = {
   url: '/section/:sectionId',
   views: {
-    'projectInfo@home.projectStructure': {
-      templateUrl: 'app/Project/card/section-card.html',
-      controller: function controller($scope, section, $interpolate) {
-        $scope.section = _.cloneDeep(section);
+    'content@': {
+      templateUrl: 'app/Finance/finance.html',
+      controller: function controller($scope, treeData, $interpolate, $stateParams,$projectsDict,financeSection) {
+        $scope.budgetShown=true;
+        $scope.showBudget = () => $scope.budgetShown=true;
+        $scope.showOwn = () => $scope.budgetShown=false;
+
+        $scope.section = _.cloneDeep(financeSection);
         prepareSection($scope.section.finance);
         var tables = getFinanceTables($scope.section.finance);
         $scope.financeBudget = tables.Budget;
-        $scope.financeOwn = tables.Own;
-        breadcrumbs.init($interpolate, 'section', $scope);
+        $scope.financeOwn = tables.Own; 
+
         $scope.basename = 'Название';
+        breadcrumbs.init($interpolate, 'financeSection', $scope);
       }
     }
   },
-  ncyBreadcrumb: breadcrumbs.crumbs.section,
-  resolve: {
-    section: function section($http, $stateParams, $sectionFactory) {
+  ncyBreadcrumb: breadcrumbs.crumbs.financeSection,
+  resolve:{
+    financeSection: function section($http, $stateParams, $sectionFactory) {
       var id = $stateParams.sectionId;
       return $sectionFactory.getById(id).then(function (data) {
         return data.data.data;
@@ -55,4 +64,5 @@ var entity = {
     }
   }
 };
+
 module.exports = entity;

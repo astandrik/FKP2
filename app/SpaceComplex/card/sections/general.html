@@ -1,18 +1,20 @@
 	<md-content flex layout-padding>
 		      <div layout="row">
-		      <div flex="20" class="space-header-name">Назначение </div>
-		      <div flex="80" class="space-info-name"></div>
+		      <div flex="30" class="space-header-name">Назначение </div>
+		      <div flex="70" class="space-info-name">{{complexFull.goals[0].name}}</div>
 	    </div>
 	    <div layout="row">
-	        <div flex="20" class="space-header-name">Ракета-носитель </div>
-	        <div flex="80" class="space-info-name">{{complexFull.launches[0].booster_complex.name}}</div>
+	        <div flex="30" class="space-header-name">Ракета-носитель </div>
+	        <div flex="70" class="space-info-name">	<a href={{dict[complexFull.launches[0].booster_complex.name]}}>{{complexFull.launches[0].booster_complex.name}}</a></div>
+
       </div>
 			<div layout="row">
-        <div flex="20" class="space-header-name">Разгонный блок </div>
-        <div flex="80" class="space-info-name">{{complexFull.launches[0].stage_complex.name}}	</div>
+        <div flex="30" class="space-header-name">Разгонный блок </div>
+        <div flex="70" class="space-info-name">	<a href={{dict[complexFull.launches[0].stage_complex.name]}}>{{complexFull.launches[0].stage_complex.name}}</a></div>
+
       </div>
 			<div layout="row">
-        <div flex="20" class="space-header-name">Космодром </div>
-        <div flex="80" class="space-info-name"> {{complexFull.launches[0].spaceport.name}} </div>
+        <div flex="30" class="space-header-name">Космодром </div>
+        <div flex="70" class="space-info-name"> {{complexFull.launches[0].spaceport.name}} </div>
       </div>
   </md-content>
