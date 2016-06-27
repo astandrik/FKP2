@@ -80,8 +80,25 @@ function highlightNode(node, paramList) {
     elem.addClass('show');
   }
 }
+function highlightNodeById(nodeId) {
+  var elemId = nodeId;
+  var elem = $('.accordion a#' + elemId);
+  $('.accordion a').removeClass('selected');
+  elem.addClass('selected');
+  var elemParent = elem.parent().parent().parent().children('a');
+  while (elemParent.length > 0) {
+    elemParent.addClass('selected');
+    elemParent.find('ng-md-icon>svg').addClass('show');
+    elemParent = elemParent.parent().parent().parent().children('a');  //  debugger;
+  }
+  while (elem.parent().closest('.inner').length > 0) {
+    elem = elem.parent().closest('.inner');
+    elem.addClass('show');
+  }
+}
 module.exports = {
   treeHtml: new buildTree(),
   bind: bindToggleEvents,
-  highlight: highlightNode
+  highlight: highlightNode,
+  highlightById: highlightNodeById
 };

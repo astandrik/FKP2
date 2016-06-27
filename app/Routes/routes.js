@@ -15,5 +15,6 @@ module.exports = {
   spaceComplexComplexSection: require('./SpaceComplexStructure/complexSection.js'),
   financeStructure: require('./FinanceStructure/financeStructure.js'),
   financeSection: require('./FinanceStructure/financeSection.js'),
-  financeSubSection: require('./FinanceStructure/financeSubsection')
+  financeSubSection: require('./FinanceStructure/financeSubsection'),
+  events: require('./Events/events.js')
 };

@@ -1,5 +1,41 @@
 'use strict';
+
 var highlightNode = require('../components/accordion/treeBuilder.js').highlight;
+var highlightNodeById = require('../components/accordion/treeBuilder.js').highlightById;
+
+function searchTree(tree,req, params){
+  if(req && req.toString().trim().length > 0) {
+    for(var i = 0; i < tree.length; i++){
+      searchNode(tree[i],req,params);
+    }
+  } else {
+    $('li.invisible').removeClass('invisible');
+  }
+};
+
+function searchNode(node, req, params) {
+  var elemId = params.reduce(function (sum, current) {
+    return sum + current + node[current];
+  }, 'node_');
+  var hasName = false;
+  if (node.name.toLowerCase().indexOf(req.toLowerCase()) > -1) {
+    hasName = true;
+  }
+  if(node.children.length > 0) {
+    for(var i = 0; i < node.children.length; i++){
+      var childrenHasName = searchNode(node.children[i], req,params);
+      hasName = childrenHasName || hasName;
+    }
+  }
+  if (!hasName) {
+    $('#'+elemId).parent().addClass('invisible');
+  } else {
+    $('#'+elemId).parent().removeClass('invisible');
+    highlightNodeById(elemId);
+  }
+  return hasName;
+};
+
 function CC($scope, treeData, dialogs, $timeout, $state, $complexDict) {
   $scope.treeData = treeData;
   $scope.treeParams = [
@@ -47,5 +83,11 @@ function CC($scope, treeData, dialogs, $timeout, $state, $complexDict) {
       }
     });
   });
+  $scope.makeVisible = function() {
+   $scope.isInputVisible = true;
+ }
+$scope.search = function() {
+   searchTree(treeData.data ,$scope.searchString,  $scope.treeParams);
+}
 }
 module.exports = CC;

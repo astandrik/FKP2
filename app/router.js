@@ -6,7 +6,12 @@ angular.module('router', []).provider('$router', function () {
     self.routes = {
       'home': {
         url: '/FKP',
-        views: { 'sidebar': { template: '<sidebar></sidebar>' } },
+        views: {
+          'sidebar': { template: '<sidebar></sidebar>' },
+          'content@' : {
+            templateUrl: 'app/Layout/homepage.html'
+          }
+        },
         ncyBreadcrumb: { label: 'ФКП' }
       },
       'home.design': routes.design,
@@ -22,10 +27,7 @@ angular.module('router', []).provider('$router', function () {
       'home.spaceComplexStructure.spaceComplexSection.spaceComplexSubSection': routes.spaceComplexSubSection,
       'home.spaceComplexStructure.spaceComplexSection.spaceComplexSubSection.spaceComplexComplex': routes.spaceComplexComplex,
       'home.spaceComplexStructure.spaceComplexSection.spaceComplexSubSection.spaceComplexComplex.spaceComplexComplexSection': routes.spaceComplexComplexSection,
-      'home.events': {
-        url: '/Events',
-        views: { 'content@': { templateUrl: 'app/Events/events.html' } }
-      },
+      'home.events': routes.events,
       'home.financeStructure': routes.financeStructure,
       'home.financeStructure.section': routes.financeSection,
       'home.financeStructure.section.subsection': routes.financeSubSection

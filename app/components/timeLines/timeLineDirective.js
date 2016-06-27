@@ -94,7 +94,11 @@ function Vertical($compile) {
 function Horizontal() {
   return {
     restrict: 'E',
-    scope: { data: '=' },
+    scope: {
+      data: '=',
+      startYear: '=',
+      endYear: '=',
+    },
     compile: function compile(templateElement, templateAttrs) {
       return {
         pre: function pre($scope) {
@@ -102,18 +106,27 @@ function Horizontal() {
           var events = $scope.data.events;
           var options = {
             'width': '100%',
-            'height': '150px',
+            'height': '350px',
             'style': 'box',
+            lang :'ru',
             showCurrentTime: false
           };
           var moment = require('moment');
           require('../../../node_modules/moment/locale/ru');
           events.forEach(function (e) {
             data.push({
-              'start': new Date(moment(e.date, 'DD.MM.YYYY').format()),
+              'start': new Date(e.date),
               'content': e.text,
               'className': 'timeline-event'
             });
+          });
+          $scope.$watch('startYear', function(newVal) {
+            timeline.setVisibleChartRange($scope.startYear, $scope.endYear);
+            timeline.redraw();
+          });
+          $scope.$watch('endYear', function(newVal) {
+            timeline.setVisibleChartRange($scope.startYear, $scope.endYear);
+            timeline.redraw();
           });
           var timeline = new links.Timeline($(templateElement)[0]);
           timeline.draw(data, options);

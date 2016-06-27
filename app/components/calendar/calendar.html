@@ -33,10 +33,9 @@
 
   <div class="col-md-6 text-center">
     <div class="btn-group">
+      <label class="btn btn-primary" ng-model="vm.calendarView" uib-btn-radio="'all'">Все</label>
       <label class="btn btn-primary" ng-model="vm.calendarView" uib-btn-radio="'year'">Год</label>
       <label class="btn btn-primary" ng-model="vm.calendarView" uib-btn-radio="'month'">Месяц</label>
-      <label class="btn btn-primary" ng-model="vm.calendarView" uib-btn-radio="'week'">Неделя</label>
-      <label class="btn btn-primary" ng-model="vm.calendarView" uib-btn-radio="'day'">День</label>
     </div>
   </div>
 
@@ -59,5 +58,8 @@
   day-view-start="06:00"
   day-view-end="22:00"
   day-view-split="30"
-  cell-modifier="vm.modifyCell(calendarCell)">
+  cell-modifier="vm.modifyCell(calendarCell)"
+  on-timespan-click="vm.timespanClicked(calendarDate)"
+  start-date="2016"
+  end-date="2025">
 </mwl-calendar>

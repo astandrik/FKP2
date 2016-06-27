@@ -6,14 +6,31 @@ div[ui-view="content"] {
   padding: 3% 0 0 12.3%;
 }
 
+#table-finance {
+  text-align: center;
+}
+.ui-grid-render-container-left {
+  text-align: left;
+}
+.ui-grid-header-cell-wrapper {
+  background-color: #c1c1c1;
+}
+.button-budget {
+  width: 113px;
+  font-weight: bold!important;
+  margin-left: 1px!important;
+}
+.button-own {
+  width: 113px;
+  font-weight: bold!important;
+  margin-left: 2px!important;
+}
+
 .breadcrumb > li + li:before {
   content: "\2192" !important;
 }
 .breadcrumb {
   margin-bottom: 0!important;
-}
-.breadcrumb li:first-child {
-  pointer-events: none;
 }
 @media (max-width: 1490px) and (min-width: 1325px) {
   .breadcrumb a,
@@ -34,7 +51,60 @@ div[ui-view="content"] {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   text-transform: none;
 }
+.square-box {
+  position: relative;
+  width: 20%;
+  overflow: hidden;
+  background: #FFFFFF;
+  width: 200px;
+  height: 200px;
+}
+.square-content {
+  position: relative;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  color: black;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.square-content div {
+  display: table;
+  width: 100%;
+  height: 100%;
+}
+.square-content span {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+  color: black;
+}
+.box-air {
+  padding: 10px;
+}
+.main-header {
+  text-align: center;
+}
 
+.input {
+  padding-left: 150px;
+}
 
 @import url('http://fonts.googleapis.com/css?family=Pacifico|Open+Sans:300,400,600');
 .accordionTree * {
@@ -157,6 +227,10 @@ div[ui-view="content"] {
           transform: rotate(90deg);
 }
 
+[ng-bind="day.label"] {
+  pointer-events: none;
+}
+
 
 .ui-grid-header-cell .sortable {
   cursor: pointer;
@@ -170,8 +244,43 @@ div[ui-view="content"] {
 div.ui-grid-row:hover div {
   background-color: #66d9ff!important;
 }
+div.ui-grid-row.active div {
+  background-color: #66d9ff!important;
+}
 div[role="rowgroup"].ui-grid-viewport {
   overflow-x: auto!important;
+}
+.grid {
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+.grid {
+  opacity: 0;
+}
+.grid.shown {
+  opacity: 1;
+}
+li.invisible {
+  display: none;
+}
+.ui-grid-row,
+.ui-grid-cell {
+  height: auto!important;
+}
+.ui-grid-cell {
+  float: none;
+  display: table-cell;
+}
+.ui-grid-header-cell,
+.ui-grid-cell-contents {
+  white-space: normal;
+  padding: 2px;
+  word-break: break-word;
+}
+.ui-grid-cell-contents {
+  display: table-cell;
+  vertical-align: middle;
+  padding: 15px 7px!important;
 }
 
 .popup1 {

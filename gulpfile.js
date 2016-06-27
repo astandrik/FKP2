@@ -16,6 +16,7 @@ var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var autoprefixer = require('gulp-autoprefixer');
 var flatten = require('gulp-flatten');
+var run = require('gulp-run');
 
 gulp.task('vendorsjs', function () {
     return gulp.src(
@@ -44,6 +45,11 @@ gulp.task('vendorsjs', function () {
         .pipe(concat('vendors.min.js'))
         .pipe(gulp.dest('dist/libs'));
 });
+
+gulp.task('search', function () {
+  run('node search.js').exec()  // prints "Hello World\n".
+    .pipe(gulp.dest('output'))    // Writes "Hello World\n" to output/echo.
+})
 
 
 gulp.task('vendorscss', function () {
@@ -127,8 +133,6 @@ gulp.task('browserify', function() {
         .pipe(source('all.js'))
         .on('error', onError)
         .pipe(buffer())
-        .pipe(sourcemaps.init({ loadMaps: true }))
-        .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest('dist/libs/'));
 })
 
