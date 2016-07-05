@@ -56,6 +56,12 @@ var crumbs = {
     toolTip: '{{subsection.name}}',
     dependencies: ['financeSection']
   },
+
+  eventsSection: {
+    label: '{{event.title}}',
+    toolTip: '{{event.title}}',
+    dependencies: []
+  }
 };
 function interpolateTooltips(interpolate, type, scope) {
   crumbs[type].dependencies.forEach(function (dep) {

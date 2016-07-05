@@ -37,6 +37,15 @@ function searchNode(node, req, params) {
 };
 
 function CC($scope, treeData, dialogs, $timeout, $state, $complexDict) {
+  $scope.scopeState = $state;
+  $scope.$watch('scopeState.current.name', function(newVal) {
+    if(newVal == "home.spaceComplexStructure") {
+      $scope.isBlank = true;
+    } else {
+      $scope.isBlank = false;
+    }
+  });
+
   $scope.treeData = treeData;
   $scope.treeParams = [
     'id',

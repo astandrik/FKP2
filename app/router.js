@@ -28,9 +28,12 @@ angular.module('router', []).provider('$router', function () {
       'home.spaceComplexStructure.spaceComplexSection.spaceComplexSubSection.spaceComplexComplex': routes.spaceComplexComplex,
       'home.spaceComplexStructure.spaceComplexSection.spaceComplexSubSection.spaceComplexComplex.spaceComplexComplexSection': routes.spaceComplexComplexSection,
       'home.events': routes.events,
+      'home.events.card': routes.eventsCard,
+      'home.events.card.section': routes.eventsSection,
       'home.financeStructure': routes.financeStructure,
       'home.financeStructure.section': routes.financeSection,
       'home.financeStructure.section.subsection': routes.financeSubSection
+
     };
     return this;
   }();

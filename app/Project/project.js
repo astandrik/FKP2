@@ -5,7 +5,7 @@ var projectController = require('./projectController.js');
 var sectionFactory = require('./sectionFactory.js');
 var subsectionFactory = require('./subsectionFactory.js');
 var currentModule = angular.module('project', []);
-currentModule.controller('projectStructureController', projectController);
+currentModule.controller('projectController', projectController);
 currentModule.directive('projectCard', projectCard);
 currentModule.factory('$projectFactory', projectFactory);
 currentModule.factory('$subsectionFactory', subsectionFactory);

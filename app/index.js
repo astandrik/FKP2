@@ -6,6 +6,8 @@ require('./Design/design.js');
 require('./core/cache/cache.js');
 require('./core/dialogs/dialogs.js');
 require('./core/errorHandler/errors.js');
+require('./core/stateManager.js');
+require('./Events/events.js');
 var layout = require('./Layout/layout.js');
 var components = require('./components/components.js');
 var icons = require('./components/Icons/icons.js');
@@ -27,7 +29,9 @@ var app = angular.module('app', [
   'project',
   'complex',
   'design',
-  require('angular-ui-bootstrap')
+'stateManager',
+'events',
+require('angular-ui-bootstrap')
 ]);
 app.config([
   '$locationProvider',
@@ -102,7 +106,7 @@ app.run(function ($rootScope, $state, $cacheRunner, $errorDialogService, $errorH
   });
   $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
     $rootScope.isLoading=false;
-    //debugger;
+    debugger;
     if (error && error.config && error.config.url) {
       $errorHandler.handleError(event.name, 'Ошибка перехода по пути ' + error.config.url + '. Обратитесь к системному администратору.');
     } else {

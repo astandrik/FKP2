@@ -36,6 +36,15 @@ function searchNode(node, req, params) {
 };
 
 function ProjectController($scope, dialogs, $projectFactory, $state, $timeout, treeData) {
+  $scope.scopeState = $state;
+  $scope.$watch('scopeState.current.name', function(newVal) {
+    if(newVal == "home.projectStructure") {
+      $scope.isBlank = true;
+    } else {
+      $scope.isBlank = false;
+    }
+  });
+
   $scope.treeData = treeData;
   $scope.treeParams = [
     'id',

@@ -16,5 +16,7 @@ module.exports = {
   financeStructure: require('./FinanceStructure/financeStructure.js'),
   financeSection: require('./FinanceStructure/financeSection.js'),
   financeSubSection: require('./FinanceStructure/financeSubsection'),
-  events: require('./Events/events.js')
+  events: require('./Events/events.js'),
+  eventsCard: require('./Events/card.js'),
+  eventsSection: require('./Events/eventsSection.js')
 };

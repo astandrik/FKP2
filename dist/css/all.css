@@ -105,6 +105,24 @@ div[ui-view="content"] {
 .input {
   padding-left: 150px;
 }
+.structure-text {
+  font-size: larger;
+  border: groove;
+  margin: 8.5%;
+  text-align: justify;
+  width: 82%;
+  height: 60%;
+}
+.header-text {
+  text-align: center;
+  font-weight: bold;
+  font-size: 130%;
+  margin-top: 1.5%;
+}
+.main-text {
+  font-size: 127%;
+  padding: 1.5%;
+}
 
 @import url('http://fonts.googleapis.com/css?family=Pacifico|Open+Sans:300,400,600');
 .accordionTree * {
@@ -550,6 +568,66 @@ tab-strip {
   width: 100px;
 }
 
+.events-card {
+  height: 600px;
+  width: 900px;
+  border: groove;
+  padding: 10px;
+}
+.events-card .size {
+  font-size: 24px;
+  padding: 0 0 20px 0!important;
+  color: #d76e00;
+  padding: 0 20px;
+}
+.events-card .header-name {
+  padding: 3% 0 0 3.92%;
+  font-weight: bold;
+}
+.events-card .info-name {
+  padding: 3% 0 0 2%;
+}
+.events-card .btn-text {
+  font-weight: bold;
+}
+.events-card .btn-default {
+  border-color: black;
+}
+.events-card .btn-default:focus {
+  background-color: #66d9ff;
+}
+.events-card .btn1 {
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+}
+.events-card li.active {
+  border-top: 2px solid #66d9ff;
+}
+.events-card li > a {
+  color: black;
+}
+.events-card .space-header-name {
+  padding: 2% 0 0 12.3%;
+  font-weight: bold;
+}
+.events-card .space-info-name {
+  padding: 2% 0 0 10%;
+}
+.events-card .relatedProjects-text {
+  border: groove;
+  width: 56%;
+  font-size: 16px;
+  padding: 1%;
+  margin-top: 3%;
+  margin-left: 22%;
+  text-align: center;
+}
+.events-card .list-text {
+  text-align: left;
+  padding: 1%;
+  margin-top: 3%;
+  margin-left: 22%;
+}
+
 #sidebar-left {
   max-width: 10vw!important;
 }
@@ -654,6 +732,21 @@ tab-strip {
 }
 .projectCard .organizations {
   padding: 10px;
+}
+.projectCard .relatedProjects-text {
+  border: groove;
+  width: 56%;
+  font-size: 16px;
+  padding: 1%;
+  margin-top: 3%;
+  margin-left: 22%;
+  text-align: center;
+}
+.projectCard .list-text {
+  text-align: left;
+  padding: 1%;
+  margin-top: 3%;
+  margin-left: 22%;
 }
 
 .complexCard .complexTableAlign {
