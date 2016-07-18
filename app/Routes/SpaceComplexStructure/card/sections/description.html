@@ -1,0 +1,66 @@
+<md-content flex layout-padding>
+  <div layout="row">
+    <div flex="20" class="space-header-name">Характеристики изделия</div>
+    <div flex="80" layout="column" class="space-info-name">
+      <div class="row rowHover complexcharact rowRight" ng-repeat="m in complexFull.meta">
+        <div class="col-xs-8">{{m.name}}</div>
+        <div class="col-xs-4 complexValueAlign">{{m.value}}</div>
+      </div>
+    </div>
+  </div>
+
+  <div layout="row">
+    <div flex="20" class="space-header-name">Количество стартов </div>
+    <div flex="80" class="space-info-name"><table class="table">
+  <thead>
+    <tr>
+      <th>Год</th>
+      <th ng-repeat="y in years track by $index" class="complexTableAlign">{{y}}</th>
+      <th class="complexTableAlign">Всего</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td scope="row">#</td>
+      <td ng-repeat="l in launches track by $index" class="complexTableAlign">{{l}}</td>
+      <td class="complexTableAlign" >{{sumlaunches}}</td>
+    </tr>
+  </tbody>
+</table></div>
+  </div>
+
+  <div layout="row">
+    <div flex="20" class="space-header-name">Документы</div>
+    <div flex="80" class='space-documents'>
+      <div  ng-show="complexFull.documents.length==0">
+        <div class="relatedProjects-text">
+            <p> Для этого проекта нет документов.</p>
+            <p>Если нашли ошибку - свяжитесь с разработчиками.</p>
+        </div>
+      </div>
+      <div  ng-show="complexFull.documents.length > 0">
+        <div layout="row">
+          <div flex="80" class="space-info-name">
+            <table class="table">
+              <thead>
+                  <tr>
+                    <th>Название</th>
+                    <th>Тип</th>
+                    <th>Дата принятия</th>
+                  </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="m in complexFull.documents">
+                  <td > <a ng-href="{{m.url}}"> {{m.name}}</a></td>
+                  <td >{{m.type.name}}</td>
+                  <td >{{m.date.toString().split(' ')[0].split('-').reverse().join('.')}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+   </div>
+  </div>
+
+</md-content>

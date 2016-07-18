@@ -5,7 +5,7 @@ var entity = {
   url: '/project/:projectId',
   views: {
     'projectInfo@home.projectStructure': {
-      templateUrl: 'app/Project/card/project-card.html',
+      templateUrl: 'app/Routes/ProjectStructure/card/project-card.html',
       controller: function controller($scope, project, pieData, tabstripData, section, subsection, $interpolate) {
         $scope.project = _.cloneDeep(project);
         $scope.tabstripData = tabstripData;

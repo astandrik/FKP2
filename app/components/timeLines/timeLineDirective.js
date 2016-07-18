@@ -98,6 +98,7 @@ function Horizontal() {
       data: '=',
       startYear: '=',
       endYear: '=',
+      selectEvent: '&'
     },
     compile: function compile(templateElement, templateAttrs) {
       return {
@@ -129,6 +130,14 @@ function Horizontal() {
             timeline.redraw();
           });
           var timeline = new links.Timeline($(templateElement)[0]);
+          links.events.addListener(timeline, 'select',
+          function() {
+             var sel = timeline.getSelection();
+             if(sel[0]) {
+               var obj = $scope.data.events[sel[0].row];
+               $scope.selectEvent()(obj);
+             }
+          });
           timeline.draw(data, options);
         }
       };

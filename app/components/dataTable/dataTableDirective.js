@@ -67,7 +67,7 @@ function DTD() {
       'fitContent':'@'
     },
     restrict: 'E',
-    template: '<div ui-grid="gridOptions" ui-grid-pinning ng-style="{\'min-height\': minHeight, height: gridHeight}" class="grid"></div>',
+    template: '<div ui-grid="gridOptions" ui-grid-pinning ng-style="{\'min-height\': minHeight, height: gridHeight}" class="grid financeGrid"></div>',
     controller: function controller($scope, $filter, $projectsDict, $timeout) {
 
 
@@ -92,13 +92,15 @@ function DTD() {
           });
         }
         //Переводим всё в тип валюты.
-        for (var i = 0; i < data.length; i++) {
-          for (var p in data[i]) {
-            if (p != $scope.basename) {
-              data[i][p] = $filter('currency')(data[i][p], '');
+          for (var i = 0; i < data.length; i++) {
+            for (var p in data[i]) {
+              if (p != $scope.basename) {
+                if(!isNaN(data[i][p])) {
+                  data[i][p] = $filter('currency')(data[i][p], '');
+                }
+              }
             }
           }
-        }
         //Проходим по именам столбцов и сортируем годы
         var b = [];
         var others = [];
@@ -122,7 +124,6 @@ function DTD() {
         } else {
           var c = b;
         }
-
         $scope.projectDict = $projectsDict.dict;
         c = c.concat(others);
         $scope.columns = [];
@@ -135,11 +136,11 @@ function DTD() {
                 ctmplt = '<a cacheType={{grid.appScope.projectDict[row.entity[col.field]] ? grid.appScope.projectDict[row.entity[col.field]].cacheType : null}} \
                 elementId={{grid.appScope.projectDict[row.entity[col.field]] ? grid.appScope.projectDict[row.entity[col.field]].elementId : null}} \
                 ng-if="grid.appScope.projectDict[row.entity[col.field]].href.indexOf(\''+$scope.linkBlocker+'\') == -1"\
-                ng-href={{grid.appScope.projectDict[row.entity[col.field]].href}}><div class="ui-grid-cell-contents">{{row.entity[col.field]}}</div></a>\
-                <div ng-if="grid.appScope.projectDict[row.entity[col.field]].href.indexOf(\''+$scope.linkBlocker+'\') > -1" class="ui-grid-cell-contents">{{row.entity[col.field]}}</div>';
+                ng-href={{grid.appScope.projectDict[row.entity[col.field]].href}}><div class="ui-grid-cell-contents pinned-cell">{{row.entity[col.field]}}</div></a>\
+                <div ng-if="grid.appScope.projectDict[row.entity[col.field]].href.indexOf(\''+$scope.linkBlocker+'\') > -1" class="ui-grid-cell-contents pinned-cell">{{row.entity[col.field]}}</div>';
               } else {
-                ctmplt = '<a cacheType={{grid.appScope.projectDict[row.entity[col.field]] ? grid.appScope.projectDict[row.entity[col.field]].cacheType : null}} elementId={{grid.appScope.projectDict[row.entity[col.field]] ? grid.appScope.projectDict[row.entity[col.field]].elementId : null}} ng-href={{grid.appScope.projectDict[row.entity[col.field]].href}}><div class="ui-grid-cell-contents">{{row.entity[col.field]}}</div></a>';
-              }
+                ctmplt = '<a cacheType={{grid.appScope.projectDict[row.entity[col.field]] ? grid.appScope.projectDict[row.entity[col.field]].cacheType : null}} elementId={{grid.appScope.projectDict[row.entity[col.field]] ? grid.appScope.projectDict[row.entity[col.field]].elementId : null}} ng-href={{grid.appScope.projectDict[row.entity[col.field]].href}}><div class="ui-grid-cell-contents pinned-cell">{{row.entity[col.field]}}</div></a>';
+              } 
             }
             if (w < 1370) {
               $scope.columns.push({
@@ -147,7 +148,8 @@ function DTD() {
                 minWidth: 100,
                 maxWidth: 250,
                 cellTemplate: ctmplt,
-                pinnedLeft:true
+                pinnedLeft:true,
+                cellClass: 'pinned-cell'
               });
             } else {
               $scope.columns.push({
@@ -155,14 +157,15 @@ function DTD() {
                 minWidth: 230,
                 maxWidth: 250,
                 cellTemplate: ctmplt,
-                pinnedLeft:true
+                pinnedLeft:true,
+                cellClass: 'pinned-cell'
               });
             }
           } else {
             $scope.columns.push({
               field: item,
               minWidth: 100,
-              cellTemplate: '<div class="ui-grid-cell-contents">{{row.entity[col.field]}}</div>',
+              cellTemplate: '<div class="ui-grid-cell-contents" style="display: flex; justify-content: center"><div style="align-self: center;">{{row.entity[col.field]}}</div></div>',
               sortingAlgorithm: function(a, b, rowA, rowB, direction) {
                 return numberSorting(a,b,direction);
               },
@@ -172,16 +175,24 @@ function DTD() {
         });
         $scope.gridData = data;
       }
+      $scope.threshold = 10;
       $scope.gridOptions = {
         onRegisterApi: function( gridApi ) {
           $scope.gridApi = gridApi;
-          $timeout(()=>{        adjustHeights($timeout); $timeout(()=> {$('.grid').fadeIn('swing',()=> $('.grid').addClass('shown') );   },200); },1000);
-
-},
+          $timeout(()=>{
+            if($scope.gridData.length <= $scope.threshold) { adjustHeights($timeout); $('.grid').addClass('dynamicGrid'); } else {$('.grid').removeClass('dynamicGrid');}
+            $timeout(()=> {
+              $('.grid').fadeIn('swing',()=> $('.grid').addClass('shown') )
+            },200);
+          },500);
+        },
         data: $scope.gridData,
         columnDefs: $scope.columns,
-        rowHeight: rowHeight,
+        rowHeight: 100,
         minimumColumnSize: 5,
+        flatEntityAccess: true,
+        virtualizationThreshold: $scope.threshold,
+        excessRows: 10,
         enableFiltering: enableFiltering,
         enableHorizontalScrollbar: 0,
         enableVerticalScrollbar: showVerticalScroll,

@@ -4,7 +4,7 @@ var structure = {
   url: '/SpaceComplexStructure',
   views: {
     'content@': {
-      templateUrl: 'app/SpaceComplex/spaceComplex-page.html',
+      templateUrl: 'app/Routes/SpaceComplexStructure/spaceComplex-page.html',
       controller: 'SpaceComplexStructureController',
       resolve: {
         treeData: function treeData($accordion, $complexDict) {

@@ -37,7 +37,7 @@ var entity = {
   url: '/section/:sectionId',
   views: {
     'content@': {
-      templateUrl: 'app/Finance/finance.html',
+      templateUrl: 'app/Routes/FinanceStructure/finance.html',
       controller: function controller($scope, treeData, $interpolate, $stateParams,$projectsDict,financeSection) {
         $scope.budgetShown=true;
         $scope.showBudget = () => $scope.budgetShown=true;
@@ -47,7 +47,7 @@ var entity = {
         prepareSection($scope.section.finance);
         var tables = getFinanceTables($scope.section.finance);
         $scope.financeBudget = tables.Budget;
-        $scope.financeOwn = tables.Own; 
+        $scope.financeOwn = tables.Own;
 
         $scope.basename = 'Название';
         breadcrumbs.init($interpolate, 'financeSection', $scope);

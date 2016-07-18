@@ -1,0 +1,14 @@
+<div ng-show='event.complexes.length==0'>
+  <div class="relatedProjects-text">
+    <p>Данный раздел еще находится в разработке. Приносим свои извинения.</p>
+    <p>Здесь будет отображаться список космических комплексов, непосредственно связанных с данным событием.</p>
+    <p> На карточку каждого из связанных космических комплексов можно будет перейти с помощью гиперссылки. </p>
+  </div>
+</div>
+<div ng-show='event.complexes.length > 0'>
+  <ul class="list-group">
+    <li class="list-group-item" ng-repeat="comp in event.complexes | orderBy: 'name'"><a ng-href="{{comp.subsectionId == -1 ? '#/FKP/SpaceComplexStructure/section/' +
+      comp.sectionId + '/complex/' + comp.id : '#/FKP/SpaceComplexStructure/section/' +
+      comp.sectionId + '/subsection/' + comp.subsectionId + '/complex/' + comp.id + '/general' }}">{{comp.cipher ? comp.cipher : comp.name ? comp.name : comp.id}}</a></li>
+    </ul>
+</div>

@@ -46,7 +46,7 @@ var structure = {
   url: '/financeStructure',
   views: {
     'content@': {
-      templateUrl: 'app/Finance/finance.html',
+      templateUrl: 'app/Routes/FinanceStructure/finance.html',
       controller: function controller($scope, treeData,sectionsData) {
         $scope.section = _.cloneDeep(sectionsData);
         $scope.budgetShown=true;

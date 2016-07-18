@@ -67,6 +67,11 @@ function CC($scope, treeData, dialogs, $timeout, $state, $complexDict) {
       name: 'Связанные проекты',
       state: 'complexSection',
       type: 'relatedProjects'
+    },
+    {
+      name: 'События',
+      state: 'complexSection',
+      type: 'events'
     }
   ];
   $scope.dict = $complexDict.dict;

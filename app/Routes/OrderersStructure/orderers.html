@@ -1,0 +1,15 @@
+<split>
+  <div size="20">
+    <input ng-show="isInputVisible" class="input" style="width:100%" ng-keyup="search()" ng-model="searchString"></input>
+    <ng-md-icon icon="search" layout="column"  layout-align="left left" ng-click="makeVisible()" ng-show="!isInputVisible"></ng-md-icon>
+    <accordion-tree data=treeData params=treeParams special=specialDict ></accordion-tree>
+  </div>
+  <div size="80">
+      <div flex ui-view="orderersInfo"></div>
+      <div ng-show="isBlank">
+        <div class="structure-text">
+          <p class="header-text">Вы находитесь в разделе "Заказчики"</p>
+        </div>
+      </div>
+  </div>
+</split>

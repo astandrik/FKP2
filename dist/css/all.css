@@ -6,6 +6,37 @@ div[ui-view="content"] {
   padding: 3% 0 0 12.3%;
 }
 
+.documentsGrid {
+  height: calc(100vh - 253px) !important;
+  min-height: 330px;
+}
+.documentsGrid .ui-grid-viewport {
+  overflow-x: hidden!important;
+}
+.documentsGrid .ui-grid-cell-contents {
+  white-space: normal;
+}
+.md-subheader {
+  color: #343434;
+  font-size: 18px!important;
+  font-weight: bold!important;
+  letter-spacing: 0.010em!important;
+  line-height: 1.2em;
+  font-family: 'Orienta', sans-serif;
+  background-color: #c1c1c1;
+}
+.news-scroll {
+  overflow-y: scroll;
+}
+.news-list {
+  text-align: center;
+  padding: 0px 0px 8px 15px!important;
+  margin-top: 100px;
+}
+.news-list-button {
+  border: outset;
+}
+
 #table-finance {
   text-align: center;
 }
@@ -124,6 +155,10 @@ div[ui-view="content"] {
   padding: 1.5%;
 }
 
+[ng-bind="day.label"] {
+  pointer-events: none;
+}
+
 @import url('http://fonts.googleapis.com/css?family=Pacifico|Open+Sans:300,400,600');
 .accordionTree * {
   box-sizing: border-box;
@@ -215,6 +250,10 @@ div[ui-view="content"] {
 .accordionTree ul li a.toggle:hover {
   background: #D6D6D6;
 }
+.accordionTree ul li a.selected {
+  background: #B4A7D5;
+  color: white;
+}
 .accordionTree ul li a.selected[type="2"] {
   background: #76A5AF;
   color: white;
@@ -245,27 +284,24 @@ div[ui-view="content"] {
           transform: rotate(90deg);
 }
 
-[ng-bind="day.label"] {
-  pointer-events: none;
-}
 
-
-.ui-grid-header-cell .sortable {
+.financeGrid .ui-grid-header-cell .sortable {
   cursor: pointer;
   -moz-text-align-last: center;
        text-align-last: center;
   padding: 0 0 0 5px;
 }
-.ui-grid-cell-contents {
+.financeGrid .ui-grid-cell-contents {
   white-space: normal !important;
+  float: right;
 }
-div.ui-grid-row:hover div {
+.financeGrid div.ui-grid-row:hover div {
   background-color: #66d9ff!important;
 }
-div.ui-grid-row.active div {
+.financeGrid div.ui-grid-row.active div {
   background-color: #66d9ff!important;
 }
-div[role="rowgroup"].ui-grid-viewport {
+.financeGrid div[role="rowgroup"].ui-grid-viewport {
   overflow-x: auto!important;
 }
 .grid {
@@ -275,27 +311,44 @@ div[role="rowgroup"].ui-grid-viewport {
 .grid {
   opacity: 0;
 }
+.pinned-cell {
+  text-align: left;
+  float: left!important;
+}
 .grid.shown {
   opacity: 1;
 }
 li.invisible {
   display: none;
 }
-.ui-grid-row,
-.ui-grid-cell {
-  height: auto!important;
+.non-visible {
+  visibility: hidden;
 }
-.ui-grid-cell {
+.null-width {
+  max-width: 0!important;
+  min-width: 0!important;
+}
+.null-width-header {
+  max-width: 0!important;
+  min-width: 0!important;
+  display: none!important;
+}
+.dynamicGrid .ui-grid-row,
+.dynamicGrid .ui-grid-cell {
+  height: auto!important;
+  text-align: right;
+}
+.dynamicGrid .ui-grid-cell {
   float: none;
   display: table-cell;
 }
-.ui-grid-header-cell,
-.ui-grid-cell-contents {
+.dynamicGrid .ui-grid-header-cell,
+.dynamicGrid .ui-grid-cell-contents {
   white-space: normal;
   padding: 2px;
   word-break: break-word;
 }
-.ui-grid-cell-contents {
+.dynamicGrid .ui-grid-cell-contents {
   display: table-cell;
   vertical-align: middle;
   padding: 15px 7px!important;
@@ -568,66 +621,6 @@ tab-strip {
   width: 100px;
 }
 
-.events-card {
-  height: 600px;
-  width: 900px;
-  border: groove;
-  padding: 10px;
-}
-.events-card .size {
-  font-size: 24px;
-  padding: 0 0 20px 0!important;
-  color: #d76e00;
-  padding: 0 20px;
-}
-.events-card .header-name {
-  padding: 3% 0 0 3.92%;
-  font-weight: bold;
-}
-.events-card .info-name {
-  padding: 3% 0 0 2%;
-}
-.events-card .btn-text {
-  font-weight: bold;
-}
-.events-card .btn-default {
-  border-color: black;
-}
-.events-card .btn-default:focus {
-  background-color: #66d9ff;
-}
-.events-card .btn1 {
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
-}
-.events-card li.active {
-  border-top: 2px solid #66d9ff;
-}
-.events-card li > a {
-  color: black;
-}
-.events-card .space-header-name {
-  padding: 2% 0 0 12.3%;
-  font-weight: bold;
-}
-.events-card .space-info-name {
-  padding: 2% 0 0 10%;
-}
-.events-card .relatedProjects-text {
-  border: groove;
-  width: 56%;
-  font-size: 16px;
-  padding: 1%;
-  margin-top: 3%;
-  margin-left: 22%;
-  text-align: center;
-}
-.events-card .list-text {
-  text-align: left;
-  padding: 1%;
-  margin-top: 3%;
-  margin-left: 22%;
-}
-
 #sidebar-left {
   max-width: 10vw!important;
 }
@@ -677,6 +670,97 @@ tab-strip {
   }
 }
 
+.events-card {
+  height: 500px;
+  width: 800px;
+  border: groove;
+  padding: 10px;
+}
+.events-card .size {
+  font-size: 24px;
+  padding: 0 0 20px 0!important;
+  color: #d76e00;
+  padding: 0 20px;
+}
+.events-card .header-name {
+  padding: 3% 0 0 5%;
+  font-weight: bold;
+}
+.events-card .info-name {
+  padding: 3% 0 0 3%;
+  text-align: justify;
+}
+.events-card .btn-text {
+  font-weight: bold;
+}
+.events-card .btn-default {
+  border-color: black;
+}
+.events-card .btn-default:focus {
+  background-color: #66d9ff;
+}
+.events-card .btn1 {
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+}
+.events-card li.active {
+  border-top: 2px solid #66d9ff;
+}
+.events-card li > a {
+  color: black;
+}
+.events-card .relatedProjects-text {
+  border: groove;
+  width: 56%;
+  font-size: 16px;
+  padding: 1%;
+  margin-top: 3%;
+  margin-left: 22%;
+  text-align: center;
+}
+.events-card .list-text {
+  text-align: left;
+  padding: 1%;
+  margin-top: 3%;
+  margin-left: 22%;
+}
+.timeline {
+  padding-top: 20px;
+}
+.cal-month-box [class*=cal-cell],
+.cal-year-box [class*=span] {
+  min-height: 52px!important;
+}
+.cal-month-day {
+  height: 52px!important;
+}
+.center-event-card {
+  min-height: 430px;
+  max-height: 430px;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+              -ms-grid-row-align: center;
+          align-items: center;
+}
+.list-group-item {
+  margin: 10px 0;
+  padding: 0;
+}
+.list-group-item a {
+  margin: 0px;
+  padding: 10px 15px;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.list-group-item:hover {
+  background-color: #AAAAAA;
+}
+.list-group-item:hover a {
+  color: white;
+  text-decoration: none;
+}
+
 .projectCard .size {
   font-size: 24px;
   min-height: 105px;
@@ -690,6 +774,7 @@ tab-strip {
 }
 .projectCard .info-name {
   padding: 3% 0 0 2%;
+  text-align: justify;
 }
 .projectCard .btn-text {
   font-weight: bold;
@@ -833,4 +918,16 @@ tab-strip {
 }
 .complexCard #finance-charts > .flex-40 {
   padding-top: 30px !important;
+}
+.complexCard .relatedProjects-text {
+  border: groove;
+  width: 56%;
+  font-size: 16px;
+  padding: 1%;
+  margin-top: 3%;
+  margin-left: 22%;
+  text-align: center;
+}
+.complexCard .space-documents {
+  padding-left: 32px;
 }

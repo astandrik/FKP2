@@ -4,7 +4,7 @@ var entity = {
   url: '/section/:sectionId',
   views: {
     'complexInfo@home.spaceComplexStructure': {
-      templateUrl: 'app/SpaceComplex/card/section-card.html',
+      templateUrl: 'app/Routes/SpaceComplexStructure/card/section-card.html',
       controller: function controller($scope, treeData, $interpolate, $stateParams) {
         var id = $stateParams.sectionId;
         $scope.section = null;

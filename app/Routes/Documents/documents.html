@@ -1,0 +1,17 @@
+<div layout="row"      layout-align="space-between stretch">
+<div ui-grid="gridOptions" class="documentsGrid" style="width:80%; height:100%; margin-top:100px;"></div>
+
+<md-list flex class="news-list md-whiteframe-10dp">
+        <md-subheader class="md-whiteframe-4dp">Новости</md-subheader>
+        <div class='news-scroll'>
+        <md-list-item class="md-3-line  md-whiteframe-4dp" ng-repeat="n in news" ng-click="null">
+          <div class="md-list-item-text" layout="column">
+            <h3>{{ n.name }}</h3>
+            <h4>от {{ n.date }}</h4>
+          </div>
+        </md-list-item>
+        </div>
+        <md-divider ></md-divider>
+</md-list>
+
+<div>

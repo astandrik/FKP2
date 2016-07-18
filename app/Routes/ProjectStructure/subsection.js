@@ -34,7 +34,7 @@ var entity = {
   url: '/subsection/:subsectionId',
   views: {
     'projectInfo@home.projectStructure': {
-      templateUrl: 'app/Project/card/subsection-card.html',
+      templateUrl: 'app/Routes/ProjectStructure/card/subsection-card.html',
       controller: function controller($scope, subsection, section, $interpolate) {
         $scope.subsection = _.cloneDeep(subsection);
         $scope.section = section;

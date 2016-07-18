@@ -32,8 +32,11 @@ angular.module('router', []).provider('$router', function () {
       'home.events.card.section': routes.eventsSection,
       'home.financeStructure': routes.financeStructure,
       'home.financeStructure.section': routes.financeSection,
-      'home.financeStructure.section.subsection': routes.financeSubSection
-
+      'home.financeStructure.section.subsection': routes.financeSubSection,
+      'home.documents': routes.documents,
+      'home.orderers': routes.orderers,
+      'home.orderers.card': routes.orderersCard,
+      'home.orderers.card.section': routes.orderersCardSection
     };
     return this;
   }();

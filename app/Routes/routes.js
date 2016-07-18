@@ -16,7 +16,11 @@ module.exports = {
   financeStructure: require('./FinanceStructure/financeStructure.js'),
   financeSection: require('./FinanceStructure/financeSection.js'),
   financeSubSection: require('./FinanceStructure/financeSubsection'),
+  orderers: require('./OrderersStructure/orderers.js'),
+  orderersCard: require('./OrderersStructure/card.js'),
+  orderersCardSection: require('./OrderersStructure/cardSection.js'),
   events: require('./Events/events.js'),
   eventsCard: require('./Events/card.js'),
-  eventsSection: require('./Events/eventsSection.js')
+  eventsSection: require('./Events/eventsSection.js'),
+  documents: require('./Documents/documents.js')
 };

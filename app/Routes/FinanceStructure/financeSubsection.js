@@ -36,7 +36,7 @@ var entity = {
   url: '/subsection/:subsectionId',
   views: {
       'content@': {
-        templateUrl: 'app/Finance/finance.html',
+        templateUrl: 'app/Routes/FinanceStructure/finance.html',
       controller: function controller($scope, financeSubsection, financeSection, $interpolate,treeData,$projectsDict) {
         $scope.budgetShown=true;
         $scope.showBudget = () => $scope.budgetShown=true;

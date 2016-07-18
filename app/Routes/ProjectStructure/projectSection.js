@@ -5,7 +5,7 @@ var section = {
   views: {
     'projectSection': {
       templateUrl: function templateUrl($stateParams) {
-        return 'app/Project/card/sections/' + $stateParams.sectionId + $stateParams.type + '.html';
+        return 'app/Routes/ProjectStructure/card/sections/' + $stateParams.sectionId + $stateParams.type + '.html';
       },
       controller: function controller($stateParams, $scope, $interpolate) {
         var state = $stateParams;

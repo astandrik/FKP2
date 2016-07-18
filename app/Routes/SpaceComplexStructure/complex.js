@@ -16,7 +16,7 @@ var entity = {
   url: '/complex/:complexId',
   views: {
     'complexInfo@home.spaceComplexStructure': {
-      templateUrl: 'app/SpaceComplex/card/complex-card.html',
+      templateUrl: 'app/Routes/SpaceComplexStructure/card/complex-card.html',
       controller: function controller($scope, treeData, $interpolate, complex, $stateParams, projectTreeData, $complexDict) {
         var id = $stateParams.sectionId;
         var subid = $stateParams.subsectionId;

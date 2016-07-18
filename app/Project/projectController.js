@@ -100,5 +100,8 @@ function ProjectController($scope, dialogs, $projectFactory, $state, $timeout, t
 $scope.search = function() {
    searchTree(treeData.data ,$scope.searchString,  $scope.treeParams);
 }
+var initialState = 'home.events';
+$scope.initialHref = window.getHref(initialState);
+
 }
 module.exports = ProjectController;

@@ -1,0 +1,14 @@
+<div ng-show='event.project.length==0'>
+  <div class="relatedProjects-text">
+    <p>Данный раздел еще находится в разработке. Приносим свои извинения.</p>
+    <p>Здесь будет отображаться список проектов, непосредственно связанных с данным событием.</p>
+    <p> На карточку каждого из связанных проектов можно будет перейти с помощью гиперссылки. </p>
+  </div>
+</div>
+<div ng-show='event.project.length > 0'>
+  <ul class="list-group">
+    <li class="list-group-item" ng-repeat="proj in event.project | orderBy: 'cipher'"><a ng-href="{{proj.type_id == 3 ? '#/FKP/ProjectStructure/section/' +
+      proj.type_id + '/project/' + proj.id : '#/FKP/ProjectStructure/section/' +
+      proj.type_id + '/subsection/' +proj.subsection_id + '/project/' + proj.id + '/general' }}">{{proj.cipher ? proj.cipher : proj.name ? proj.name : proj.id}}</a></li>
+    </ul>
+</div>

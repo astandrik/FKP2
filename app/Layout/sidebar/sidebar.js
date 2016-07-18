@@ -17,7 +17,8 @@ var directories = [
   },
   {
     name: 'Заказчики',
-    icon: 'people'
+    icon: 'people',
+    state: 'home.orderers'
   },
   {
     name: 'Планирование',
@@ -25,7 +26,8 @@ var directories = [
   },
   {
     name: 'Документация',
-    icon: 'insert_drive_file'
+    icon: 'insert_drive_file',
+    state: 'home.documents'
   },
   {
     name: 'События',

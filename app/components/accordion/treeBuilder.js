@@ -14,7 +14,11 @@ function buildTree() {
       row += '"';
       special += row + ' ';
     }
-    return '<li><a layout="row" layout-align="space-between center" ' + (special ? special : '') + ' class="toggle ' + (!hasChildren ? 'fullWidth' : '') + '" id="' + elemId + '" href="' + element.href + '"><span>' + element.name + (hasChildren ? '</span><ng-md-icon class="toggleOpen" size=30 layout="column" layout-align="center center" icon="keyboard_arrow_right"></ng-md-icon></a>' : '') + nested + '</li>';
+    return '<li><a layout="row" layout-align="space-between center" ' + (special ? special : '') +
+     ' class="toggle ' + (!hasChildren ? 'fullWidth' : '') + '" id="' + elemId + '" href="'
+      + element.href + '"><span>' + element.name
+      + (hasChildren ? '</span><ng-md-icon class="toggleOpen" size=30 layout="column" layout-align="center center" icon="keyboard_arrow_right"></ng-md-icon></a>' : '') + (nested ? nested : '')
+      + '</li>';
   };
   this.buildNode = function (root, paramList, specialDict) {
     var inner = '';

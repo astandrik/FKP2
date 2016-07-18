@@ -5,7 +5,7 @@ function C() {
     scope: {
       data: '=',
       timespanSelected: '&',
-      eventClicked: '&'
+      eventChosen: '&' 
    },
     templateUrl: 'app/components/calendar/calendar.html',
     controller: function controller($scope) {
@@ -23,7 +23,7 @@ function C() {
       $scope.vm.events = calendarData;
       $scope.vm.isCellOpen = true;
       $scope.vm.eventClicked = function(event) {
-        $scope.eventClicked(event);
+        $scope.eventChosen()(event);
       }
       $scope.vm.toggle = function ($event, field, event) {
         $event.preventDefault();

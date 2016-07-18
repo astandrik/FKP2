@@ -5,7 +5,7 @@ var section = {
   views: {
     'complexSection': {
       templateUrl: function templateUrl($stateParams) {
-        return 'app/SpaceComplex/card/sections/' + $stateParams.type + '.html';
+        return 'app/Routes/SpaceComplexStructure/card/sections/' + $stateParams.type + '.html';
       },
       controller: function controller($stateParams, $scope, $interpolate) {
         var state = $stateParams;
@@ -18,6 +18,9 @@ var section = {
           break;
         case 'relatedProjects':
           $scope.sectionName = 'Связанные проекты';
+          break;
+        case 'events':
+          $scope.sectionName = 'События';
           break;
         default:
           $scope.sectionName = 'Общие сведения';

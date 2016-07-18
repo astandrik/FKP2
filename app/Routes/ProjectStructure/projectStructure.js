@@ -4,7 +4,7 @@ var structure = {
   url: '/ProjectStructure',
   views: {
     'content@': {
-      templateUrl: 'app/Project/project-page.html',
+      templateUrl: 'app/Routes/ProjectStructure/project-page.html',
       controller: 'projectController',
       resolve: {
         treeData: function treeData($accordion, $projectsDict) {

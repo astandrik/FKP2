@@ -61,6 +61,18 @@ var crumbs = {
     label: '{{event.title}}',
     toolTip: '{{event.title}}',
     dependencies: []
+  },
+
+  orderer: {
+    label: '{{orderer.name}}',
+    toolTip: '{{orderer.name}}',
+    dependencies: []
+  },
+
+  orderersSection: {
+    label: '{{sectionName}}',
+    toolTip: '{{sectionName}}',
+    dependencies: ['orderer']
   }
 };
 function interpolateTooltips(interpolate, type, scope) {

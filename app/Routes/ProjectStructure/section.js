@@ -33,7 +33,7 @@ var entity = {
   url: '/section/:sectionId',
   views: {
     'projectInfo@home.projectStructure': {
-      templateUrl: 'app/Project/card/section-card.html',
+      templateUrl: 'app/Routes/ProjectStructure/card/section-card.html',
       controller: function controller($scope, section, $interpolate) {
         $scope.section = _.cloneDeep(section);
         prepareSection($scope.section.finance);

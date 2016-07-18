@@ -8,6 +8,8 @@ require('./core/dialogs/dialogs.js');
 require('./core/errorHandler/errors.js');
 require('./core/stateManager.js');
 require('./Events/events.js');
+require('./Documents/documents.js');
+require('./Orderers/orderers.js');
 var layout = require('./Layout/layout.js');
 var components = require('./components/components.js');
 var icons = require('./components/Icons/icons.js');
@@ -29,8 +31,10 @@ var app = angular.module('app', [
   'project',
   'complex',
   'design',
+  'documents',
 'stateManager',
 'events',
+'orderers',
 require('angular-ui-bootstrap')
 ]);
 app.config([
@@ -58,8 +62,8 @@ app.config([
 ]);
 app.run(function ($rootScope, $state, $cacheRunner, $errorDialogService, $errorHandler) {
   $cacheRunner.setOptions({
-    checkRate: 2000,
-    cacheRate: 500
+    checkRate: 4000,
+    cacheRate: 1000
   });
   $cacheRunner.startCacheRunner();
   $cacheRunner.runCacheProcess();
