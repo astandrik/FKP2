@@ -1,0 +1,30 @@
+
+
+<div class="flex layout-row autocomplete">
+    <md-autocomplete ng-class="{'text-gray' : !catalog.parent[catalog.boundTo]}" md-selected-item="catalog.parent[catalog.boundTo]"
+                     md-items="item in getData()"
+                     md-item-text="item.Value"
+                     md-selected-item-change="toggleDeleteLabel()"
+                     md-floating-label={{catalog.title}}
+                     md-min-length="0"
+                     md-search-text="query"
+                     placeholder="Name"
+                     md-select-on-match="true"
+                     md-top-index="topIndex"
+                     md-no-cache="true"
+                     md-is-field-required="catalog.isRequired">
+        <md-item-template>
+            <span md-highlight-text="query" md-highlight-flags="^i">{{item.Value}}</span>
+            <span class="sr-only">{{item.Id}}</span>
+        </md-item-template>
+        <md-not-found>
+            Извините, по запросу ничего не найдено.
+        </md-not-found>
+    </md-autocomplete>
+</div>
+
+<script type="text/javascript">
+    function focusClosestInput(e) {
+        $(e.currentTarget).parent().find('md-autocomplete').focus();
+    }
+</script>

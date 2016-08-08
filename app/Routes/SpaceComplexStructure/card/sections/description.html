@@ -28,39 +28,4 @@
   </tbody>
 </table></div>
   </div>
-
-  <div layout="row">
-    <div flex="20" class="space-header-name">Документы</div>
-    <div flex="80" class='space-documents'>
-      <div  ng-show="complexFull.documents.length==0">
-        <div class="relatedProjects-text">
-            <p> Для этого проекта нет документов.</p>
-            <p>Если нашли ошибку - свяжитесь с разработчиками.</p>
-        </div>
-      </div>
-      <div  ng-show="complexFull.documents.length > 0">
-        <div layout="row">
-          <div flex="80" class="space-info-name">
-            <table class="table">
-              <thead>
-                  <tr>
-                    <th>Название</th>
-                    <th>Тип</th>
-                    <th>Дата принятия</th>
-                  </tr>
-              </thead>
-              <tbody>
-                <tr ng-repeat="m in complexFull.documents">
-                  <td > <a ng-href="{{m.url}}"> {{m.name}}</a></td>
-                  <td >{{m.type.name}}</td>
-                  <td >{{m.date.toString().split(' ')[0].split('-').reverse().join('.')}}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-   </div>
-  </div>
-
 </md-content>

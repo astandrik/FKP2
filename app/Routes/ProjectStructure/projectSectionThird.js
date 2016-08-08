@@ -16,6 +16,9 @@ var section = {
         case 'results':
           $scope.sectionName = 'Результаты';
           break;
+        case 'documents':
+          $scope.sectionName = 'Документы';
+          break;
         case 'finance':
           $scope.sectionName = 'Финансирование';
           break;

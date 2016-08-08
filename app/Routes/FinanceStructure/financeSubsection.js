@@ -1,6 +1,14 @@
 'use strict';
 var breadcrumbs = require('../breadcrumbs.js');
 
+
+function makeIdList(arr) {
+  return arr.reduce((sum,current) => {
+    sum.push(current.id);
+    return sum;
+  },[]).join();
+}
+
 var helpers = require('./financeStructureHelper');
 function prepareSubSection(finance) {
   for (var e in finance) {
@@ -11,18 +19,14 @@ function prepareSubSection(finance) {
     }
   }
 }
-function getFinanceTables(finance) {
+function getFinanceTables(children) {
   var projectsBudget = [];
   var projectsOwn = [];
-  for (var e in finance) {
-    var projectBudget = { 'Название': e };
-    var projectOwn = { 'Название': e };
-    for (var y in finance[e]['Финансирование за счет бюджетных средств']) {
-      projectBudget[y] = finance[e]['Финансирование за счет бюджетных средств'][y];
-    }
-    for (var y in finance[e]['Финансирование из собственных средств']) {
-      projectOwn[y] = finance[e]['Финансирование из собственных средств'][y];
-    }
+  for (var i = 0; i < children.length; i++) {
+    var projectBudget = { 'Название': children[i].name };
+    var projectOwn = { 'Название': children[i].name };
+    projectBudget =  $.extend(projectBudget,children[i].finance['Финансирование за счет бюджетных средств']);
+    projectOwn =  $.extend(projectOwn,children[i].finance['Финансирование за счет бюджетных средств']);
     projectsBudget.push(projectBudget);
     projectsOwn.push(projectOwn);
   }
@@ -37,18 +41,20 @@ var entity = {
   views: {
       'content@': {
         templateUrl: 'app/Routes/FinanceStructure/finance.html',
-      controller: function controller($scope, financeSubsection, financeSection, $interpolate,treeData,$projectsDict) {
+      controller: function controller($scope, financeSubSections,financeSections, $interpolate,   $financeFactory,$projectsDict, projectsCatalog,sectionsCatalog, subSectionsCatalog, $state, events) {
+        $financeFactory.makeFilters($scope,projectsCatalog, subSectionsCatalog, sectionsCatalog);
+
         $scope.budgetShown=true;
         $scope.showBudget = () => $scope.budgetShown=true;
         $scope.showOwn = () => $scope.budgetShown=false;
-
-        $scope.subsection = _.cloneDeep(financeSubsection);
-        $scope.section = financeSection;
-        prepareSubSection($scope.subsection.finance);
-        var tables = getFinanceTables($scope.subsection.finance);
+        $scope.currName = financeSubSections.name;
+        $scope.parentCurrName = financeSections.name;
+        $scope.sections = _.cloneDeep(financeSubSections.children);
+        $scope.sections.map((item) => {prepareSubSection(item.finance); return item; });
+        var tables = getFinanceTables($scope.sections);
         $scope.financeBudget = tables.Budget;
         $scope.financeOwn = tables.Own;
-        $scope.finance = tables.Budget;
+
         $scope.basename = 'Название';
         breadcrumbs.init($interpolate, 'financeSubSection', $scope);
       }
@@ -56,10 +62,28 @@ var entity = {
   },
   ncyBreadcrumb: breadcrumbs.crumbs.financeSubSection,
   resolve: {
-    financeSubsection: function subsection($http, $stateParams, $subsectionFactory) {
-      var id = $stateParams.subsectionId;
-      return $subsectionFactory.getById(id).then(function (data) {
-        return data.data.data;
+    financeSubSections: function section($http, $stateParams, $financeFactory,$projectsDict) {
+      var subsectionId = $stateParams.subsectionId;
+      var from = $stateParams.from;
+      var to = $stateParams.to;
+      return $financeFactory.getListFilter({from: from, to: to, subsection_id: subsectionId}).then(function (data) {
+        helpers.appendHrefs(data, 'home.financeStructure.section', $projectsDict);
+        return data.data.data[0];
+      });
+    },
+    projectsCatalog: function($catalogs) {
+      return $catalogs.getByType('project').then((data) => {
+        return data.data.data.map((item)=> {return  {name: item[0].cipher || item[0].name, ticked: false, id: item[1]}});
+      });
+    },
+    sectionsCatalog: function($catalogs) {
+      return $catalogs.getByType('section').then((data) => {
+        return data.data.data.map((item)=> {return  {name: item[0].cipher || item[0].name, ticked: false, id: item[1]}});
+      });
+    },
+    subSectionsCatalog: function($catalogs) {
+      return $catalogs.getByType('subsection').then((data) => {
+        return data.data.data.map((item)=> {return  {name: item[0].cipher || item[0].name, ticked: false, id: item[1]}});
       });
     }
   }

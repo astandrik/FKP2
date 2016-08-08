@@ -5,13 +5,19 @@ require('./tabstrip/tabstrip.js');
 require('./charts/charts.js');
 require('./timeLines/timeLines.js');
 require('./calendar/calendar.js');
+require('./dateInput/dateInput.js');
+require('./autocomplete/autocomplete.js');
+require('./catalogs/catalogs.js');
 var currentModule = angular.module('components', [
   'accordion',
   'dataTable',
   'tabstrip',
   'charts',
   'timeLineModule',
-  'calendar'
+  'calendar',
+  'datePicker',
+  'autoselect',
+  'catalogs'
 ]);
 var accordionDirective = require('./accordion/accordion.js');
 var popupController = require('./popup/popupController.js');

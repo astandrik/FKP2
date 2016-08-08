@@ -1,0 +1,28 @@
+<div ng-show="project.documents.length==0">
+  <div class="relatedProjects-text">
+      <p> Для этого проекта нет документов.</p>
+      <p>Если нашли ошибку - свяжитесь с разработчиками.</p>
+  </div>
+</div>
+<div ng-show="project.documents.length > 0">
+  <div layout="row">
+    <div flex="80" class="space-info-name">
+      <table class="table">
+        <thead>
+            <tr>
+              <th>Название</th>
+              <th>Тип</th>
+              <th>Дата принятия</th>
+            </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="m in project.documents">
+            <td class="complexTableAlign"> <a ng-href="{{m.url}}"> {{m.name}}</a></td>
+            <td class="complexTableAlign">{{m.type.name}}</td>
+            <td  class="complexTableAlign">{{m.date.toString().split(' ')[0].split('-').reverse().join('.')}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

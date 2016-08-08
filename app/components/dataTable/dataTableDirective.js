@@ -69,8 +69,6 @@ function DTD() {
     restrict: 'E',
     template: '<div ui-grid="gridOptions" ui-grid-pinning ng-style="{\'min-height\': minHeight, height: gridHeight}" class="grid financeGrid"></div>',
     controller: function controller($scope, $filter, $projectsDict, $timeout) {
-
-
       toggleHover($timeout);
       var minRowsToShow = 4, rowHeight = 100;
       $scope.minHeight = minRowsToShow > $scope.data.length ? ($scope.data.length * rowHeight + 30) + 'px' : (minRowsToShow * rowHeight + 30) + 'px';
@@ -140,12 +138,12 @@ function DTD() {
                 <div ng-if="grid.appScope.projectDict[row.entity[col.field]].href.indexOf(\''+$scope.linkBlocker+'\') > -1" class="ui-grid-cell-contents pinned-cell">{{row.entity[col.field]}}</div>';
               } else {
                 ctmplt = '<a cacheType={{grid.appScope.projectDict[row.entity[col.field]] ? grid.appScope.projectDict[row.entity[col.field]].cacheType : null}} elementId={{grid.appScope.projectDict[row.entity[col.field]] ? grid.appScope.projectDict[row.entity[col.field]].elementId : null}} ng-href={{grid.appScope.projectDict[row.entity[col.field]].href}}><div class="ui-grid-cell-contents pinned-cell">{{row.entity[col.field]}}</div></a>';
-              } 
+              }
             }
             if (w < 1370) {
               $scope.columns.push({
                 field: item,
-                minWidth: 100,
+                minWidth: 200,
                 maxWidth: 250,
                 cellTemplate: ctmplt,
                 pinnedLeft:true,
@@ -165,6 +163,7 @@ function DTD() {
             $scope.columns.push({
               field: item,
               minWidth: 100,
+              enablePinning: false,
               cellTemplate: '<div class="ui-grid-cell-contents" style="display: flex; justify-content: center"><div style="align-self: center;">{{row.entity[col.field]}}</div></div>',
               sortingAlgorithm: function(a, b, rowA, rowB, direction) {
                 return numberSorting(a,b,direction);
@@ -180,9 +179,10 @@ function DTD() {
         onRegisterApi: function( gridApi ) {
           $scope.gridApi = gridApi;
           $timeout(()=>{
-            if($scope.gridData.length <= $scope.threshold) { adjustHeights($timeout); $('.grid').addClass('dynamicGrid'); } else {$('.grid').removeClass('dynamicGrid');}
+            if($scope.gridData.length <= $scope.threshold &&  $(window).width() > 1370) { adjustHeights($timeout); $('.grid').addClass('dynamicGrid'); } else {$('.grid').removeClass('dynamicGrid');}
             $timeout(()=> {
-              $('.grid').fadeIn('swing',()=> $('.grid').addClass('shown') )
+              $('.grid').fadeIn('swing',()=> $('.grid').addClass('shown') );
+               $scope.gridApi.core.handleWindowResize();
             },200);
           },500);
         },

@@ -1,17 +1,125 @@
-<div layout="row"      layout-align="space-between stretch">
-<div ui-grid="gridOptions" class="documentsGrid" style="width:80%; height:100%; margin-top:100px;"></div>
+<div style="display:flex; flex-direction: row;" class="grow hide-panel" role="group" aria-label="...">
+  <div style="display:flex; flex-direction: column;flex:10" ng-show="filtersDisplayed">
+    <h3 style="text-align: center">Выборка по времени</h3>
+    <div style="display:flex; flex-direction: row" class="document-fields">
+      <div style="flex:10;display:flex;flex-direction:column">
+          <label>Дата начала</label>
+          <date-input model="filter.startDate"></date-input>
+      </div>
+      <div style="flex:10;display:flex;flex-direction:column">
+          <label>Дата окончания</label>
+          <date-input model="filter.endDate"></date-input>
+      </div>
+       <autocomplete style="flex:10" catalog="chooseStartEvent"></autocomplete>
+       <autocomplete style="flex:10" catalog="chooseEndEvent"></autocomplete>
+    </div>
+  </div>
+  <div style="display:flex; flex-direction: column; flex:5;" ng-show="filtersDisplayed">
+    <h3 style="text-align: center" class="chooser-button">Выборка {{filterType}} <ng-md-icon size=30 icon="add_circle" ng-click="slidePanel()" style="align-self:flex-end"></ng-md-icon></h3>
 
-<md-list flex class="news-list md-whiteframe-10dp">
-        <md-subheader class="md-whiteframe-4dp">Новости</md-subheader>
-        <div class='news-scroll'>
-        <md-list-item class="md-3-line  md-whiteframe-4dp" ng-repeat="n in news" ng-click="null">
-          <div class="md-list-item-text" layout="column">
-            <h3>{{ n.name }}</h3>
-            <h4>от {{ n.date }}</h4>
+    <div class="slidePanel" style="flex-direction: column;justify-content: flex-start;">
+      <h3 style="text-align:center;border-bottom: 1px solid black;padding-bottom: 10px;"> Срез данных </h3>
+      <div style="display:flex; flex-direction:column; justify-content: flex-start; flex:1">
+        <md-radio-group class="horizontal-radio" ng-model="radioTypeSelect" style="margin-top:20px">
+          <md-radio-button value="directories" class="md-primary">  Разделы </md-radio-button>
+          <md-radio-button value="directions"  class="md-primary"> Направления </md-radio-button>
+          <md-radio-button value="projects"  class="md-primary"> Проекты </md-radio-button>
+        </md-radio-group>
+        <div>
+          <div class="fullButton" ng-show="radioTypeSelect=='projects'"
+          isteven-multi-select
+          input-model="projects"
+          output-model="filter.projectsOutput"
+          button-label="name"
+          item-label="name"
+          tick-property="ticked"
+          translation="translationProject"
+          output-properties="name id"
+          style='width:100%'>
           </div>
-        </md-list-item>
+          <div class="fullButton" ng-show="radioTypeSelect=='directions'"
+          isteven-multi-select
+          input-model="directions"
+          output-model="filter.directionsOutput"
+          button-label="name"
+          item-label="name"
+          tick-property="ticked"
+          translation="translationDirection"
+            output-properties="name id"
+          style='width:100%'>
+          </div>
+          <div class="fullButton" ng-show="radioTypeSelect=='directories'"
+          isteven-multi-select
+          input-model="directories"
+          output-model="filter.directoriesOutput"
+          button-label="name"
+          item-label="name"
+          tick-property="ticked"
+          translation="translationDirectory"
+            output-properties="name id"
+          style='width:100%'>
+          </div>
         </div>
-        <md-divider ></md-divider>
-</md-list>
+        <div> </div>
+     </div>
+    </div>
+    <div class="pageButtons" ng-show="!slidePanelShown">
+      <div class="fullButton" ng-show="radioTypeSelect=='projects'"
+      isteven-multi-select
+      input-model="projects"
+      output-model="filter.projectsOutput"
+      button-label="name"
+      item-label="name"
+      tick-property="ticked"
+      translation="translationProject"
+        output-properties="name id"
+      style='width:100%'>
+      </div>
+      <div class="fullButton" ng-show="radioTypeSelect=='directions'"
+      isteven-multi-select
+      input-model="directions"
+      output-model="filter.directionsOutput"
+      button-label="name"
+      item-label="name"
+      tick-property="ticked"
+      translation="translationDirection"
+        output-properties="name id"
+      style='width:100%'>
+      </div>
+      <div class="fullButton" ng-show="radioTypeSelect=='directories'"
+      isteven-multi-select
+      input-model="directories"
+      output-model="filter.directoriesOutput"
+      button-label="name"
+      item-label="name"
+      tick-property="ticked"
+      translation="translationDirectory"
+        output-properties="name id"
+      style='width:100%'>
+      </div>
+    </div>
+  </div>
 
-<div>
+  <div style="display:flex;flex-direction:column; justify-content:space-around;flex:1">
+    <button style="align-self:flex-end" type="button" ng-class="{active: budgetShown}" ng-click="showFilters()" class="btn btn-default button-budget">Фильтры</button>
+    <button style="align-self:flex-end" type="button" ng-class="{active: budgetShown}" ng-click="applyFilters()" class="btn btn-default button-budget" ng-show="filtersDisplayed">Применить</button>
+    <button style="align-self:flex-end" type="button" ng-class="{active: budgetShown}" ng-click="clearFilters()" class="btn btn-default button-budget" ng-show="filtersDisplayed">Сбросить</button>
+  </div>
+</div>
+<div layout="row" layout-align="space-between stretch" style="margin-top:20px">
+  <div ui-grid="gridOptions" class="documentsGrid" style="width:80%; height:100%;"></div>
+
+  <md-list flex class="news-list md-whiteframe-10dp">
+          <md-subheader class="md-whiteframe-4dp">Новости</md-subheader>
+          <div class='news-scroll'>
+          <md-list-item class="md-3-line  md-whiteframe-4dp" ng-repeat="n in news" ng-click="null">
+            <div class="md-list-item-text" layout="column">
+              <h3>{{ n.name }}</h3>
+              <h4>от {{ n.date }}</h4>
+            </div>
+          </md-list-item>
+          </div>
+          <md-divider ></md-divider>
+  </md-list>
+
+</div>

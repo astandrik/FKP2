@@ -47,13 +47,13 @@ var crumbs = {
     dependencies: []
   },
   financeSection: {
-    label: '{{sectionCutFunction(section.name)}}',
-    toolTip: '{{section.name}}',
+    label: '{{sectionCutFunction(parentCurrName)}}',
+    toolTip: '{{currName}}',
     dependencies: []
   },
   financeSubSection: {
-    label: '{{subsectionCutFunction(subsection.name)}}',
-    toolTip: '{{subsection.name}}',
+    label: '{{currName}}',
+    toolTip: '{{currName}}',
     dependencies: ['financeSection']
   },
 

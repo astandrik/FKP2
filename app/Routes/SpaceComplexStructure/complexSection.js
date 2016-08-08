@@ -16,6 +16,9 @@ var section = {
         case 'description':
           $scope.sectionName = 'Описание';
           break;
+        case 'documents':
+          $scope.sectionName = 'Документы';
+          break;
         case 'relatedProjects':
           $scope.sectionName = 'Связанные проекты';
           break;

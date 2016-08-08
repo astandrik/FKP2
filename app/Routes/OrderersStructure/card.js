@@ -23,14 +23,14 @@ module.exports = {
     tabstripData: function tabstripData($stateParams) {
         var tabs = [];
         tabs.push({
-          name: 'Общие сведения',
-          state: 'orderersSection',
-          type: 'general'
-        });
-        tabs.push({
           name: 'Контактные данные',
           state: 'orderersSection',
           type: 'contacts'
+        });
+        tabs.push({
+          name: 'Общие сведения',
+          state: 'orderersSection',
+          type: 'general'
         });
         tabs.push({
           name: 'Связанные проекты',

@@ -8,6 +8,45 @@
     white-space: normal;
   }
 }
+
+.document-fields {
+  &>div {
+    margin: 0 20px;
+  }
+}
+
+md-autocomplete[md-floating-label] {
+  width: 100%;
+}
+
+.checkboxLayer {
+  max-width: 200px;
+  max-height: 400px;
+  overflow-y: scroll;
+}
+
+.grow {
+  -moz-transition: height .5s;
+  -ms-transition: height .5s;
+  -o-transition: height .5s;
+  -webkit-transition: height .5s;
+  transition: height .5s;
+  height:150px;
+}
+
+.grow.hide-panel {
+  height:40px;
+}
+
+.slidePanel {
+  display: none;
+  min-height:400px;
+  width:25vw;
+  z-index: 999;
+  background-color: white;
+  border: 1px rgb(212, 212, 212) solid;
+}
+
 .md-subheader {
     color: #343434;
     font-size: 18px!important;
@@ -23,8 +62,32 @@
 .news-list{
   text-align:center;
   padding: 0px 0px 8px 15px!important;
-  margin-top: 100px;
 }
 .news-list-button{
   border:outset;
+}
+
+.fullButton {
+  .multiSelect>button {
+    width:100%;
+    max-height: 270px;
+    overflow-y: scroll;
+  }
+}
+
+.pageButtons {
+  .multiSelect>button {
+    width:100%;
+    max-height: 72px;
+    overflow-y: scroll;
+  }
+}
+
+.horizontal-radio {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  md-radio-button {
+    margin-top:0!important;
+  }
 }

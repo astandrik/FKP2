@@ -42,36 +42,36 @@ function prepareFinance(finance, baseName) {
     sumOwnBudget: sumOwnBudget
   };
 }
-function traverseTree(data, initialHref, parentId, parentType, $projectsDict) {
+function traverseTree(data, initialHref, parentId, parentType, $projectsDict, params) {
   data.forEach(function (node) {
     if (node.object_type != parentType) {
       switch (node.object_type) {
       case 2:
-        node.href = initialHref + '/section/' + node.id;
+        node.href = initialHref + (params ?  params : '') + '/section/' + node.id;
         node.cacheType = 'section';
         break;
       case 1:
-        node.href = initialHref + '/subsection/' + node.id;
+        node.href = initialHref+ (params ?  params : '')+ '/subsection/' + node.id;
         node.cacheType = 'subsection';
         break;
       case 0:
-        node.href = initialHref + '/project/' + node.id;
+        node.href = initialHref + (params ? params : '') + '/project/' + node.id;
         node.cacheType = 'project';
         break;
       }
     } else {
-      node.href = initialHref.replace(new RegExp('/' + parentId + '$'), '/' + node.id);
+      node.href = initialHref.replace(new RegExp('/' + parentId + '$'), (params ? params : '')+ '/' + node.id);
       node.cacheType = parentType == 0 ? 'project' : parentType == 1 ? 'subsection' : parentType == 2 ? 'section' : 'project';
     }
     node.elementId = node.id;
     $projectsDict.dict[node.name] = node;
-    traverseTree(node.children, node.href, node.id, node.object_type, $projectsDict);
+    traverseTree(node.children, node.href, node.id, node.object_type, $projectsDict, params);
   });
 }
-function appendHrefs(data, initialState, $projectsDict) {
-  var initialHref = window.getHref(initialState);
+function appendHrefs(data, initialState, $projectsDict, params) {
+  var initialHref = window.getHref(initialState).split('?')[0];
   var curData = data.data.data;
-  traverseTree(curData, initialHref, null, null, $projectsDict);
+  traverseTree(curData, initialHref, null, null, $projectsDict, params);
 }
 module.exports = {
   prepareValues: projectMillionsFunction,

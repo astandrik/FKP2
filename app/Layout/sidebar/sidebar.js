@@ -22,7 +22,9 @@ var directories = [
   },
   {
     name: 'Планирование',
-    icon: 'access_time'
+    icon: 'access_time',
+    state: 'home.plan',
+    isNonActive: true
   },
   {
     name: 'Документация',

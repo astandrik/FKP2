@@ -1,7 +1,110 @@
-<div class="btn-group" role="group" aria-label="...">
-  <button type="button" ng-class="{active: budgetShown}" ng-click="showBudget()" class="btn btn-default button-budget">Бюджет</button>
-  <button type="button" ng-class="{active: !budgetShown}" ng-click="showOwn()" class="btn btn-default button-own">Внебюджет</button>
+<div style="display:flex; flex-direction: row;" class="grow hide-panel financePage"  role="group" aria-label="...">
+  <div class="btn-group" style="align-self:flex-end;margin-bottom: 13px;" role="group" aria-label="...">
+    <button type="button" ng-class="{active: budgetShown}" ng-click="showBudget()" class="btn btn-default button-budget">Бюджет</button>
+    <button type="button" ng-class="{active: !budgetShown}" ng-click="showOwn()" class="btn btn-default button-own">Внебюджет</button>
+  </div>
+  <div style="display:flex; flex-direction: column;flex:10" ng-show="filtersDisplayed">
+    <h3 style="text-align: center">Выборка по времени</h3>
+    <div style="display:flex; flex-direction: row" class="document-fields">
+      <div style="flex:10;display:flex;flex-direction:column">
+          <label>Дата начала</label>
+          <date-input model="filter.startDate"></date-input>
+      </div>
+      <div style="flex:10;display:flex;flex-direction:column">
+          <label>Дата окончания</label>
+          <date-input model="filter.endDate"></date-input>
+      </div>
+       <autocomplete style="flex:10" catalog="chooseStartEvent"></autocomplete>
+       <autocomplete style="flex:10" catalog="chooseEndEvent"></autocomplete>
+    </div>
+  </div>
+  <div style="display:flex; flex-direction: column; flex:5;" ng-show="filtersDisplayed">
+    <h3 style="text-align: center" class="chooser-button">Выборка {{filterType}} <ng-md-icon size=30 icon="add_circle" ng-click="slidePanel()" style="align-self:flex-end"></ng-md-icon></h3>
+
+    <div class="slidePanel" style="flex-direction: column;justify-content: flex-start;">
+      <h3 style="text-align:center;border-bottom: 1px solid black;padding-bottom: 10px;"> Срез данных </h3>
+      <div style="display:flex; flex-direction:column; justify-content: flex-start; flex:1">
+        <md-radio-group class="horizontal-radio" ng-model="radioTypeSelect" style="margin-top:20px">
+          <md-radio-button value="directories" class="md-primary">  Разделы </md-radio-button>
+          <md-radio-button value="directions"  class="md-primary"> Направления </md-radio-button>
+          <md-radio-button value="projects"  class="md-primary"> Проекты </md-radio-button>
+        </md-radio-group>
+        <div>
+          <div class="fullButton" ng-show="radioTypeSelect=='projects'"
+          isteven-multi-select
+          input-model="projects"
+          output-model="filter.projectsOutput"
+          button-label="name"
+          item-label="name"
+          tick-property="ticked"
+          translation="translationProject"
+          style='width:100%'>
+          </div>
+          <div class="fullButton" ng-show="radioTypeSelect=='directions'"
+          isteven-multi-select
+          input-model="directions"
+          output-model="filter.directionsOutput"
+          button-label="name"
+          item-label="name"
+          tick-property="ticked"
+          translation="translationDirection"
+          style='width:100%'>
+          </div>
+          <div class="fullButton" ng-show="radioTypeSelect=='directories'"
+          isteven-multi-select
+          input-model="directories"
+          output-model="filter.directoriesOutput"
+          button-label="name"
+          item-label="name"
+          tick-property="ticked"
+          translation="translationDirectory"
+          style='width:100%'>
+          </div>
+        </div>
+        <div> </div>
+     </div>
+    </div>
+    <div class="pageButtons" ng-show="!slidePanelShown">
+      <div class="fullButton" ng-show="radioTypeSelect=='projects'"
+      isteven-multi-select
+      input-model="projects"
+      output-model="filter.projectsOutput"
+      button-label="name"
+      item-label="name"
+      tick-property="ticked"
+      translation="translationProject"
+      style='width:100%'>
+      </div>
+      <div class="fullButton" ng-show="radioTypeSelect=='directions'"
+      isteven-multi-select
+      input-model="directions"
+      output-model="filter.directionsOutput"
+      button-label="name"
+      item-label="name"
+      tick-property="ticked"
+      translation="translationDirection"
+      style='width:100%'>
+      </div>
+      <div class="fullButton" ng-show="radioTypeSelect=='directories'"
+      isteven-multi-select
+      input-model="directories"
+      output-model="filter.directoriesOutput"
+      button-label="name"
+      item-label="name"
+      tick-property="ticked"
+      translation="translationDirectory"
+      style='width:100%'>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column; justify-content:space-around;flex:1">
+    <button style="align-self:flex-end" type="button" ng-class="{active: budgetShown}" ng-click="showFilters()" class="btn btn-default button-budget">Фильтры</button>
+    <button style="align-self:flex-end" type="button" ng-class="{active: budgetShown}" ng-click="applyFilters()" class="btn btn-default button-budget" ng-show="filtersDisplayed">Применить</button>
+    <button style="align-self:flex-end" type="button" ng-class="{active: budgetShown}" ng-click="clearFilters()" class="btn btn-default button-budget" ng-show="filtersDisplayed">Сбросить</button>
+  </div>
 </div>
+
 
 <c-data-table need-all-count="true" ng-if="budgetShown"  grid-height="calc(100vh - 153px)" need-links=true link-blocker=project data="financeBudget" basename="basename" id="table-finance"></c-data-table>
 <c-data-table need-all-count="true" ng-if="!budgetShown"  grid-height="calc(100vh - 153px)" need-links=true link-blocker=project data="financeOwn" basename="basename" id="table-finance"></c-data-table>

@@ -20,7 +20,7 @@ var section = {
           $scope.sectionName = 'Контактные данные';
           break;
         default:
-          $scope.sectionName = 'Общие сведения';
+          $scope.sectionName = 'Контактные данные';
           break;
         }
         breadcrumbs.init($interpolate, 'orderersSection', $scope);

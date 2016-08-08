@@ -30,13 +30,23 @@ angular.module('router', []).provider('$router', function () {
       'home.events': routes.events,
       'home.events.card': routes.eventsCard,
       'home.events.card.section': routes.eventsSection,
+
       'home.financeStructure': routes.financeStructure,
       'home.financeStructure.section': routes.financeSection,
       'home.financeStructure.section.subsection': routes.financeSubSection,
+
+      'home.financeStructure.sections': routes.financeSections,
+      'home.financeStructure.sections.section': routes.financeSectionSubSections,
+      'home.financeStructure.sections.section.subsection': routes.financeSectionSubSectionsProjects,
+      'home.financeStructure.subsections': routes.financeSubSections,
+      'home.financeStructure.subsections.subsection': routes.financeSubSectionsProjects,
+      'home.financeStructure.projects': routes.financeProjects,
+
       'home.documents': routes.documents,
       'home.orderers': routes.orderers,
       'home.orderers.card': routes.orderersCard,
-      'home.orderers.card.section': routes.orderersCardSection
+      'home.orderers.card.section': routes.orderersCardSection,
+      'home.plan': routes.plan
     };
     return this;
   }();

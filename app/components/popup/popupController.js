@@ -5,6 +5,7 @@ module.exports = function ($scope, $uibModalInstance, data) {
   $scope.done = function () {
     $uibModalInstance.close($scope.data);
   };
+  
   // end done
   $scope.close = function () {
     $uibModalInstance.close($scope.data);

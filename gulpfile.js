@@ -40,7 +40,8 @@ gulp.task('vendorsjs', function () {
         'node_modules/angular-i18n/angular-locale_ru.js',
         'external/timeLine/timeline-min.js',
         'node_modules/lodash/lodash.min.js',
-        'node_modules/angular-cache/dist/angular-cache.min.js'
+        'node_modules/angular-cache/dist/angular-cache.min.js',
+        'external/multiselect/isteven-multi-select.js'
       ])
         .pipe(concat('vendors.min.js'))
         .pipe(gulp.dest('dist/libs'));
@@ -66,7 +67,8 @@ gulp.task('vendorscss', function () {
         'node_modules/angular-chart.js/dist/angular-chart.min.css',
         'node_modules/angular-bootstrap-calendar/dist/css/angular-bootstrap-calendar.min.css',
         'external/timeLine/timeline.css',
-        'external/timeLine/timeline-theme.css'
+        'external/timeLine/timeline-theme.css',
+        'external/multiselect/isteven-multi-select.css'
 
       ])
         .pipe(concat('vendors.min.css'))

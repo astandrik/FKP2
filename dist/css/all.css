@@ -1,6 +1,14 @@
 div[ui-view="content"] {
   max-height: 100%;
 }
+body.smallScreen {
+  -moz-transform: scale(0.8, 0.8);
+  /* Moz-browsers */
+  zoom: 0.8;
+  /* Other non-webkit browsers */
+  zoom: 80%;
+  /* Webkit browsers */
+}
 
 .space-header-name {
   padding: 3% 0 0 12.3%;
@@ -15,6 +23,33 @@ div[ui-view="content"] {
 }
 .documentsGrid .ui-grid-cell-contents {
   white-space: normal;
+}
+.document-fields > div {
+  margin: 0 20px;
+}
+md-autocomplete[md-floating-label] {
+  width: 100%;
+}
+.checkboxLayer {
+  max-width: 200px;
+  max-height: 400px;
+  overflow-y: scroll;
+}
+.grow {
+  -webkit-transition: height .5s;
+  transition: height .5s;
+  height: 150px;
+}
+.grow.hide-panel {
+  height: 40px;
+}
+.slidePanel {
+  display: none;
+  min-height: 400px;
+  width: 25vw;
+  z-index: 999;
+  background-color: white;
+  border: 1px #d4d4d4 solid;
 }
 .md-subheader {
   color: #343434;
@@ -31,10 +66,36 @@ div[ui-view="content"] {
 .news-list {
   text-align: center;
   padding: 0px 0px 8px 15px!important;
-  margin-top: 100px;
 }
 .news-list-button {
   border: outset;
+}
+.fullButton .multiSelect > button {
+  width: 100%;
+  max-height: 270px;
+  overflow-y: scroll;
+}
+.pageButtons .multiSelect > button {
+  width: 100%;
+  max-height: 72px;
+  overflow-y: scroll;
+}
+.horizontal-radio {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-justify-content: space-around;
+      -ms-flex-pack: distribute;
+          justify-content: space-around;
+}
+.horizontal-radio md-radio-button {
+  margin-top: 0!important;
 }
 
 #table-finance {
@@ -55,6 +116,20 @@ div[ui-view="content"] {
   width: 113px;
   font-weight: bold!important;
   margin-left: 2px!important;
+}
+[uib-tooltip="Выборка по направлениям"] {
+  pointer-events: none;
+  color: #777;
+}
+[uib-tooltip="Выборка по разделам"] {
+  pointer-events: none;
+  color: #777;
+}
+div.grow.financePage {
+  min-height: 127px;
+}
+div.grow.hide-panel.financePage {
+  min-height: 70px;
 }
 
 .breadcrumb > li + li:before {
@@ -153,10 +228,6 @@ div[ui-view="content"] {
 .main-text {
   font-size: 127%;
   padding: 1.5%;
-}
-
-[ng-bind="day.label"] {
-  pointer-events: none;
 }
 
 @import url('http://fonts.googleapis.com/css?family=Pacifico|Open+Sans:300,400,600');
@@ -282,6 +353,10 @@ div[ui-view="content"] {
 .accordionTree ng-md-icon > svg.show {
   -webkit-transform: rotate(90deg);
           transform: rotate(90deg);
+}
+
+[ng-bind="day.label"] {
+  pointer-events: none;
 }
 
 
@@ -669,6 +744,12 @@ tab-strip {
     font-size: 13px;
   }
 }
+#sidebar-left .nonActive {
+  pointer-events: none;
+}
+#sidebar-left .nonActive ng-md-icon {
+  fill: #CCCCCC;
+}
 
 .events-card {
   height: 500px;
@@ -833,6 +914,14 @@ tab-strip {
   margin-top: 3%;
   margin-left: 22%;
 }
+chart-legend .pie-legend > li {
+  clear: both;
+  height: 20px;
+  float: left;
+}
+chart-legend .pie-legend-text {
+  margin-left: 25px;
+}
 
 .complexCard .complexTableAlign {
   text-align: center;
@@ -902,7 +991,10 @@ tab-strip {
   font-weight: bold;
 }
 .complexCard .space-info-name {
-  padding: 5% 0 0 10%;
+  padding: 5% 0 0 3%;
+  text-align: justify;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 14px;
 }
 .complexCard #table-finance > .grid {
   height: 100px !important;

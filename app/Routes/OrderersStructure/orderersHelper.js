@@ -1,7 +1,7 @@
 'use strict';
 function traverseTree(data, initialHref,$orderersDict) {
   data.forEach(function (node) {
-    node.href = initialHref + '/' + node.id + '/general';
+    node.href = initialHref + '/' + node.id + '/contacts';
     $orderersDict.dict[node.name] = node;
   });
 }

@@ -70,6 +70,11 @@ var entity = {
           state: 'projectSection',
           type: 'results'
         });
+      tabs.push({
+        name: 'Документы', 
+        state: 'projectSection',
+        type: 'documents'
+      });
       }
       tabs.push({
         name: 'Финансирование',

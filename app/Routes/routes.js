@@ -16,11 +16,18 @@ module.exports = {
   financeStructure: require('./FinanceStructure/financeStructure.js'),
   financeSection: require('./FinanceStructure/financeSection.js'),
   financeSubSection: require('./FinanceStructure/financeSubsection'),
+  financeSections: require('./FinanceStructure/financeSections.js'),
+  financeSubSections: require('./FinanceStructure/financeSubsections'),
+  financeProjects: require('./FinanceStructure/financeProjects'),
+  financeSubSectionsProjects: require('./FinanceStructure/financeSubSectionProjects'),
+  financeSectionSubSections: require('./FinanceStructure/financeSectionSubSections'),
+  financeSectionSubSectionsProjects: require('./FinanceStructure/financeSectionSubSectionProjects'),
   orderers: require('./OrderersStructure/orderers.js'),
   orderersCard: require('./OrderersStructure/card.js'),
   orderersCardSection: require('./OrderersStructure/cardSection.js'),
   events: require('./Events/events.js'),
   eventsCard: require('./Events/card.js'),
   eventsSection: require('./Events/eventsSection.js'),
-  documents: require('./Documents/documents.js')
+  documents: require('./Documents/documents.js'),
+  plan: require('./Plan/plan.js')
 };

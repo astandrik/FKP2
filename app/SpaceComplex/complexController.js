@@ -64,6 +64,11 @@ function CC($scope, treeData, dialogs, $timeout, $state, $complexDict) {
       type: 'description'
     },
     {
+      name: 'Документы',
+      state: 'complexSection',
+      type: 'documents'
+    },
+    {
       name: 'Связанные проекты',
       state: 'complexSection',
       type: 'relatedProjects'
