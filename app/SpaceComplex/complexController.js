@@ -52,33 +52,6 @@ function CC($scope, treeData, dialogs, $timeout, $state, $complexDict) {
     'object_type'
   ];
   $scope.specialDict = { type: 'object_type' };
-  $scope.tabstripData = [
-    {
-      name: 'Общие сведения',
-      state: 'complexSection',
-      type: 'general'
-    },
-    {
-      name: 'Описание',
-      state: 'complexSection',
-      type: 'description'
-    },
-    {
-      name: 'Документы',
-      state: 'complexSection',
-      type: 'documents'
-    },
-    {
-      name: 'Связанные проекты',
-      state: 'complexSection',
-      type: 'relatedProjects'
-    },
-    {
-      name: 'События',
-      state: 'complexSection',
-      type: 'events'
-    }
-  ];
   $scope.dict = $complexDict.dict;
   $scope.$on('$viewContentLoaded', function (event) {
     $timeout(function () {
@@ -87,17 +60,12 @@ function CC($scope, treeData, dialogs, $timeout, $state, $complexDict) {
           id: $state.params.complexId,
           object_type: 3
         }, $scope.treeParams);
-      } else if ($state.params.subsectionId) {
-        highlightNode({
-          id: $state.params.subsectionId,
-          object_type: 2
-        }, $scope.treeParams);
       } else if ($state.params.sectionId) {
         highlightNode({
           id: $state.params.sectionId,
-          object_type: 1
+          object_type: 2
         }, $scope.treeParams);
-      } else {
+      }  else {
         highlightNode(-1, []);
       }
     });

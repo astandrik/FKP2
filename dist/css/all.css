@@ -117,19 +117,51 @@ md-autocomplete[md-floating-label] {
   font-weight: bold!important;
   margin-left: 2px!important;
 }
-[uib-tooltip="Выборка по направлениям"] {
-  pointer-events: none;
-  color: #777;
-}
-[uib-tooltip="Выборка по разделам"] {
-  pointer-events: none;
-  color: #777;
-}
 div.grow.financePage {
   min-height: 127px;
 }
 div.grow.hide-panel.financePage {
   min-height: 70px;
+}
+.change-layout-s {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+.change-layout-m {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+@media (max-width: 1600px) {
+  .change-layout-m {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+}
+@media (max-width: 1500px) {
+  .change-layout-s {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
 }
 
 .breadcrumb > li + li:before {
@@ -696,11 +728,32 @@ tab-strip {
   width: 100px;
 }
 
-#sidebar-left {
-  max-width: 10vw!important;
+.hide-panel-button {
+  width: 10vw;
+  height: 22px;
+  position: absolute;
+  z-index: 9999;
+  bottom: 0;
+  text-align: center;
+  font-weight: 600;
 }
-#sidebar-left .md-whiteframe-z2 {
+.hide-panel-button:hover {
+  color: #337ab7;
+  cursor: pointer;
+}
+.show-full.not-shown {
+  display: none;
+}
+.md-whiteframe-z2 {
   box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
+}
+#sidebar-left {
+  -webkit-transition: width 0.5s;
+  transition: width 0.5s;
+  width: 10vw;
+}
+#sidebar-left.closed {
+  width: 85px;
 }
 #sidebar-left .layout-padding > * {
   padding: 6px;
@@ -987,7 +1040,7 @@ chart-legend .pie-legend-text {
   color: black;
 }
 .complexCard .space-header-name {
-  padding: 5% 0 0 12.3%;
+  padding: 5% 0 0 5.3%;
   font-weight: bold;
 }
 .complexCard .space-info-name {

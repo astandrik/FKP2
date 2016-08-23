@@ -19,15 +19,6 @@ margin-left: 2px!important;
 }
 
 
-[uib-tooltip="Выборка по направлениям"] {
-  pointer-events: none;
-  color:  #777;
-}
-[uib-tooltip="Выборка по разделам"] {
-  pointer-events: none;
-  color:  #777;
-}
-
 
   div.grow.financePage {
     min-height: 127px;
@@ -35,3 +26,24 @@ margin-left: 2px!important;
   div.grow.hide-panel.financePage {
     min-height: 70px;
   }
+
+.change-layout-s {
+  display:flex;
+  flex-direction: row
+}
+
+  .change-layout-m {
+    display: flex;
+    flex-direction: row;
+  }
+@media (max-width: 1600px) {
+  .change-layout-m {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 1500px) {
+  .change-layout-s {
+    flex-direction: column
+  }
+}

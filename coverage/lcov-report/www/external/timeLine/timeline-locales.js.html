@@ -1,0 +1,917 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for www\external\timeLine\timeline-locales.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../index.html">all files</a> / <a href="index.html">www/external/timeLine/</a> timeline-locales.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>0/45</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/4</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/0</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>0/45</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285</td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">﻿<span class="cstat-no" title="statement not covered" >if (typeof links === 'undefined') {</span>
+<span class="cstat-no" title="statement not covered" >    links = {};</span>
+<span class="cstat-no" title="statement not covered" >    links.locales = {};</span>
+} else <span class="cstat-no" title="statement not covered" >if (typeof links.locales === 'undefined') {</span>
+<span class="cstat-no" title="statement not covered" >    links.locales = {};</span>
+}
+&nbsp;
+// English ===================================================
+<span class="cstat-no" title="statement not covered" >links.locales['en'] = {</span>
+    'MONTHS': ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+    'MONTHS_SHORT': ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    'DAYS': ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+    'DAYS_SHORT': ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    'ZOOM_IN': "Zoom in",
+    'ZOOM_OUT': "Zoom out",
+    'MOVE_LEFT': "Move left",
+    'MOVE_RIGHT': "Move right",
+    'NEW': "New",
+    'CREATE_NEW_EVENT': "Create new event"
+};
+&nbsp;
+<span class="cstat-no" title="statement not covered" >links.locales['en_US'] = links.locales['en'];</span>
+<span class="cstat-no" title="statement not covered" >links.locales['en_UK'] = links.locales['en'];</span>
+&nbsp;
+// French ===================================================
+<span class="cstat-no" title="statement not covered" >links.locales['fr'] = {</span>
+    'MONTHS': ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"],
+    'MONTHS_SHORT': ["Jan", "Fev", "Mar", "Avr", "Mai", "Jun", "Jul", "Aou", "Sep", "Oct", "Nov", "Dec"],
+    'DAYS': ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"],
+    'DAYS_SHORT': ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"],
+    'ZOOM_IN': "Zoomer",
+    'ZOOM_OUT': "Dézoomer",
+    'MOVE_LEFT': "Déplacer à gauche",
+    'MOVE_RIGHT': "Déplacer à droite",
+    'NEW': "Nouveau",
+    'CREATE_NEW_EVENT': "Créer un nouvel évènement"
+};
+&nbsp;
+<span class="cstat-no" title="statement not covered" >links.locales['fr_FR'] = links.locales['fr'];</span>
+<span class="cstat-no" title="statement not covered" >links.locales['fr_BE'] = links.locales['fr'];</span>
+<span class="cstat-no" title="statement not covered" >links.locales['fr_CA'] = links.locales['fr'];</span>
+&nbsp;
+// Catalan ===================================================
+<span class="cstat-no" title="statement not covered" >links.locales['ca'] = {</span>
+    'MONTHS': ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", "Juliol", "Setembre", "Octubre", "Novembre", "Desembre"],
+    'MONTHS_SHORT': ["Gen", "Feb", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Des"],
+    'DAYS': ["Diumenge", "Dilluns", "Dimarts", "Dimecres", "Dijous", "Divendres", "Dissabte"],
+    'DAYS_SHORT': ["Dm.", "Dl.", "Dm.", "Dc.", "Dj.", "Dv.", "Ds."],
+    'ZOOM_IN': "Augmentar zoom",
+    'ZOOM_OUT': "Disminuir zoom",
+    'MOVE_LEFT': "Moure esquerra",
+    'MOVE_RIGHT': "Moure dreta",
+    'NEW': "Nou",
+    'CREATE_NEW_EVENT': "Crear nou event"
+};
+<span class="cstat-no" title="statement not covered" >links.locales['ca_ES'] = links.locales['ca'];</span>
+&nbsp;
+// German ===================================================
+<span class="cstat-no" title="statement not covered" >links.locales['de'] = {</span>
+    'MONTHS': ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"],
+    'MONTHS_SHORT': ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"],
+    'DAYS': ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"],
+    'DAYS_SHORT': ["Son", "Mon", "Die", "Mit", "Don", "Fre", "Sam"],
+    'ZOOM_IN': "Vergrößern",
+    'ZOOM_OUT': "Verkleinern",
+    'MOVE_LEFT': "Nach links verschieben",
+    'MOVE_RIGHT': "Nach rechts verschieben",
+    'NEW': "Neu",
+    'CREATE_NEW_EVENT': "Neues Ereignis erzeugen"
+};
+&nbsp;
+<span class="cstat-no" title="statement not covered" >links.locales['de_DE'] = links.locales['de'];</span>
+<span class="cstat-no" title="statement not covered" >links.locales['de_CH'] = links.locales['de'];</span>
+&nbsp;
+// Danish ===================================================
+<span class="cstat-no" title="statement not covered" >links.locales['da'] = {</span>
+    'MONTHS': ["januar", "februar", "marts", "april", "maj", "juni", "juli", "august", "september", "oktober", "november", "december"],
+    'MONTHS_SHORT': ["jan", "feb", "mar", "apr", "maj", "jun", "jul", "aug", "sep", "okt", "nov", "dec"],
+    'DAYS': ["søndag", "mandag", "tirsdag", "onsdag", "torsdag", "fredag", "lørdag"],
+    'DAYS_SHORT': ["søn", "man", "tir", "ons", "tor", "fre", "lør"],
+    'ZOOM_IN': "Zoom in",
+    'ZOOM_OUT': "Zoom out",
+    'MOVE_LEFT': "Move left",
+    'MOVE_RIGHT': "Move right",
+    'NEW': "New",
+    'CREATE_NEW_EVENT': "Create new event"
+};
+<span class="cstat-no" title="statement not covered" >links.locales['da_DK'] = links.locales['da'];</span>
+&nbsp;
+// Russian ===================================================
+<span class="cstat-no" title="statement not covered" >links.locales['ru'] = {</span>
+    'MONTHS': ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
+    'MONTHS_SHORT': ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"],
+    'DAYS': ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"],
+    'DAYS_SHORT': ["Вос", "Пон", "Втo", "Срe", "Чет", "Пят", "Суб"],
+    'ZOOM_IN': "Увeличить",
+    'ZOOM_OUT': "Умeньшить",
+    'MOVE_LEFT': "Сдвинуть налeво",
+    'MOVE_RIGHT': "Сдвинуть направо",
+    'NEW': "Новый",
+    'CREATE_NEW_EVENT': "Создать новоe событиe"
+};
+<span class="cstat-no" title="statement not covered" >links.locales['ru_RU'] = links.locales['ru'];</span>
+&nbsp;
+// Spanish ===================================================
+<span class="cstat-no" title="statement not covered" >links.locales['es'] = {</span>
+    'MONTHS': ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+    'MONTHS_SHORT': ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+    'DAYS': ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+    'DAYS_SHORT': ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
+    'ZOOM_IN': "Aumentar zoom",
+    'ZOOM_OUT': "Disminuir zoom",
+    'MOVE_LEFT': "Mover izquierda",
+    'MOVE_RIGHT': "Mover derecha",
+    'NEW': "Nuevo",
+    'CREATE_NEW_EVENT': "Crear nuevo evento"
+};
+&nbsp;
+<span class="cstat-no" title="statement not covered" >links.locales['es_ES'] = links.locales['es'];</span>
+&nbsp;
+// Dutch =====================================================
+<span class="cstat-no" title="statement not covered" >links.locales['nl'] = {</span>
+    'MONTHS': ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"],
+    'MONTHS_SHORT': ["jan", "feb", "mrt", "apr", "mei", "jun", "jul", "aug", "sep", "okt", "nov", "dec"],
+    'DAYS': ["zondag", "maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag"],
+    'DAYS_SHORT': ["zo", "ma", "di", "wo", "do", "vr", "za"],
+    'ZOOM_IN': "Inzoomen",
+    'ZOOM_OUT': "Uitzoomen",
+    'MOVE_LEFT': "Naar links",
+    'MOVE_RIGHT': "Naar rechts",
+    'NEW': "Nieuw",
+    'CREATE_NEW_EVENT': "Nieuwe gebeurtenis maken"
+};
+&nbsp;
+<span class="cstat-no" title="statement not covered" >links.locales['nl_NL'] = links.locales['nl'];</span>
+<span class="cstat-no" title="statement not covered" >links.locales['nl_BE'] = links.locales['nl'];</span>
+&nbsp;
+// Turkish ===================================================
+<span class="cstat-no" title="statement not covered" >links.locales['tr'] = {</span>
+    'MONTHS': ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+    'MONTHS_SHORT': ["Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara"],
+    'DAYS': ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"],
+    'DAYS_SHORT': ["Paz", "Pzt", "Sal", "Çar", "Per", "Cum", "Cmt"],
+    'ZOOM_IN': "Büyült",
+    'ZOOM_OUT': "Küçült",
+    'MOVE_LEFT': "Sola Taşı",
+    'MOVE_RIGHT': "Sağa Taşı",
+    'NEW': "Yeni",
+    'CREATE_NEW_EVENT': "Yeni etkinlik oluştur"
+};
+&nbsp;
+<span class="cstat-no" title="statement not covered" >links.locales['tr_TR'] = links.locales['tr'];</span>
+&nbsp;
+// Hungarian ===================================================
+<span class="cstat-no" title="statement not covered" >links.locales['hu'] = {</span>
+    'MONTHS': ["január", "február", "március", "április", "május", "június", "július", "augusztus", "szeptember", "október", "november", "december"],
+    'MONTHS_SHORT': ["jan", "feb", "márc", "ápr", "máj", "jún", "júl", "aug", "szep", "okt", "nov", "dec"],
+    'DAYS': ["vasárnap", "hétfő", "kedd", "szerda", "csütörtök", "péntek", "szombat"],
+    'DAYS_SHORT': ["vas", "hét", "kedd", "sze", "csü", "pé", "szo"],
+    'ZOOM_IN': "Nagyítás",
+    'ZOOM_OUT': "Kicsinyítés",
+    'MOVE_LEFT': "Balra",
+    'MOVE_RIGHT': "Jobbra",
+    'NEW': "Új",
+    'CREATE_NEW_EVENT': "Új esemény készítése"
+};
+&nbsp;
+<span class="cstat-no" title="statement not covered" >links.locales['hu_HU'] = links.locales['hu'];</span>
+&nbsp;
+// Brazilian Portuguese ===================================================
+<span class="cstat-no" title="statement not covered" >links.locales['pt'] = {</span>
+    'MONTHS': ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
+    'MONTHS_SHORT': ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
+    'DAYS': ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"],
+    'DAYS_SHORT': ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
+    'ZOOM_IN': "Aproximar",
+    'ZOOM_OUT': "Afastar",
+    'MOVE_LEFT': "Mover para esquerda",
+    'MOVE_RIGHT': "Mover para direita",
+    'NEW': "Novo",
+    'CREATE_NEW_EVENT': "Criar novo evento"
+};
+&nbsp;
+<span class="cstat-no" title="statement not covered" >links.locales['pt_BR'] = links.locales['pt'];</span>
+&nbsp;
+// Portuguese ===================================================
+<span class="cstat-no" title="statement not covered" >links.locales['pt'] = {</span>
+    'MONTHS': ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro", "Outubro", "Novembro", "Dezembro"],
+    'MONTHS_SHORT': ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
+    'DAYS': ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"],
+    'DAYS_SHORT': ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
+    'ZOOM_IN': "Mais Zoom",
+    'ZOOM_OUT': "Menos Zoom",
+    'MOVE_LEFT': "Esquerda",
+    'MOVE_RIGHT': "Direita",
+    'NEW': "Novo",
+    'CREATE_NEW_EVENT': "Criar novo evento"
+};
+&nbsp;
+<span class="cstat-no" title="statement not covered" >links.locales['pt_PT'] = links.locales['pt'];</span>
+&nbsp;
+&nbsp;
+// Chinese ===================================================
+<span class="cstat-no" title="statement not covered" >links.locales['zh'] = {</span>
+    'MONTHS': ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+    'MONTHS_SHORT': ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+    'DAYS': ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
+    'DAYS_SHORT': ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
+    'ZOOM_IN': "放大",
+    'ZOOM_OUT': "缩小",
+    'MOVE_LEFT': "左移",
+    'MOVE_RIGHT': "右移",
+    'NEW': "新建",
+    'CREATE_NEW_EVENT': "创建新的事件"
+};
+&nbsp;
+<span class="cstat-no" title="statement not covered" >links.locales['zh_CN'] = links.locales['zh'];</span>
+<span class="cstat-no" title="statement not covered" >links.locales['zh_TR'] = links.locales['zh'];</span>
+&nbsp;
+&nbsp;
+// Arabic ===================================================
+<span class="cstat-no" title="statement not covered" >links.locales['ar'] = {</span>
+    'MONTHS': ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"],
+    'MONTHS_SHORT': ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"],
+    'DAYS': ["الأحد", "الأثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"],
+    'DAYS_SHORT': ["الأحد", "الأثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"],
+    'ZOOM_IN': "تكبير",
+    'ZOOM_OUT': "تصغير",
+    'MOVE_LEFT': "تحريك لليسار",
+    'MOVE_RIGHT': "تحريك لليمين",
+    'NEW': "جديد",
+    'CREATE_NEW_EVENT': "إنشاء حدث جديد"
+};
+&nbsp;
+<span class="cstat-no" title="statement not covered" >links.locales['ar_AR'] = links.locales['ar'];</span>
+&nbsp;
+&nbsp;
+// Japanese ===================================================
+<span class="cstat-no" title="statement not covered" >links.locales['ja'] = {</span>
+    'MONTHS': ["一月", "二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],
+    'MONTHS_SHORT': ["一月", "二月", "三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],
+    'DAYS': ["日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日"],
+    'DAYS_SHORT': ["日", "月", "火", "水", "木", "金", "土"],
+    'ZOOM_IN': "拡大する",
+    'ZOOM_OUT': "縮小する",
+    'MOVE_LEFT': "左に移動",
+    'MOVE_RIGHT': "右に移動",
+    'NEW': "新しい",
+    'CREATE_NEW_EVENT': "新しいイベントの作成"
+};
+&nbsp;
+<span class="cstat-no" title="statement not covered" >links.locales['ja_JA'] = links.locales['ja'];</span>
+&nbsp;
+// Korean ===================================================
+<span class="cstat-no" title="statement not covered" >links.locales['ko'] = {</span>
+    'MONTHS': ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"],
+    'MONTHS_SHORT': ["1월", "2월", "3월", "4월", "5월", "6월", "7월", "8월", "9월", "10월", "11월", "12월"],
+    'DAYS': ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"],
+    'DAYS_SHORT': ["일", "월", "화", "수", "목", "금", "토"],
+    'ZOOM_IN': "줌 인",
+    'ZOOM_OUT': "줌 아웃",
+    'MOVE_LEFT': "왼쪽으로 이동",
+    'MOVE_RIGHT': "오른쪽으로 이동",
+    'NEW': "신규",
+    'CREATE_NEW_EVENT': "새 이벤트 생성"
+};
+&nbsp;
+<span class="cstat-no" title="statement not covered" >links.locales['ko_KO'] = links.locales['ko'];</span>
+&nbsp;
+// Polish ===================================================
+<span class="cstat-no" title="statement not covered" >links.locales['pl'] = {</span>
+    'MONTHS': ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"],
+    'MONTHS_SHORT': ["Sty", "Lut", "Mar", "Kwi", "Maj", "Cze", "Lip", "Sie", "Wrz", "Paź", "Lis", "Gru"],
+    'DAYS': ["Niedziela", "Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota"],
+    'DAYS_SHORT': ["niedz", "pon", "wt", "śr", "czw", "pt", "sob"],
+    'ZOOM_IN': "Powiększ",
+    'ZOOM_OUT': "Zmniejsz",
+    'MOVE_LEFT': "Przesuń w lewo",
+    'MOVE_RIGHT': "Przesuń w prawo",
+    'NEW': "Nowy",
+    'CREATE_NEW_EVENT': "Utwórz nowe wydarzenie"
+};
+&nbsp;
+<span class="cstat-no" title="statement not covered" >links.locales['ko'] = links.locales['ko_KO'];</span>
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Aug 08 2016 16:16:48 GMT+0300 (RTZ 2 (зима))
+</div>
+</div>
+<script src="../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../sorter.js"></script>
+</body>
+</html>

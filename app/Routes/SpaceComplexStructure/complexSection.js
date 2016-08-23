@@ -1,34 +1,21 @@
 'use strict';
 var breadcrumbs = require('../breadcrumbs.js');
 var section = {
-  url: '/:type',
+  url: '/:type?sectionType',
   views: {
     'complexSection': {
       templateUrl: function templateUrl($stateParams) {
-        return 'app/Routes/SpaceComplexStructure/card/sections/' + $stateParams.type + '.html';
+        return 'app/Routes/SpaceComplexStructure/card/sections/' +   $stateParams.sectionType  + $stateParams.type + '.html';
       },
       controller: function controller($stateParams, $scope, $interpolate) {
-        var state = $stateParams;
-        switch (state.type) {
-        case 'general':
-          $scope.sectionName = 'Общие сведения';
-          break;
-        case 'description':
-          $scope.sectionName = 'Описание';
-          break;
-        case 'documents':
-          $scope.sectionName = 'Документы';
-          break;
-        case 'relatedProjects':
-          $scope.sectionName = 'Связанные проекты';
-          break;
-        case 'events':
-          $scope.sectionName = 'События';
-          break;
-        default:
-          $scope.sectionName = 'Общие сведения';
-          break;
+        var sectionDict = {
+          General: 'Общие сведения',
+          Description: 'Описание',
+          Documents: 'Документы',
+          RelatedProjects: 'Связанные проекты',
+          Events: 'События'
         }
+        $scope.sectionName = sectionDict[$stateParams.type];
         breadcrumbs.init($interpolate, 'complexSection', $scope);
       }
     }

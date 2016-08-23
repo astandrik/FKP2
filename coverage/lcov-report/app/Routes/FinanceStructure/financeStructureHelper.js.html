@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for app\Routes\FinanceStructure\financeStructureHelper.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../index.html">all files</a> / <a href="index.html">app/Routes/FinanceStructure/</a> financeStructureHelper.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">93.88% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>46/49</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">63.64% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>7/11</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">85.71% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>6/7</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">93.18% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>41/44</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">'use strict';
+&nbsp;
+function getNodeInfo(node, initialHref) {
+  var obj = {};
+  if (node.object_type != node.parent_type) {
+    switch (node.object_type) {
+    case 2:
+      obj.href = initialHref  + '/section/' + node.id;
+      obj.cacheType = 'section';
+      break;
+    case 1:
+      obj.href = initialHref + '/subsection/' + node.id;
+      obj.cacheType = 'subsection';
+      break;
+    case 0:
+      obj.href = initialHref  + '/project/' + node.id;
+      obj.cacheType = 'project';
+      break;
+    }
+  } else {
+    obj.href = initialHref.replace(new RegExp('/' + node.parent_id + '$'), '/' + node.id);
+    obj.cacheType = node.parent_type == 0 ? <span class="branch-0 cbranch-no" title="branch not covered" >'project' </span>: node.parent_type == 1 ? 'subsection' : <span class="branch-1 cbranch-no" title="branch not covered" >node.parent_type == 2 ? 'section' : 'project';</span>
+  }
+  return obj;
+}
+&nbsp;
+function traverseTree(data, initialHref) {
+  return data.map((node) =&gt; {
+    var obj = Object.assign({},node, getNodeInfo(node, initialHref), {elementId: node.id});
+    obj.children = traverseTree(obj.children, obj.href);
+    return obj;
+  })
+}
+&nbsp;
+<span class="fstat-no" title="function not covered" >function appendHrefs(data, initialState, $projectsDict) {</span>
+<span class="cstat-no" title="statement not covered" >  var initialHref = window.getHref(initialState).split('?')[0];</span>
+<span class="cstat-no" title="statement not covered" >  var curData = data.data.data;</span>
+<span class="cstat-no" title="statement not covered" >  return traverseTree(curData, initialHref, $projectsDict);</span>
+}
+&nbsp;
+&nbsp;
+function sumObject(obj) {
+  return Object.keys(obj).reduce((sum, current) =&gt; sum + parseFloat(obj[current]), 0);
+}
+&nbsp;
+function prepareSection(finance) {
+  var newObj = {};
+  var prepareNumber = (x) =&gt; parseFloat(x) / 1000000
+   Object.keys(finance).forEach((type) =&gt;
+   {
+      newObj[type] = {};
+      Object.keys(finance[type]).forEach((year) =&gt;
+      {
+        newObj[type][year] = prepareNumber(finance[type][year]);
+      });
+  });
+  return newObj;
+}
+&nbsp;
+function getFinanceTables(children) {
+  var getData = (item, type) =&gt; {
+    return  Object.assign({},{ 'Название': item.name },item.finance[`Финансирование ${type} средств`]);
+  };
+  var projectsBudget = children.map((x) =&gt; getData(x, 'за счет бюджетных'));
+  var projectsOwn= children.map((x) =&gt; getData(x, 'из собственных'));
+  return {
+    'Budget': projectsBudget,
+    'Own': projectsOwn
+  };
+}
+&nbsp;
+function makeIdList(arr) {
+  return arr.map((x) =&gt; x.id);
+}
+&nbsp;
+module.exports = {
+  getNodeInfo: getNodeInfo,
+  appendHrefs: appendHrefs,
+  sumObject: sumObject,
+  prepareSection: prepareSection,
+  getFinanceTables: getFinanceTables,
+  makeIdList: makeIdList,
+  traverseTree: traverseTree
+};
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Aug 12 2016 14:22:46 GMT+0300 (RTZ 2 (зима))
+</div>
+</div>
+<script src="../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../sorter.js"></script>
+</body>
+</html>

@@ -7,7 +7,22 @@ angular.module('router', []).provider('$router', function () {
       'home': {
         url: '/FKP',
         views: {
-          'sidebar': { template: '<sidebar></sidebar>' },
+          'sidebar': { templateUrl: 'app/Routes/sidebar-page.html',
+          controller: function($scope, $cookies) {
+            $scope.panelClosed = $cookies.get('sidebar-closed') == 'closed' ? true : false;
+            $scope.togglePanel = ()=> {
+              var sidebar = $('#sidebar-left');
+              var hasClass =  sidebar.hasClass('closed');
+              if(hasClass) {
+                $scope.panelClosed = false;
+                $cookies.put('sidebar-closed', 'opened');
+              } else {
+                $scope.panelClosed = true;
+                $cookies.put('sidebar-closed', 'closed');
+              }
+            }
+          }
+        },
           'content@' : {
             templateUrl: 'app/Layout/homepage.html'
           }
@@ -24,9 +39,14 @@ angular.module('router', []).provider('$router', function () {
       'home.projectStructure.section.subSection.project.tab': routes.projectSection,
       'home.spaceComplexStructure': routes.spaceComplexStructure,
       'home.spaceComplexStructure.spaceComplexSection': routes.spaceComplexSection,
-      'home.spaceComplexStructure.spaceComplexSection.spaceComplexSubSection': routes.spaceComplexSubSection,
-      'home.spaceComplexStructure.spaceComplexSection.spaceComplexSubSection.spaceComplexComplex': routes.spaceComplexComplex,
-      'home.spaceComplexStructure.spaceComplexSection.spaceComplexSubSection.spaceComplexComplex.spaceComplexComplexSection': routes.spaceComplexComplexSection,
+      'home.spaceComplexStructure.spaceComplexSection.spaceComplexSection': routes.spaceComplexSectionSection,
+      'home.spaceComplexStructure.spaceComplexSection.spaceComplexSection.spaceComplexComplex': Object.assign({},routes.spaceComplexComplex),
+      'home.spaceComplexStructure.spaceComplexSection.spaceComplexSection.spaceComplexComplex.spaceComplexComplexSection': Object.assign({},routes.spaceComplexComplexSection),
+      'home.spaceComplexStructure.spaceComplexSection.spaceComplexSection.spaceComplexSection': routes.spaceComplexSectionSectionSection,
+      'home.spaceComplexStructure.spaceComplexSection.spaceComplexSection.spaceComplexSection.spaceComplexComplex': Object.assign({},routes.spaceComplexComplex),
+      'home.spaceComplexStructure.spaceComplexSection.spaceComplexSection.spaceComplexSection.spaceComplexComplex.spaceComplexComplexSection': Object.assign({},routes.spaceComplexComplexSection),
+      'home.spaceComplexStructure.spaceComplexSection.spaceComplexComplex': routes.spaceComplexComplex,
+      'home.spaceComplexStructure.spaceComplexSection.spaceComplexComplex.spaceComplexComplexSection': routes.spaceComplexComplexSection,
       'home.events': routes.events,
       'home.events.card': routes.eventsCard,
       'home.events.card.section': routes.eventsSection,

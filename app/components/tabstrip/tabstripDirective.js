@@ -3,7 +3,8 @@ function tabstripDirective($compile, $state, $timeout) {
   return {
     scope: {
       data: '=',
-      id: '@'
+      id: '@',
+      params: "="
     },
     compile: function compile(templateElement, templateAttrs) {
       return function ($scope) {
@@ -20,7 +21,9 @@ function tabstripDirective($compile, $state, $timeout) {
           if (btn.href) {
             buttons.push('<a class="btn btn-default btn-tab"  ng-href="' + btn.href + '" flex>' + btn.name + '</a>');
           } else if (btn.state && btn.type) {
-            var href = window.getHref(templateAttrs.initial) + '/' + btn.type;
+            var url = window.getHref(templateAttrs.initial).split("?");
+            var additionalParams = btn.params ? "?" + btn.params.map((x) => `${x.name}=${x.value}`).join('&') : "";
+            var href =  `${url[0]}/${btn.type}${additionalParams}`;
             buttons.push('<a class="btn btn-default btn-tab" type="' + btn.type + '" ng-click="activateTab($event)" href="' + href + '" flex>' + btn.name + '</a>');
           } else {
             buttons.push('<a class="btn btn-default btn-tab" flex>' + btn.name + '</a>');

@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for www\app\components\components.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../index.html">all files</a> / <a href="index.html">www/app/components/</a> components.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>0/56</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/9</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/10</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>0/56</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">'use strict';
+<span class="cstat-no" title="statement not covered" >require('./accordion/accordion.js');</span>
+<span class="cstat-no" title="statement not covered" >require('./dataTable/dataTable.js');</span>
+<span class="cstat-no" title="statement not covered" >require('./tabstrip/tabstrip.js');</span>
+<span class="cstat-no" title="statement not covered" >require('./charts/charts.js');</span>
+<span class="cstat-no" title="statement not covered" >require('./timeLines/timeLines.js');</span>
+<span class="cstat-no" title="statement not covered" >require('./calendar/calendar.js');</span>
+<span class="cstat-no" title="statement not covered" >require('./dateInput/dateInput.js');</span>
+<span class="cstat-no" title="statement not covered" >require('./autocomplete/autocomplete.js');</span>
+<span class="cstat-no" title="statement not covered" >require('./catalogs/catalogs.js');</span>
+<span class="cstat-no" title="statement not covered" >var currentModule = angular.module('components', [</span>
+  'accordion',
+  'dataTable',
+  'tabstrip',
+  'charts',
+  'timeLineModule',
+  'calendar',
+  'datePicker',
+  'autoselect',
+  'catalogs'
+]);
+<span class="cstat-no" title="statement not covered" >var accordionDirective = require('./accordion/accordion.js');</span>
+<span class="cstat-no" title="statement not covered" >var popupController = require('./popup/popupController.js');</span>
+<span class="cstat-no" title="statement not covered" >var splitDirective = require('./split/split.js');</span>
+<span class="cstat-no" title="statement not covered" >currentModule.controller('popupController', popupController);</span>
+<span class="cstat-no" title="statement not covered" >currentModule.directive('split', splitDirective);</span>
+<span class="cstat-no" title="statement not covered" >currentModule.controller('KitchenSinkCtrl', <span class="fstat-no" title="function not covered" >function () {</span></span>
+});
+<span class="cstat-no" title="statement not covered" >currentModule.controller('DatepickerDemoCtrl', <span class="fstat-no" title="function not covered" >function ($scope) {</span></span>
+<span class="cstat-no" title="statement not covered" >  $scope.today = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >    $scope.dt = new Date();</span>
+  };
+<span class="cstat-no" title="statement not covered" >  $scope.today();</span>
+<span class="cstat-no" title="statement not covered" >  $scope.clear = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >    $scope.dt = null;</span>
+  };
+<span class="cstat-no" title="statement not covered" >  $scope.inlineOptions = {</span>
+    customClass: getDayClass,
+    minDate: new Date(),
+    showWeeks: true
+  };
+<span class="cstat-no" title="statement not covered" >  $scope.dateOptions = {</span>
+    dateDisabled: disabled,
+    formatYear: 'yy',
+    maxDate: new Date(2020, 5, 22),
+    minDate: new Date(),
+    startingDay: 1
+  };
+  // Disable weekend selection
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  function disabled(data) {</span></span>
+<span class="cstat-no" title="statement not covered" >    var date = data.date, mode = data.mode;</span>
+<span class="cstat-no" title="statement not covered" >    return mode === 'day' &amp;&amp; (date.getDay() === 0 || date.getDay() === 6);</span>
+  }
+<span class="cstat-no" title="statement not covered" >  $scope.toggleMin = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >    $scope.inlineOptions.minDate = $scope.inlineOptions.minDate ? null : new Date();</span>
+<span class="cstat-no" title="statement not covered" >    $scope.dateOptions.minDate = $scope.inlineOptions.minDate;</span>
+  };
+<span class="cstat-no" title="statement not covered" >  $scope.toggleMin();</span>
+<span class="cstat-no" title="statement not covered" >  $scope.open1 = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >    $scope.popup1.opened = true;</span>
+  };
+<span class="cstat-no" title="statement not covered" >  $scope.open2 = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >    $scope.popup2.opened = true;</span>
+  };
+<span class="cstat-no" title="statement not covered" >  $scope.setDate = <span class="fstat-no" title="function not covered" >function (year, month, day) {</span></span>
+<span class="cstat-no" title="statement not covered" >    $scope.dt = new Date(year, month, day);</span>
+  };
+<span class="cstat-no" title="statement not covered" >  $scope.formats = [</span>
+    'dd-MMMM-yyyy',
+    'yyyy/MM/dd',
+    'dd.MM.yyyy',
+    'shortDate'
+  ];
+<span class="cstat-no" title="statement not covered" >  $scope.format = $scope.formats[0];</span>
+<span class="cstat-no" title="statement not covered" >  $scope.altInputFormats = ['M!/d!/yyyy'];</span>
+<span class="cstat-no" title="statement not covered" >  $scope.popup1 = { opened: false };</span>
+<span class="cstat-no" title="statement not covered" >  $scope.popup2 = { opened: false };</span>
+<span class="cstat-no" title="statement not covered" >  var tomorrow = new Date();</span>
+<span class="cstat-no" title="statement not covered" >  tomorrow.setDate(tomorrow.getDate() + 1);</span>
+<span class="cstat-no" title="statement not covered" >  var afterTomorrow = new Date();</span>
+<span class="cstat-no" title="statement not covered" >  afterTomorrow.setDate(tomorrow.getDate() + 1);</span>
+<span class="cstat-no" title="statement not covered" >  $scope.events = [</span>
+    {
+      date: tomorrow,
+      status: 'full'
+    },
+    {
+      date: afterTomorrow,
+      status: 'partially'
+    }
+  ];
+<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  function getDayClass(data) {</span></span>
+<span class="cstat-no" title="statement not covered" >    var date = data.date, mode = data.mode;</span>
+<span class="cstat-no" title="statement not covered" >    if (mode === 'day') {</span>
+<span class="cstat-no" title="statement not covered" >      var dayToCheck = new Date(date).setHours(0, 0, 0, 0);</span>
+<span class="cstat-no" title="statement not covered" >      for (var i = 0; i &lt; $scope.events.length; i++) {</span>
+<span class="cstat-no" title="statement not covered" >        var currentDay = new Date($scope.events[i].date).setHours(0, 0, 0, 0);</span>
+<span class="cstat-no" title="statement not covered" >        if (dayToCheck === currentDay) {</span>
+<span class="cstat-no" title="statement not covered" >          return $scope.events[i].status;</span>
+        }
+      }
+    }
+<span class="cstat-no" title="statement not covered" >    return '';</span>
+  }
+});
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Aug 08 2016 16:16:48 GMT+0300 (RTZ 2 (зима))
+</div>
+</div>
+<script src="../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../sorter.js"></script>
+</body>
+</html>

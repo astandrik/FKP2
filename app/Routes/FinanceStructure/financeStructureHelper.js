@@ -1,80 +1,85 @@
 'use strict';
-function projectMillionsFunction(project) {
-  for (var type in project.finance) {
-    for (var val in project.finance[type]) {
-      project.finance[type][val] = project.finance[type][val] / 1000000;
-    }
+
+function getNodeInfo(node, initialHref) {
+  var obj = {};
+  var addr = initialHref.split('?').map((x,i) => i == 1 ? "?" + x : x);
+  addr[1] = addr[1]===undefined ? "" : addr[1];
+  var typeStrMatch = {
+    0: "project",
+    1: "subsection",
+    2: "section"
   }
-  return project;
+  if (node.object_type != node.parent_type) {
+    obj.href = `${addr[0]}/${typeStrMatch[node.object_type]}/${node.id}${addr[1]}`;
+  } else {
+    obj.href = addr[0].replace(new RegExp('/' + node.parent_id + '$'), '/' + node.id) + addr[1];
+  }
+  obj.cacheType = typeStrMatch[node.object_type];
+  return obj;
 }
-function prepareFinance(finance, baseName) {
-  var years = [];
-  var valueBudget = [];
-  var valueOwnBudget = [];
-  var sumBudget = 0;
-  var sumOwnBudget = 0;
-  for (var p in finance['Финансирование из собственных средств']) {
-    years.push(p);
-    valueOwnBudget.push(finance['Финансирование из собственных средств'][p]);
-    sumOwnBudget = sumOwnBudget + finance['Финансирование из собственных средств'][p];
-  }
-  for (var p in finance['Финансирование за счет бюджетных средств']) {
-    valueBudget.push(finance['Финансирование за счет бюджетных средств'][p]);
-    sumBudget = sumBudget + finance['Финансирование за счет бюджетных средств'][p];
-  }
-  years.sort();
-  var start = years[0];
-  var end = years[years.length - 1];
-  finance['Финансирование из собственных средств'][baseName] = 'Внебюджет, млн.р.';
-  finance['Финансирование за счет бюджетных средств'][baseName] = 'Бюджет, млн.р.';
-  var a = [
-    finance['Финансирование из собственных средств'],
-    finance['Финансирование за счет бюджетных средств']
-  ];
+
+function findElemsInTree(treeLevel, id, type) {
+  var elem = treeLevel.filter((node) =>{ return node.id == id && node.object_type == type; });
+  if(elem.length == 0) return treeLevel.reduce((sum,curr) => sum.concat(findElemsInTree(curr.children, id, type)),[]);
+  else return elem;
+}
+
+function traverseTree(data, initialHref) {
+  return data.map((node) => {
+    var obj = Object.assign({},node, getNodeInfo(node, initialHref), {elementId: node.id});
+    obj.children = traverseTree(obj.children, obj.href);
+    return obj;
+  })
+}
+
+function appendHrefs(data, href, params) {
+  var curData = data.data.data;
+  href = `${href}${params.length > 0 ? "?".concat(params.join("&")) : ""}`
+  return traverseTree(curData, href);
+}
+
+
+function sumObject(obj) {
+  return Object.keys(obj).reduce((sum, current) => sum + parseFloat(obj[current]), 0);
+}
+
+function prepareSection(finance) {
+  var newObj = {};
+  var prepareNumber = (x) => parseFloat(x) / 1000000
+   Object.keys(finance).forEach((type) =>
+   {
+      newObj[type] = {};
+      Object.keys(finance[type]).forEach((year) =>
+      {
+        newObj[type][year] = prepareNumber(finance[type][year]);
+      });
+  });
+  return newObj;
+}
+
+function getFinanceTables(children) {
+  var getData = (item, type) => {
+    return  Object.assign({},{ 'Название': item.name },item.finance[`Финансирование ${type} средств`], {href: item.href});
+  };
+  var projectsBudget = children.map((x) => getData(x, 'за счет бюджетных'));
+  var projectsOwn= children.map((x) => getData(x, 'из собственных'));
   return {
-    finance: a,
-    start: start,
-    end: end,
-    years: years,
-    valueBudget: valueBudget,
-    valueOwnBudget: valueOwnBudget,
-    sumBudget: sumBudget,
-    sumOwnBudget: sumOwnBudget
+    'Budget': projectsBudget,
+    'Own': projectsOwn
   };
 }
-function traverseTree(data, initialHref, parentId, parentType, $projectsDict, params) {
-  data.forEach(function (node) {
-    if (node.object_type != parentType) {
-      switch (node.object_type) {
-      case 2:
-        node.href = initialHref + (params ?  params : '') + '/section/' + node.id;
-        node.cacheType = 'section';
-        break;
-      case 1:
-        node.href = initialHref+ (params ?  params : '')+ '/subsection/' + node.id;
-        node.cacheType = 'subsection';
-        break;
-      case 0:
-        node.href = initialHref + (params ? params : '') + '/project/' + node.id;
-        node.cacheType = 'project';
-        break;
-      }
-    } else {
-      node.href = initialHref.replace(new RegExp('/' + parentId + '$'), (params ? params : '')+ '/' + node.id);
-      node.cacheType = parentType == 0 ? 'project' : parentType == 1 ? 'subsection' : parentType == 2 ? 'section' : 'project';
-    }
-    node.elementId = node.id;
-    $projectsDict.dict[node.name] = node;
-    traverseTree(node.children, node.href, node.id, node.object_type, $projectsDict, params);
-  });
+
+function makeIdList(arr) {
+  return arr.map((x) => x.id);
 }
-function appendHrefs(data, initialState, $projectsDict, params) {
-  var initialHref = window.getHref(initialState).split('?')[0];
-  var curData = data.data.data;
-  traverseTree(curData, initialHref, null, null, $projectsDict, params);
-}
+
 module.exports = {
-  prepareValues: projectMillionsFunction,
-  prepareFinance: prepareFinance,
-  appendHrefs: appendHrefs
+  getNodeInfo: getNodeInfo,
+  appendHrefs: appendHrefs,
+  sumObject: sumObject,
+  prepareSection: prepareSection,
+  getFinanceTables: getFinanceTables,
+  makeIdList: makeIdList,
+  traverseTree: traverseTree,
+  findElemsInTree: findElemsInTree
 };

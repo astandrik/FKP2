@@ -1,0 +1,29 @@
+<md-content flex layout-padding>
+  <div layout="row">
+    <div ng-show="complexFull.meta.length > 0" flex="20" class="space-header-name">Характеристики изделия</div>
+    <div flex="80" layout="column" class="space-info-name">
+      <div class="row rowHover complexcharact rowRight" ng-repeat="m in complexFull.meta">
+        <div class="col-xs-8">{{m.name}}</div>
+        <div class="col-xs-4 complexValueAlign">{{m.value}}</div>
+      </div>
+    </div>
+  </div>
+
+  <div layout="row">
+    <div flex="20" class="space-header-name">Количество стартов </div>
+    <div flex="80" class="space-info-name">
+  <table class="table">
+    <thead>
+      <tr>
+        <th  ng-repeat="r in launches[0]" class="complexTableAlign">{{r.name}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="r in launches">
+        <td ng-repeat="c in r" class="complexTableAlign">{{c.value}}</td>
+      </tr>
+    </tbody>
+  </table>
+   </div>
+  </div>
+</md-content>

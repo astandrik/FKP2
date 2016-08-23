@@ -109,7 +109,7 @@ function DTD() {
           if (isNaN(p) == false) {
             b.push(p);
           } else {
-            if (p != $scope.basename) {
+            if (p != $scope.basename && p != 'href') {
               others.push(p);
             }
           }
@@ -131,13 +131,11 @@ function DTD() {
             var ctmplt = '<div class="ui-grid-cell-contents">{{row.entity[col.field]}}</div>';
             if ($scope.needLinks) {
               if($scope.linkBlocker) {
-                ctmplt = '<a cacheType={{grid.appScope.projectDict[row.entity[col.field]] ? grid.appScope.projectDict[row.entity[col.field]].cacheType : null}} \
-                elementId={{grid.appScope.projectDict[row.entity[col.field]] ? grid.appScope.projectDict[row.entity[col.field]].elementId : null}} \
-                ng-if="grid.appScope.projectDict[row.entity[col.field]].href.indexOf(\''+$scope.linkBlocker+'\') == -1"\
-                ng-href={{grid.appScope.projectDict[row.entity[col.field]].href}}><div class="ui-grid-cell-contents pinned-cell">{{row.entity[col.field]}}</div></a>\
-                <div ng-if="grid.appScope.projectDict[row.entity[col.field]].href.indexOf(\''+$scope.linkBlocker+'\') > -1" class="ui-grid-cell-contents pinned-cell">{{row.entity[col.field]}}</div>';
+                ctmplt = '<a ng-if="row.entity.href.indexOf(\''+$scope.linkBlocker+'\') == -1"\
+                ng-href={{row.entity.href}}><div class="ui-grid-cell-contents pinned-cell">{{row.entity[col.field]}}</div></a>\
+                <div ng-if="row.entity.href.indexOf(\''+$scope.linkBlocker+'\') > -1" class="ui-grid-cell-contents pinned-cell">{{row.entity[col.field]}}</div>';
               } else {
-                ctmplt = '<a cacheType={{grid.appScope.projectDict[row.entity[col.field]] ? grid.appScope.projectDict[row.entity[col.field]].cacheType : null}} elementId={{grid.appScope.projectDict[row.entity[col.field]] ? grid.appScope.projectDict[row.entity[col.field]].elementId : null}} ng-href={{grid.appScope.projectDict[row.entity[col.field]].href}}><div class="ui-grid-cell-contents pinned-cell">{{row.entity[col.field]}}</div></a>';
+                ctmplt = '<a ng-href={{row.entity.href}}><div class="ui-grid-cell-contents pinned-cell">{{row.entity[col.field]}}</div></a>';
               }
             }
             if (w < 1370) {

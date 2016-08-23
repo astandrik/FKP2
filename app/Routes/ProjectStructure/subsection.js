@@ -9,7 +9,7 @@ function prepareSubSection(finance) {
     }
   }
 }
-function getFinanceTables(finance) {
+function getFinanceTables(finance,$projectsDict) {
   var projectsBudget = [];
   var projectsOwn = [];
   for (var e in finance) {
@@ -21,6 +21,8 @@ function getFinanceTables(finance) {
     for (var y in finance[e]['Финансирование из собственных средств']) {
       projectOwn[y] = finance[e]['Финансирование из собственных средств'][y];
     }
+    projectBudget.href = $projectsDict.dict[e].href;
+    projectOwn.href = $projectsDict.dict[e].href;
     projectsBudget.push(projectBudget);
     projectsOwn.push(projectOwn);
   }
@@ -35,11 +37,11 @@ var entity = {
   views: {
     'projectInfo@home.projectStructure': {
       templateUrl: 'app/Routes/ProjectStructure/card/subsection-card.html',
-      controller: function controller($scope, subsection, section, $interpolate) {
+      controller: function controller($scope, subsection, section, $interpolate, $projectsDict) {
         $scope.subsection = _.cloneDeep(subsection);
         $scope.section = section;
         prepareSubSection($scope.subsection.finance);
-        var tables = getFinanceTables($scope.subsection.finance);
+        var tables = getFinanceTables($scope.subsection.finance, $projectsDict);
         $scope.financeBudget = tables.Budget;
         $scope.financeOwn = tables.Own;
         breadcrumbs.init($interpolate, 'section', $scope);

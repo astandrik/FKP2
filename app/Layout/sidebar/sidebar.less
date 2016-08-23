@@ -1,7 +1,31 @@
+.hide-panel-button {
+  width:10vw;
+  height:22px;
+  position: absolute;
+  z-index: 9999;
+  bottom:0;
+  text-align: center;
+  font-weight: 600;
+  &:hover {
+    color: #337ab7;
+    cursor:pointer;
+  }
+}
+
+.show-full.not-shown {
+  display: none;
+}
+
+.md-whiteframe-z2 {
+    box-shadow: 0 2px 4px -1px rgba(0,0,0,.2),0 4px 5px 0 rgba(0,0,0,.14),0 1px 10px 0 rgba(0,0,0,.12);
+  }
+
 #sidebar-left{
-  .md-whiteframe-z2 {
-      box-shadow: 0 2px 4px -1px rgba(0,0,0,.2),0 4px 5px 0 rgba(0,0,0,.14),0 1px 10px 0 rgba(0,0,0,.12);
-    }
+     &.closed {
+       width:85px;
+     }
+    -webkit-transition: width 0.5s;
+    transition: width 0.5s;
     .layout-padding > * {
       padding:6px
     }
@@ -9,7 +33,7 @@
      background-color: white;
      color: black;
     }
-    max-width: 10vw!important;
+    width: 10vw;
     .md-button {
       font-size: 15px;
     }

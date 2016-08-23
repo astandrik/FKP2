@@ -1,18 +1,25 @@
-<md-sidenav id="sidebar-left"
-        class="md-sidenav-left md-whiteframe-z2"
+<md-sidenav ng-class="{closed: panelClosed}" id="sidebar-left"
+        class="md-sidenav-left md-whiteframe-z2 open"
         md-component-id="left"
         md-is-locked-open="true"
         md-disable-backdrop
-        md-whiteframe="4">
-        <md-list flex layout="column" layout-align="space-around stretch">
-          <md-toolbar class="md-whiteframe-1dp" layout-padding layout="column">
+        md-whiteframe="4"
+        style="overflow-x: hidden;">
+        <md-list flex layout="column" style="margin-bottom: 22px;" layout-align="space-around stretch">
+          <md-toolbar ng-show="!panelClosed"  class="md-whiteframe-1dp show-full" layout-padding layout="column">
             <span class="programmHeader ">Федеральная космическая программа 2016-2025</span>
           </md-toolbar>
           <md-list-item ng-repeat="dir in directories" flex layout="column"  layout-align="center stretch"  ng-class="{nonActive: dir.isNonActive}">
               <md-button ng-href="{{getHref(dir.state)}}" layout="column">
               <ng-md-icon icon={{::dir.icon}} size=30 layout="column" layout-align="center center"></ng-md-icon>
-                <span  class="font-sidebar">{{::dir.name}}</span>
+                <span ng-show="!panelClosed"  class="font-sidebar show-full">{{::dir.name}}</span>
               </md-button>
           </md-list-item>
+          <md-list-item flex layout="column"  layout-align="center stretch">
+            <md-button style="display:flex" layout-align="center center" ng-href="" ng-click="togglePanel()" layout="column">
+              <ng-md-icon style="display:flex;margin-left:2px" layout-align="center center" ng-show="!panelClosed" icon='left' size=30></ng-md-icon>
+              <ng-md-icon style="display:flex;margin-left:2px" layout-align="center center" ng-show="panelClosed" icon='right' size=30></ng-md-icon>
+            </md-button>
+         </md-list-item>
         </md-list>
 </md-sidenav>

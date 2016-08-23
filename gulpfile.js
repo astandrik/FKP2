@@ -17,7 +17,9 @@ var buffer = require('vinyl-buffer');
 var autoprefixer = require('gulp-autoprefixer');
 var flatten = require('gulp-flatten');
 var run = require('gulp-run');
-
+var notify = require("gulp-notify");
+const jasmine = require('gulp-jasmine');
+process.env.isTesting = false;
 gulp.task('vendorsjs', function () {
     return gulp.src(
       [
@@ -127,15 +129,27 @@ gulp.task('fonts', function() {
     .pipe(gulp.dest('dist/fonts'));
 });
 
+gulp.task('tests', ['build'], function() {
+  return gulp.src("./app/**/*[Ss]pec.js")
+        .pipe(jasmine())
+        .on('error',  notify.onError(function (error) {
+          return error.message;
+        }))
+        .pipe(notify({ message: 'Tests Succeed' }));
+})
+
 gulp.task('browserify', function() {
   return browserify({entries:'app/index.js',  debug: true})
-        .transform("babelify", {presets: ["es2015"]})
+        .transform("babelify")
         .bundle()
-        .on('error', onError)
+        .on('error',  notify.onError(function (error) {
+          return error.message;
+        }))
         .pipe(source('all.js'))
         .on('error', onError)
         .pipe(buffer())
-        .pipe(gulp.dest('dist/libs/'));
+        .pipe(gulp.dest('dist/libs/'))
+        .pipe(notify({ message: 'Build Succeed' }));
 })
 
 gulp.task('less', function(){
@@ -153,5 +167,5 @@ gulp.task('watch', function () {
         'app/**/*.less'
     ], ['default']).on('error', onError);
 });
-
-gulp.task('default', ['validate','vendors','browserify','less']);
+gulp.task('build',['validate','vendors','browserify','less'])
+gulp.task('default', ['tests']);

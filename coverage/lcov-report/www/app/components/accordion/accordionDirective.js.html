@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for www\app\components\accordion\accordionDirective.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../../prettify.css" />
+    <link rel="stylesheet" href="../../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../../index.html">all files</a> / <a href="index.html">www/app/components/accordion/</a> accordionDirective.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>0/23</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/8</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/6</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>0/23</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">'use strict';
+<span class="cstat-no" title="statement not covered" >var treeBuilder = require('./treeBuilder.js').treeHtml;</span>
+<span class="cstat-no" title="statement not covered" >var bindToggleEvents = require('./treeBuilder.js').bind;</span>
+<span class="cstat-no" title="statement not covered" >module.exports = <span class="fstat-no" title="function not covered" >function ($compile, $accordion, $state) {</span></span>
+<span class="cstat-no" title="statement not covered" >  return {</span>
+    scope: {
+      data: '=',
+      params: '=',
+      special: '='
+    },
+    compile: <span class="fstat-no" title="function not covered" >function compile(templateElement, templateAttrs) {</span>
+<span class="cstat-no" title="statement not covered" >      return {</span>
+        pre: <span class="fstat-no" title="function not covered" >function pre($scope) {</span>
+<span class="cstat-no" title="statement not covered" >          $scope.getHref = $scope.$parent.getHref;</span>
+<span class="cstat-no" title="statement not covered" >          $scope.getCurrentState = $scope.$parent.getCurrentState;</span>
+<span class="cstat-no" title="statement not covered" >          var paramList = $scope.params;</span>
+<span class="cstat-no" title="statement not covered" >          var specialDict = $scope.special || {};</span>
+<span class="cstat-no" title="statement not covered" >          $scope.getCurrentEntityState = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >            var state = $scope.getCurrentState();</span>
+<span class="cstat-no" title="statement not covered" >            return state.indexOf('treeEntity') &gt; -1 ? state.slice(0, state.indexOf('treeEntity') + 'treeEntity'.length) : state + '.treeEntity';</span>
+          };
+<span class="cstat-no" title="statement not covered" >          var treeData = $scope.data;</span>
+<span class="cstat-no" title="statement not covered" >          templateAttrs.timeout === undefined ? 400 : parseint(templateAttrs.timeout);</span>
+<span class="cstat-no" title="statement not covered" >          var html = '&lt;div  class="accordionTree"&gt;  &lt;ul class="accordion"&gt;';</span>
+<span class="cstat-no" title="statement not covered" >          var elements = [];</span>
+<span class="cstat-no" title="statement not covered" >          if (!treeData.data) {</span>
+<span class="cstat-no" title="statement not covered" >            throw 'define data attribute for tree';</span>
+          }
+<span class="cstat-no" title="statement not covered" >          treeData.data.forEach(<span class="fstat-no" title="function not covered" >function (item) {</span></span>
+<span class="cstat-no" title="statement not covered" >            elements.push(treeBuilder.buildNode(item, paramList, specialDict));</span>
+          });
+<span class="cstat-no" title="statement not covered" >          var treeHtml = html + elements.join('') + '&lt;/ul&gt;&lt;/div&gt;';</span>
+<span class="cstat-no" title="statement not covered" >          templateElement.replaceWith($compile(treeHtml)($scope));</span>
+<span class="cstat-no" title="statement not covered" >          bindToggleEvents();</span>
+        }
+      };
+    },
+    controller: <span class="fstat-no" title="function not covered" >function controller($scope) {</span>
+    }
+  };
+};</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Aug 08 2016 16:16:48 GMT+0300 (RTZ 2 (зима))
+</div>
+</div>
+<script src="../../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../../sorter.js"></script>
+</body>
+</html>

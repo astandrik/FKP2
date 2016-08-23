@@ -1,0 +1,2174 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for www\assets\a6e0d15d\yii.activeForm.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../index.html">all files</a> / <a href="index.html">www/assets/a6e0d15d/</a> yii.activeForm.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>0/266</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/159</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/54</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>0/266</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364
+365
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389
+390
+391
+392
+393
+394
+395
+396
+397
+398
+399
+400
+401
+402
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412
+413
+414
+415
+416
+417
+418
+419
+420
+421
+422
+423
+424
+425
+426
+427
+428
+429
+430
+431
+432
+433
+434
+435
+436
+437
+438
+439
+440
+441
+442
+443
+444
+445
+446
+447
+448
+449
+450
+451
+452
+453
+454
+455
+456
+457
+458
+459
+460
+461
+462
+463
+464
+465
+466
+467
+468
+469
+470
+471
+472
+473
+474
+475
+476
+477
+478
+479
+480
+481
+482
+483
+484
+485
+486
+487
+488
+489
+490
+491
+492
+493
+494
+495
+496
+497
+498
+499
+500
+501
+502
+503
+504
+505
+506
+507
+508
+509
+510
+511
+512
+513
+514
+515
+516
+517
+518
+519
+520
+521
+522
+523
+524
+525
+526
+527
+528
+529
+530
+531
+532
+533
+534
+535
+536
+537
+538
+539
+540
+541
+542
+543
+544
+545
+546
+547
+548
+549
+550
+551
+552
+553
+554
+555
+556
+557
+558
+559
+560
+561
+562
+563
+564
+565
+566
+567
+568
+569
+570
+571
+572
+573
+574
+575
+576
+577
+578
+579
+580
+581
+582
+583
+584
+585
+586
+587
+588
+589
+590
+591
+592
+593
+594
+595
+596
+597
+598
+599
+600
+601
+602
+603
+604
+605
+606
+607
+608
+609
+610
+611
+612
+613
+614
+615
+616
+617
+618
+619
+620
+621
+622
+623
+624
+625
+626
+627
+628
+629
+630
+631
+632
+633
+634
+635
+636
+637
+638
+639
+640
+641
+642
+643
+644
+645
+646
+647
+648
+649
+650
+651
+652
+653
+654
+655
+656
+657
+658
+659
+660
+661
+662
+663
+664
+665
+666
+667
+668
+669
+670
+671
+672
+673
+674
+675
+676
+677
+678
+679
+680
+681
+682
+683
+684
+685
+686
+687
+688
+689
+690
+691
+692
+693
+694
+695
+696
+697
+698
+699
+700
+701
+702
+703
+704</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
+ * Yii form widget.
+ *
+ * This is the JavaScript widget used by the yii\widgets\ActiveForm widget.
+ *
+ * @link http://www.yiiframework.com/
+ * @copyright Copyright (c) 2008 Yii Software LLC
+ * @license http://www.yiiframework.com/license/
+ * @author Qiang Xue &lt;qiang.xue@gmail.com&gt;
+ * @since 2.0
+ */
+<span class="cstat-no" title="statement not covered" >(<span class="fstat-no" title="function not covered" >function ($) {</span></span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    $.fn.yiiActiveForm = <span class="fstat-no" title="function not covered" >function (method) {</span></span>
+<span class="cstat-no" title="statement not covered" >        if (methods[method]) {</span>
+<span class="cstat-no" title="statement not covered" >            return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));</span>
+        } else <span class="cstat-no" title="statement not covered" >if (typeof method === 'object' || !method) {</span>
+<span class="cstat-no" title="statement not covered" >            return methods.init.apply(this, arguments);</span>
+        } else {
+<span class="cstat-no" title="statement not covered" >            $.error('Method ' + method + ' does not exist on jQuery.yiiActiveForm');</span>
+<span class="cstat-no" title="statement not covered" >            return false;</span>
+        }
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    var events = {</span>
+        /**
+         * beforeValidate event is triggered before validating the whole form.
+         * The signature of the event handler should be:
+         *     function (event, messages, deferreds)
+         * where
+         *  - event: an Event object.
+         *  - messages: an associative array with keys being attribute IDs and values being error message arrays
+         *    for the corresponding attributes.
+         *  - deferreds: an array of Deferred objects. You can use deferreds.add(callback) to add a new deferred validation.
+         *
+         * If the handler returns a boolean false, it will stop further form validation after this event. And as
+         * a result, afterValidate event will not be triggered.
+         */
+        beforeValidate: 'beforeValidate',
+        /**
+         * afterValidate event is triggered after validating the whole form.
+         * The signature of the event handler should be:
+         *     function (event, messages, errorAttributes)
+         * where
+         *  - event: an Event object.
+         *  - messages: an associative array with keys being attribute IDs and values being error message arrays
+         *    for the corresponding attributes.
+         *  - errorAttributes: an array of attributes that have validation errors. Please refer to attributeDefaults for the structure of this parameter.
+         */
+        afterValidate: 'afterValidate',
+        /**
+         * beforeValidateAttribute event is triggered before validating an attribute.
+         * The signature of the event handler should be:
+         *     function (event, attribute, messages, deferreds)
+         * where
+         *  - event: an Event object.
+         *  - attribute: the attribute to be validated. Please refer to attributeDefaults for the structure of this parameter.
+         *  - messages: an array to which you can add validation error messages for the specified attribute.
+         *  - deferreds: an array of Deferred objects. You can use deferreds.add(callback) to add a new deferred validation.
+         *
+         * If the handler returns a boolean false, it will stop further validation of the specified attribute.
+         * And as a result, afterValidateAttribute event will not be triggered.
+         */
+        beforeValidateAttribute: 'beforeValidateAttribute',
+        /**
+         * afterValidateAttribute event is triggered after validating the whole form and each attribute.
+         * The signature of the event handler should be:
+         *     function (event, attribute, messages)
+         * where
+         *  - event: an Event object.
+         *  - attribute: the attribute being validated. Please refer to attributeDefaults for the structure of this parameter.
+         *  - messages: an array to which you can add additional validation error messages for the specified attribute.
+         */
+        afterValidateAttribute: 'afterValidateAttribute',
+        /**
+         * beforeSubmit event is triggered before submitting the form after all validations have passed.
+         * The signature of the event handler should be:
+         *     function (event)
+         * where event is an Event object.
+         *
+         * If the handler returns a boolean false, it will stop form submission.
+         */
+        beforeSubmit: 'beforeSubmit',
+        /**
+         * ajaxBeforeSend event is triggered before sending an AJAX request for AJAX-based validation.
+         * The signature of the event handler should be:
+         *     function (event, jqXHR, settings)
+         * where
+         *  - event: an Event object.
+         *  - jqXHR: a jqXHR object
+         *  - settings: the settings for the AJAX request
+         */
+        ajaxBeforeSend: 'ajaxBeforeSend',
+        /**
+         * ajaxComplete event is triggered after completing an AJAX request for AJAX-based validation.
+         * The signature of the event handler should be:
+         *     function (event, jqXHR, textStatus)
+         * where
+         *  - event: an Event object.
+         *  - jqXHR: a jqXHR object
+         *  - textStatus: the status of the request ("success", "notmodified", "error", "timeout", "abort", or "parsererror").
+         */
+        ajaxComplete: 'ajaxComplete'
+    };
+&nbsp;
+    // NOTE: If you change any of these defaults, make sure you update yii\widgets\ActiveForm::getClientOptions() as well
+<span class="cstat-no" title="statement not covered" >    var defaults = {</span>
+        // whether to encode the error summary
+        encodeErrorSummary: true,
+        // the jQuery selector for the error summary
+        errorSummary: '.error-summary',
+        // whether to perform validation before submitting the form.
+        validateOnSubmit: true,
+        // the container CSS class representing the corresponding attribute has validation error
+        errorCssClass: 'has-error',
+        // the container CSS class representing the corresponding attribute passes validation
+        successCssClass: 'has-success',
+        // the container CSS class representing the corresponding attribute is being validated
+        validatingCssClass: 'validating',
+        // the GET parameter name indicating an AJAX-based validation
+        ajaxParam: 'ajax',
+        // the type of data that you're expecting back from the server
+        ajaxDataType: 'json',
+        // the URL for performing AJAX-based validation. If not set, it will use the the form's action
+        validationUrl: undefined,
+        // whether to scroll to first visible error after validation.
+        scrollToError: true
+    };
+&nbsp;
+    // NOTE: If you change any of these defaults, make sure you update yii\widgets\ActiveField::getClientOptions() as well
+<span class="cstat-no" title="statement not covered" >    var attributeDefaults = {</span>
+        // a unique ID identifying an attribute (e.g. "loginform-username") in a form
+        id: undefined,
+        // attribute name or expression (e.g. "[0]content" for tabular input)
+        name: undefined,
+        // the jQuery selector of the container of the input field
+        container: undefined,
+        // the jQuery selector of the input field under the context of the form
+        input: undefined,
+        // the jQuery selector of the error tag under the context of the container
+        error: '.help-block',
+        // whether to encode the error
+        encodeError: true,
+        // whether to perform validation when a change is detected on the input
+        validateOnChange: true,
+        // whether to perform validation when the input loses focus
+        validateOnBlur: true,
+        // whether to perform validation when the user is typing.
+        validateOnType: false,
+        // number of milliseconds that the validation should be delayed when a user is typing in the input field.
+        validationDelay: 500,
+        // whether to enable AJAX-based validation.
+        enableAjaxValidation: false,
+        // function (attribute, value, messages, deferred, $form), the client-side validation function.
+        validate: undefined,
+        // status of the input field, 0: empty, not entered before, 1: validated, 2: pending validation, 3: validating
+        status: 0,
+        // whether the validation is cancelled by beforeValidateAttribute event handler
+        cancelled: false,
+        // the value of the input
+        value: undefined
+    };
+&nbsp;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    var submitDefer;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    var setSubmitFinalizeDefer = <span class="fstat-no" title="function not covered" >function($form) {</span></span>
+<span class="cstat-no" title="statement not covered" >        submitDefer = $.Deferred();</span>
+<span class="cstat-no" title="statement not covered" >        $form.data('yiiSubmitFinalizePromise', submitDefer.promise());</span>
+    };
+&nbsp;
+    // finalize yii.js $form.submit
+<span class="cstat-no" title="statement not covered" >    var submitFinalize = <span class="fstat-no" title="function not covered" >function($form) {</span></span>
+<span class="cstat-no" title="statement not covered" >        if(submitDefer) {</span>
+<span class="cstat-no" title="statement not covered" >            submitDefer.resolve();</span>
+<span class="cstat-no" title="statement not covered" >            submitDefer = undefined;</span>
+<span class="cstat-no" title="statement not covered" >            $form.removeData('yiiSubmitFinalizePromise');</span>
+        }
+    };
+&nbsp;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    var methods = {</span>
+        init: <span class="fstat-no" title="function not covered" >function (attributes, options) {</span>
+<span class="cstat-no" title="statement not covered" >            return this.each(<span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                var $form = $(this);</span>
+<span class="cstat-no" title="statement not covered" >                if ($form.data('yiiActiveForm')) {</span>
+<span class="cstat-no" title="statement not covered" >                    return;</span>
+                }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                var settings = $.extend({}, defaults, options || {});</span>
+<span class="cstat-no" title="statement not covered" >                if (settings.validationUrl === undefined) {</span>
+<span class="cstat-no" title="statement not covered" >                    settings.validationUrl = $form.attr('action');</span>
+                }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                $.each(attributes, <span class="fstat-no" title="function not covered" >function (i) {</span></span>
+<span class="cstat-no" title="statement not covered" >                    attributes[i] = $.extend({value: getValue($form, this)}, attributeDefaults, this);</span>
+<span class="cstat-no" title="statement not covered" >                    watchAttribute($form, attributes[i]);</span>
+                });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                $form.data('yiiActiveForm', {</span>
+                    settings: settings,
+                    attributes: attributes,
+                    submitting: false,
+                    validated: false
+                });
+&nbsp;
+                /**
+                 * Clean up error status when the form is reset.
+                 * Note that $form.on('reset', ...) does work because the "reset" event does not bubble on IE.
+                 */
+<span class="cstat-no" title="statement not covered" >                $form.bind('reset.yiiActiveForm', methods.resetForm);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                if (settings.validateOnSubmit) {</span>
+<span class="cstat-no" title="statement not covered" >                    $form.on('mouseup.yiiActiveForm keyup.yiiActiveForm', ':submit', <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                        $form.data('yiiActiveForm').submitObject = $(this);</span>
+                    });
+<span class="cstat-no" title="statement not covered" >                    $form.on('submit.yiiActiveForm', methods.submitForm);</span>
+                }
+            });
+        },
+&nbsp;
+        // add a new attribute to the form dynamically.
+        // please refer to attributeDefaults for the structure of attribute
+        add: <span class="fstat-no" title="function not covered" >function (attribute) {</span>
+<span class="cstat-no" title="statement not covered" >            var $form = $(this);</span>
+<span class="cstat-no" title="statement not covered" >            attribute = $.extend({value: getValue($form, attribute)}, attributeDefaults, attribute);</span>
+<span class="cstat-no" title="statement not covered" >            $form.data('yiiActiveForm').attributes.push(attribute);</span>
+<span class="cstat-no" title="statement not covered" >            watchAttribute($form, attribute);</span>
+        },
+&nbsp;
+        // remove the attribute with the specified ID from the form
+        remove: <span class="fstat-no" title="function not covered" >function (id) {</span>
+<span class="cstat-no" title="statement not covered" >            var $form = $(this),</span>
+                attributes = $form.data('yiiActiveForm').attributes,
+                index = -1,
+                attribute = undefined;
+<span class="cstat-no" title="statement not covered" >            $.each(attributes, <span class="fstat-no" title="function not covered" >function (i) {</span></span>
+<span class="cstat-no" title="statement not covered" >                if (attributes[i]['id'] == id) {</span>
+<span class="cstat-no" title="statement not covered" >                    index = i;</span>
+<span class="cstat-no" title="statement not covered" >                    attribute = attributes[i];</span>
+<span class="cstat-no" title="statement not covered" >                    return false;</span>
+                }
+            });
+<span class="cstat-no" title="statement not covered" >            if (index &gt;= 0) {</span>
+<span class="cstat-no" title="statement not covered" >                attributes.splice(index, 1);</span>
+<span class="cstat-no" title="statement not covered" >                unwatchAttribute($form, attribute);</span>
+            }
+<span class="cstat-no" title="statement not covered" >            return attribute;</span>
+        },
+&nbsp;
+        // manually trigger the validation of the attribute with the specified ID
+        validateAttribute: <span class="fstat-no" title="function not covered" >function (id) {</span>
+<span class="cstat-no" title="statement not covered" >            var attribute = methods.find.call(this, id);</span>
+<span class="cstat-no" title="statement not covered" >            if (attribute != undefined) {</span>
+<span class="cstat-no" title="statement not covered" >                validateAttribute($(this), attribute, true);</span>
+            }
+        },
+&nbsp;
+        // find an attribute config based on the specified attribute ID
+        find: <span class="fstat-no" title="function not covered" >function (id) {</span>
+<span class="cstat-no" title="statement not covered" >            var attributes = $(this).data('yiiActiveForm').attributes,</span>
+                result = undefined;
+<span class="cstat-no" title="statement not covered" >            $.each(attributes, <span class="fstat-no" title="function not covered" >function (i) {</span></span>
+<span class="cstat-no" title="statement not covered" >                if (attributes[i]['id'] == id) {</span>
+<span class="cstat-no" title="statement not covered" >                    result = attributes[i];</span>
+<span class="cstat-no" title="statement not covered" >                    return false;</span>
+                }
+            });
+<span class="cstat-no" title="statement not covered" >            return result;</span>
+        },
+&nbsp;
+        destroy: <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >            return this.each(<span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                $(this).unbind('.yiiActiveForm');</span>
+<span class="cstat-no" title="statement not covered" >                $(this).removeData('yiiActiveForm');</span>
+            });
+        },
+&nbsp;
+        data: <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >            return this.data('yiiActiveForm');</span>
+        },
+&nbsp;
+        // validate all applicable inputs in the form
+        validate: <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >            var $form = $(this),</span>
+                data = $form.data('yiiActiveForm'),
+                needAjaxValidation = false,
+                messages = {},
+                deferreds = deferredArray(),
+                submitting = data.submitting;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            if (submitting) {</span>
+<span class="cstat-no" title="statement not covered" >                var event = $.Event(events.beforeValidate);</span>
+<span class="cstat-no" title="statement not covered" >                $form.trigger(event, [messages, deferreds]);</span>
+<span class="cstat-no" title="statement not covered" >                if (event.result === false) {</span>
+<span class="cstat-no" title="statement not covered" >                    data.submitting = false;</span>
+<span class="cstat-no" title="statement not covered" >                    submitFinalize($form);</span>
+<span class="cstat-no" title="statement not covered" >                    return;</span>
+                }
+            }
+&nbsp;
+            // client-side validation
+<span class="cstat-no" title="statement not covered" >            $.each(data.attributes, <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                if (!$(this.input).is(":disabled")) {</span>
+<span class="cstat-no" title="statement not covered" >                    this.cancelled = false;</span>
+                    // perform validation only if the form is being submitted or if an attribute is pending validation
+<span class="cstat-no" title="statement not covered" >                    if (data.submitting || this.status === 2 || this.status === 3) {</span>
+<span class="cstat-no" title="statement not covered" >                        var msg = messages[this.id];</span>
+<span class="cstat-no" title="statement not covered" >                        if (msg === undefined) {</span>
+<span class="cstat-no" title="statement not covered" >                            msg = [];</span>
+<span class="cstat-no" title="statement not covered" >                            messages[this.id] = msg;</span>
+                        }
+<span class="cstat-no" title="statement not covered" >                        var event = $.Event(events.beforeValidateAttribute);</span>
+<span class="cstat-no" title="statement not covered" >                        $form.trigger(event, [this, msg, deferreds]);</span>
+<span class="cstat-no" title="statement not covered" >                        if (event.result !== false) {</span>
+<span class="cstat-no" title="statement not covered" >                            if (this.validate) {</span>
+<span class="cstat-no" title="statement not covered" >                                this.validate(this, getValue($form, this), msg, deferreds, $form);</span>
+                            }
+<span class="cstat-no" title="statement not covered" >                            if (this.enableAjaxValidation) {</span>
+<span class="cstat-no" title="statement not covered" >                                needAjaxValidation = true;</span>
+                            }
+                        } else {
+<span class="cstat-no" title="statement not covered" >                            this.cancelled = true;</span>
+                        }
+                    }
+                }
+            });
+&nbsp;
+            // ajax validation
+<span class="cstat-no" title="statement not covered" >            $.when.apply(this, deferreds).always(<span class="fstat-no" title="function not covered" >function() {</span></span>
+                // Remove empty message arrays
+<span class="cstat-no" title="statement not covered" >                for (var i in messages) {</span>
+<span class="cstat-no" title="statement not covered" >                    if (0 === messages[i].length) {</span>
+<span class="cstat-no" title="statement not covered" >                        delete messages[i];</span>
+                    }
+                }
+<span class="cstat-no" title="statement not covered" >                if (needAjaxValidation) {</span>
+<span class="cstat-no" title="statement not covered" >                    var $button = data.submitObject,</span>
+                        extData = '&amp;' + data.settings.ajaxParam + '=' + $form.attr('id');
+<span class="cstat-no" title="statement not covered" >                    if ($button &amp;&amp; $button.length &amp;&amp; $button.attr('name')) {</span>
+<span class="cstat-no" title="statement not covered" >                        extData += '&amp;' + $button.attr('name') + '=' + $button.attr('value');</span>
+                    }
+<span class="cstat-no" title="statement not covered" >                    $.ajax({</span>
+                        url: data.settings.validationUrl,
+                        type: $form.attr('method'),
+                        data: $form.serialize() + extData,
+                        dataType: data.settings.ajaxDataType,
+                        complete: <span class="fstat-no" title="function not covered" >function (jqXHR, textStatus) {</span>
+<span class="cstat-no" title="statement not covered" >                            $form.trigger(events.ajaxComplete, [jqXHR, textStatus]);</span>
+                        },
+                        beforeSend: <span class="fstat-no" title="function not covered" >function (jqXHR, settings) {</span>
+<span class="cstat-no" title="statement not covered" >                            $form.trigger(events.ajaxBeforeSend, [jqXHR, settings]);</span>
+                        },
+                        success: <span class="fstat-no" title="function not covered" >function (msgs) {</span>
+<span class="cstat-no" title="statement not covered" >                            if (msgs !== null &amp;&amp; typeof msgs === 'object') {</span>
+<span class="cstat-no" title="statement not covered" >                                $.each(data.attributes, <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                                    if (!this.enableAjaxValidation || this.cancelled) {</span>
+<span class="cstat-no" title="statement not covered" >                                        delete msgs[this.id];</span>
+                                    }
+                                });
+<span class="cstat-no" title="statement not covered" >                                updateInputs($form, $.extend(messages, msgs), submitting);</span>
+                            } else {
+<span class="cstat-no" title="statement not covered" >                                updateInputs($form, messages, submitting);</span>
+                            }
+                        },
+                        error: <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                            data.submitting = false;</span>
+<span class="cstat-no" title="statement not covered" >                            submitFinalize($form);</span>
+                        }
+                    });
+                } else <span class="cstat-no" title="statement not covered" >if (data.submitting) {</span>
+                    // delay callback so that the form can be submitted without problem
+<span class="cstat-no" title="statement not covered" >                    setTimeout(<span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                        updateInputs($form, messages, submitting);</span>
+                    }, 200);
+                } else {
+<span class="cstat-no" title="statement not covered" >                    updateInputs($form, messages, submitting);</span>
+                }
+            });
+        },
+&nbsp;
+        submitForm: <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >            var $form = $(this),</span>
+                data = $form.data('yiiActiveForm');
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            if (data.validated) {</span>
+                // Second submit's call (from validate/updateInputs)
+<span class="cstat-no" title="statement not covered" >                data.submitting = false;</span>
+<span class="cstat-no" title="statement not covered" >                var event = $.Event(events.beforeSubmit);</span>
+<span class="cstat-no" title="statement not covered" >                $form.trigger(event);</span>
+<span class="cstat-no" title="statement not covered" >                if (event.result === false) {</span>
+<span class="cstat-no" title="statement not covered" >                    data.validated = false;</span>
+<span class="cstat-no" title="statement not covered" >                    submitFinalize($form);</span>
+<span class="cstat-no" title="statement not covered" >                    return false;</span>
+                }
+<span class="cstat-no" title="statement not covered" >                updateHiddenButton($form);</span>
+<span class="cstat-no" title="statement not covered" >                return true; </span>  // continue submitting the form since validation passes
+            } else {
+                // First submit's call (from yii.js/handleAction) - execute validating
+<span class="cstat-no" title="statement not covered" >                setSubmitFinalizeDefer($form);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                if (data.settings.timer !== undefined) {</span>
+<span class="cstat-no" title="statement not covered" >                    clearTimeout(data.settings.timer);</span>
+                }
+<span class="cstat-no" title="statement not covered" >                data.submitting = true;</span>
+<span class="cstat-no" title="statement not covered" >                methods.validate.call($form);</span>
+<span class="cstat-no" title="statement not covered" >                return false;</span>
+            }
+        },
+&nbsp;
+        resetForm: <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >            var $form = $(this);</span>
+<span class="cstat-no" title="statement not covered" >            var data = $form.data('yiiActiveForm');</span>
+            // Because we bind directly to a form reset event instead of a reset button (that may not exist),
+            // when this function is executed form input values have not been reset yet.
+            // Therefore we do the actual reset work through setTimeout.
+<span class="cstat-no" title="statement not covered" >            setTimeout(<span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                $.each(data.attributes, <span class="fstat-no" title="function not covered" >function () {</span></span>
+                    // Without setTimeout() we would get the input values that are not reset yet.
+<span class="cstat-no" title="statement not covered" >                    this.value = getValue($form, this);</span>
+<span class="cstat-no" title="statement not covered" >                    this.status = 0;</span>
+<span class="cstat-no" title="statement not covered" >                    var $container = $form.find(this.container);</span>
+<span class="cstat-no" title="statement not covered" >                    $container.removeClass(</span>
+                        data.settings.validatingCssClass + ' ' +
+                            data.settings.errorCssClass + ' ' +
+                            data.settings.successCssClass
+                    );
+<span class="cstat-no" title="statement not covered" >                    $container.find(this.error).html('');</span>
+                });
+<span class="cstat-no" title="statement not covered" >                $form.find(data.settings.errorSummary).hide().find('ul').html('');</span>
+            }, 1);
+        },
+&nbsp;
+        /**
+         * Updates error messages, input containers, and optionally summary as well.
+         * If an attribute is missing from messages, it is considered valid.
+         * @param messages array the validation error messages, indexed by attribute IDs
+         * @param summary whether to update summary as well.
+         */
+        updateMessages: <span class="fstat-no" title="function not covered" >function (messages, summary) {</span>
+<span class="cstat-no" title="statement not covered" >            var $form = $(this);</span>
+<span class="cstat-no" title="statement not covered" >            var data = $form.data('yiiActiveForm');</span>
+<span class="cstat-no" title="statement not covered" >            $.each(data.attributes, <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                updateInput($form, this, messages);</span>
+            });
+<span class="cstat-no" title="statement not covered" >            if (summary) {</span>
+<span class="cstat-no" title="statement not covered" >                updateSummary($form, messages);</span>
+            }
+        },
+&nbsp;
+        /**
+         * Updates error messages and input container of a single attribute.
+         * If messages is empty, the attribute is considered valid.
+         * @param id attribute ID
+         * @param messages array with error messages
+         */
+        updateAttribute: <span class="fstat-no" title="function not covered" >function(id, messages) {</span>
+<span class="cstat-no" title="statement not covered" >            var attribute = methods.find.call(this, id);</span>
+<span class="cstat-no" title="statement not covered" >            if (attribute != undefined) {</span>
+<span class="cstat-no" title="statement not covered" >                var msg = {};</span>
+<span class="cstat-no" title="statement not covered" >                msg[id] = messages;</span>
+<span class="cstat-no" title="statement not covered" >                updateInput($(this), attribute, msg);</span>
+            }
+        }
+&nbsp;
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    var watchAttribute = <span class="fstat-no" title="function not covered" >function ($form, attribute) {</span></span>
+<span class="cstat-no" title="statement not covered" >        var $input = findInput($form, attribute);</span>
+<span class="cstat-no" title="statement not covered" >        if (attribute.validateOnChange) {</span>
+<span class="cstat-no" title="statement not covered" >            $input.on('change.yiiActiveForm', <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                validateAttribute($form, attribute, false);</span>
+            });
+        }
+<span class="cstat-no" title="statement not covered" >        if (attribute.validateOnBlur) {</span>
+<span class="cstat-no" title="statement not covered" >            $input.on('blur.yiiActiveForm', <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                if (attribute.status == 0 || attribute.status == 1) {</span>
+<span class="cstat-no" title="statement not covered" >                    validateAttribute($form, attribute, true);</span>
+                }
+            });
+        }
+<span class="cstat-no" title="statement not covered" >        if (attribute.validateOnType) {</span>
+<span class="cstat-no" title="statement not covered" >            $input.on('keyup.yiiActiveForm', <span class="fstat-no" title="function not covered" >function (e) {</span></span>
+<span class="cstat-no" title="statement not covered" >                if ($.inArray(e.which, [16, 17, 18, 37, 38, 39, 40]) !== -1 ) {</span>
+<span class="cstat-no" title="statement not covered" >                    return;</span>
+                }
+<span class="cstat-no" title="statement not covered" >                if (attribute.value !== getValue($form, attribute)) {</span>
+<span class="cstat-no" title="statement not covered" >                    validateAttribute($form, attribute, false, attribute.validationDelay);</span>
+                }
+            });
+        }
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    var unwatchAttribute = <span class="fstat-no" title="function not covered" >function ($form, attribute) {</span></span>
+<span class="cstat-no" title="statement not covered" >        findInput($form, attribute).off('.yiiActiveForm');</span>
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    var validateAttribute = <span class="fstat-no" title="function not covered" >function ($form, attribute, forceValidate, validationDelay) {</span></span>
+<span class="cstat-no" title="statement not covered" >        var data = $form.data('yiiActiveForm');</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (forceValidate) {</span>
+<span class="cstat-no" title="statement not covered" >            attribute.status = 2;</span>
+        }
+<span class="cstat-no" title="statement not covered" >        $.each(data.attributes, <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >            if (this.value !== getValue($form, this)) {</span>
+<span class="cstat-no" title="statement not covered" >                this.status = 2;</span>
+<span class="cstat-no" title="statement not covered" >                forceValidate = true;</span>
+            }
+        });
+<span class="cstat-no" title="statement not covered" >        if (!forceValidate) {</span>
+<span class="cstat-no" title="statement not covered" >            return;</span>
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (data.settings.timer !== undefined) {</span>
+<span class="cstat-no" title="statement not covered" >            clearTimeout(data.settings.timer);</span>
+        }
+<span class="cstat-no" title="statement not covered" >        data.settings.timer = setTimeout(<span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >            if (data.submitting || $form.is(':hidden')) {</span>
+<span class="cstat-no" title="statement not covered" >                return;</span>
+            }
+<span class="cstat-no" title="statement not covered" >            $.each(data.attributes, <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                if (this.status === 2) {</span>
+<span class="cstat-no" title="statement not covered" >                    this.status = 3;</span>
+<span class="cstat-no" title="statement not covered" >                    $form.find(this.container).addClass(data.settings.validatingCssClass);</span>
+                }
+            });
+<span class="cstat-no" title="statement not covered" >            methods.validate.call($form);</span>
+        }, validationDelay ? validationDelay : 200);
+    };
+&nbsp;
+    /**
+     * Returns an array prototype with a shortcut method for adding a new deferred.
+     * The context of the callback will be the deferred object so it can be resolved like ```this.resolve()```
+     * @returns Array
+     */
+<span class="cstat-no" title="statement not covered" >    var deferredArray = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >        var array = [];</span>
+<span class="cstat-no" title="statement not covered" >        array.add = <span class="fstat-no" title="function not covered" >function(callback) {</span></span>
+<span class="cstat-no" title="statement not covered" >            this.push(new $.Deferred(callback));</span>
+        };
+<span class="cstat-no" title="statement not covered" >        return array;</span>
+    };
+&nbsp;
+    /**
+     * Updates the error messages and the input containers for all applicable attributes
+     * @param $form the form jQuery object
+     * @param messages array the validation error messages
+     * @param submitting whether this method is called after validation triggered by form submission
+     */
+<span class="cstat-no" title="statement not covered" >    var updateInputs = <span class="fstat-no" title="function not covered" >function ($form, messages, submitting) {</span></span>
+<span class="cstat-no" title="statement not covered" >        var data = $form.data('yiiActiveForm');</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (submitting) {</span>
+<span class="cstat-no" title="statement not covered" >            var errorAttributes = [];</span>
+<span class="cstat-no" title="statement not covered" >            $.each(data.attributes, <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                if (!$(this.input).is(":disabled") &amp;&amp; !this.cancelled &amp;&amp; updateInput($form, this, messages)) {</span>
+<span class="cstat-no" title="statement not covered" >                    errorAttributes.push(this);</span>
+                }
+            });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            $form.trigger(events.afterValidate, [messages, errorAttributes]);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            updateSummary($form, messages);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            if (errorAttributes.length) {</span>
+<span class="cstat-no" title="statement not covered" >                if (data.settings.scrollToError) {</span>
+<span class="cstat-no" title="statement not covered" >                    var top = $form.find($.map(errorAttributes, <span class="fstat-no" title="function not covered" >function(attribute) {</span></span>
+<span class="cstat-no" title="statement not covered" >                        return attribute.input;</span>
+                    }).join(',')).first().closest(':visible').offset().top;
+<span class="cstat-no" title="statement not covered" >                    var wtop = $(window).scrollTop();</span>
+<span class="cstat-no" title="statement not covered" >                    if (top &lt; wtop || top &gt; wtop + $(window).height()) {</span>
+<span class="cstat-no" title="statement not covered" >                        $(window).scrollTop(top);</span>
+                    }
+                }
+<span class="cstat-no" title="statement not covered" >                data.submitting = false;</span>
+            } else {
+<span class="cstat-no" title="statement not covered" >                data.validated = true;</span>
+<span class="cstat-no" title="statement not covered" >                $form.submit();</span>
+            }
+        } else {
+<span class="cstat-no" title="statement not covered" >            $.each(data.attributes, <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                if (!this.cancelled &amp;&amp; (this.status === 2 || this.status === 3)) {</span>
+<span class="cstat-no" title="statement not covered" >                    updateInput($form, this, messages);</span>
+                }
+            });
+        }
+<span class="cstat-no" title="statement not covered" >        submitFinalize($form);</span>
+    };
+&nbsp;
+    /**
+     * Updates hidden field that represents clicked submit button.
+     * @param $form the form jQuery object.
+     */
+<span class="cstat-no" title="statement not covered" >    var updateHiddenButton = <span class="fstat-no" title="function not covered" >function ($form) {</span></span>
+<span class="cstat-no" title="statement not covered" >        var data = $form.data('yiiActiveForm');</span>
+<span class="cstat-no" title="statement not covered" >        var $button = data.submitObject || $form.find(':submit:first');</span>
+        // TODO: if the submission is caused by "change" event, it will not work
+<span class="cstat-no" title="statement not covered" >        if ($button.length &amp;&amp; $button.attr('type') == 'submit' &amp;&amp; $button.attr('name')) {</span>
+            // simulate button input value
+<span class="cstat-no" title="statement not covered" >            var $hiddenButton = $('input[type="hidden"][name="' + $button.attr('name') + '"]', $form);</span>
+<span class="cstat-no" title="statement not covered" >            if (!$hiddenButton.length) {</span>
+<span class="cstat-no" title="statement not covered" >                $('&lt;input&gt;').attr({</span>
+                    type: 'hidden',
+                    name: $button.attr('name'),
+                    value: $button.attr('value')
+                }).appendTo($form);
+            } else {
+<span class="cstat-no" title="statement not covered" >                $hiddenButton.attr('value', $button.attr('value'));</span>
+            }
+        }
+    };
+&nbsp;
+    /**
+     * Updates the error message and the input container for a particular attribute.
+     * @param $form the form jQuery object
+     * @param attribute object the configuration for a particular attribute.
+     * @param messages array the validation error messages
+     * @return boolean whether there is a validation error for the specified attribute
+     */
+<span class="cstat-no" title="statement not covered" >    var updateInput = <span class="fstat-no" title="function not covered" >function ($form, attribute, messages) {</span></span>
+<span class="cstat-no" title="statement not covered" >        var data = $form.data('yiiActiveForm'),</span>
+            $input = findInput($form, attribute),
+            hasError = false;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if (!$.isArray(messages[attribute.id])) {</span>
+<span class="cstat-no" title="statement not covered" >            messages[attribute.id] = [];</span>
+        }
+<span class="cstat-no" title="statement not covered" >        $form.trigger(events.afterValidateAttribute, [attribute, messages[attribute.id]]);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        attribute.status = 1;</span>
+<span class="cstat-no" title="statement not covered" >        if ($input.length) {</span>
+<span class="cstat-no" title="statement not covered" >            hasError = messages[attribute.id].length &gt; 0;</span>
+<span class="cstat-no" title="statement not covered" >            var $container = $form.find(attribute.container);</span>
+<span class="cstat-no" title="statement not covered" >            var $error = $container.find(attribute.error);</span>
+<span class="cstat-no" title="statement not covered" >            if (hasError) {</span>
+<span class="cstat-no" title="statement not covered" >                if (attribute.encodeError) {</span>
+<span class="cstat-no" title="statement not covered" >                    $error.text(messages[attribute.id][0]);</span>
+                } else {
+<span class="cstat-no" title="statement not covered" >                    $error.html(messages[attribute.id][0]);</span>
+                }
+<span class="cstat-no" title="statement not covered" >                $container.removeClass(data.settings.validatingCssClass + ' ' + data.settings.successCssClass)</span>
+                    .addClass(data.settings.errorCssClass);
+            } else {
+<span class="cstat-no" title="statement not covered" >                $error.empty();</span>
+<span class="cstat-no" title="statement not covered" >                $container.removeClass(data.settings.validatingCssClass + ' ' + data.settings.errorCssClass + ' ')</span>
+                    .addClass(data.settings.successCssClass);
+            }
+<span class="cstat-no" title="statement not covered" >            attribute.value = getValue($form, attribute);</span>
+        }
+<span class="cstat-no" title="statement not covered" >        return hasError;</span>
+    };
+&nbsp;
+    /**
+     * Updates the error summary.
+     * @param $form the form jQuery object
+     * @param messages array the validation error messages
+     */
+<span class="cstat-no" title="statement not covered" >    var updateSummary = <span class="fstat-no" title="function not covered" >function ($form, messages) {</span></span>
+<span class="cstat-no" title="statement not covered" >        var data = $form.data('yiiActiveForm'),</span>
+            $summary = $form.find(data.settings.errorSummary),
+            $ul = $summary.find('ul').empty();
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if ($summary.length &amp;&amp; messages) {</span>
+<span class="cstat-no" title="statement not covered" >            $.each(data.attributes, <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                if ($.isArray(messages[this.id]) &amp;&amp; messages[this.id].length) {</span>
+<span class="cstat-no" title="statement not covered" >                    var error = $('&lt;li/&gt;');</span>
+<span class="cstat-no" title="statement not covered" >                    if (data.settings.encodeErrorSummary) {</span>
+<span class="cstat-no" title="statement not covered" >                        error.text(messages[this.id][0]);</span>
+                    } else {
+<span class="cstat-no" title="statement not covered" >                        error.html(messages[this.id][0]);</span>
+                    }
+<span class="cstat-no" title="statement not covered" >                    $ul.append(error);</span>
+                }
+            });
+<span class="cstat-no" title="statement not covered" >            $summary.toggle($ul.find('li').length &gt; 0);</span>
+        }
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    var getValue = <span class="fstat-no" title="function not covered" >function ($form, attribute) {</span></span>
+<span class="cstat-no" title="statement not covered" >        var $input = findInput($form, attribute);</span>
+<span class="cstat-no" title="statement not covered" >        var type = $input.attr('type');</span>
+<span class="cstat-no" title="statement not covered" >        if (type === 'checkbox' || type === 'radio') {</span>
+<span class="cstat-no" title="statement not covered" >            var $realInput = $input.filter(':checked');</span>
+<span class="cstat-no" title="statement not covered" >            if (!$realInput.length) {</span>
+<span class="cstat-no" title="statement not covered" >                $realInput = $form.find('input[type=hidden][name="' + $input.attr('name') + '"]');</span>
+            }
+<span class="cstat-no" title="statement not covered" >            return $realInput.val();</span>
+        } else {
+<span class="cstat-no" title="statement not covered" >            return $input.val();</span>
+        }
+    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    var findInput = <span class="fstat-no" title="function not covered" >function ($form, attribute) {</span></span>
+<span class="cstat-no" title="statement not covered" >        var $input = $form.find(attribute.input);</span>
+<span class="cstat-no" title="statement not covered" >        if ($input.length &amp;&amp; $input[0].tagName.toLowerCase() === 'div') {</span>
+            // checkbox list or radio list
+<span class="cstat-no" title="statement not covered" >            return $input.find('input');</span>
+        } else {
+<span class="cstat-no" title="statement not covered" >            return $input;</span>
+        }
+    };
+&nbsp;
+})(window.jQuery);
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Aug 08 2016 16:16:48 GMT+0300 (RTZ 2 (зима))
+</div>
+</div>
+<script src="../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../sorter.js"></script>
+</body>
+</html>

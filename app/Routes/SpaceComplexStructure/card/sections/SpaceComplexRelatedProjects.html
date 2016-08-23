@@ -1,0 +1,5 @@
+  <ul class="list-group">
+    <li class="list-group-item" ng-repeat="proj in complexFull.project | orderBy: 'cipher'"><a ng-href="{{proj.type_id == 3 ? '#/FKP/ProjectStructure/section/' +
+    proj.type_id + '/project/' + proj.id : '#/FKP/ProjectStructure/section/' +
+    proj.type_id + '/subsection/' +proj.subsection_id + '/project/' + proj.id }}">{{proj.cipher ? proj.cipher : proj.name ? proj.name : proj.id}}</a></li>
+  </ul>

@@ -1,0 +1,25 @@
+<div  ng-show="!complexFull.groups[0].name && !complexFull.launches[0].booster_complex.name && !complexFull.launches[0].stage_complex.name && !complexFull.launches[0].spaceport.name">
+  <div class="relatedProjects-text">
+      <p>Общая информация для данного комплекса отсутствует</p>
+      <p>Если нашли ошибку - свяжитесь с разработчиками.</p>
+  </div>
+</div>
+
+	<md-content flex layout-padding>
+		  <div ng-show="complexFull.groups[0].name" layout="row">
+		      <div flex="30" class="space-header-name">Назначение </div>
+		      <div flex="70" class="space-info-name">{{complexFull.groups[0].name}}</div>
+	    </div>
+	    <div ng-show="complexFull.launches[0].booster_complex.name" layout="row">
+	        <div flex="30" class="space-header-name">Ракета-носитель </div>
+	        <div flex="70" class="space-info-name">	<a href={{dict[complexFull.launches[0].booster_complex.name].href}}>{{complexFull.launches[0].booster_complex.name}}</a></div>
+      </div>
+			<div ng-show="complexFull.launches[0].stage_complex.name" layout="row">
+        <div flex="30" class="space-header-name">Разгонный блок </div>
+        <div flex="70" class="space-info-name">	<a href={{dict[complexFull.launches[0].stage_complex.name].href}}>{{complexFull.launches[0].stage_complex.name}}</a></div>
+      </div>
+			<div layout="row" ng-show="complexFull.launches[0].spaceport.name">
+        <div flex="30" class="space-header-name">Космодром </div>
+        <div flex="70" class="space-info-name"> {{complexFull.launches[0].spaceport.name}} </div>
+      </div>
+  </md-content>

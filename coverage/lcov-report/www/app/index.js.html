@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for www\app\index.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">all files</a> / <a href="index.html">www/app/</a> index.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>0/85</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/60</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/16</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>0/71</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">'use strict';
+&nbsp;
+<span class="cstat-no" title="statement not covered" >require('./router.js');</span>
+<span class="cstat-no" title="statement not covered" >require('./Project/project.js');</span>
+<span class="cstat-no" title="statement not covered" >require('./SpaceComplex/complex.js');</span>
+<span class="cstat-no" title="statement not covered" >require('./Design/design.js');</span>
+<span class="cstat-no" title="statement not covered" >require('./core/cache/cache.js');</span>
+<span class="cstat-no" title="statement not covered" >require('./core/dialogs/dialogs.js');</span>
+<span class="cstat-no" title="statement not covered" >require('./core/errorHandler/errors.js');</span>
+<span class="cstat-no" title="statement not covered" >require('./core/stateManager.js');</span>
+<span class="cstat-no" title="statement not covered" >require('./Events/events.js');</span>
+<span class="cstat-no" title="statement not covered" >require('./Documents/documents.js');</span>
+<span class="cstat-no" title="statement not covered" >require('./Orderers/orderers.js');</span>
+<span class="cstat-no" title="statement not covered" >require('./Plan/plan.js');</span>
+<span class="cstat-no" title="statement not covered" >require('./Finance/finance.js');</span>
+<span class="cstat-no" title="statement not covered" >var layout = require('./Layout/layout.js');</span>
+<span class="cstat-no" title="statement not covered" >var components = require('./components/components.js');</span>
+<span class="cstat-no" title="statement not covered" >var icons = require('./components/Icons/icons.js');</span>
+<span class="cstat-no" title="statement not covered" >var activateDir = require('./Layout/sidebar/sidebar.js').activateDir;</span>
+<span class="cstat-no" title="statement not covered" >window.angular = angular;</span>
+<span class="cstat-no" title="statement not covered" >var app = angular.module('app', [</span>
+  'cache-custom',
+  'dialogWorker',
+  'errorsModule',
+  'ui.router',
+  'ngMaterial',
+  'ngMdIcons',
+  'ncy-angular-breadcrumb',
+  'ngSanitize',
+  'dialogs.main',
+  'layout',
+  'components',
+  'router',
+  'project',
+  'complex',
+  'design',
+  'documents',
+'stateManager',
+'events',
+'orderers',
+'finance',
+"isteven-multi-select","plan",require('angular-ui-bootstrap')
+]);
+<span class="cstat-no" title="statement not covered" >var dateFormat=<span class="fstat-no" title="function not covered" >function(){<span class="cstat-no" title="statement not covered" ></span>var t=/d{1,4}|m{1,4}|yy(?:yy)?|([HhMsTt])\1?|[LloSZ]|"[^"]*"|'[^']*'/g,e=/\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\d{4})?)\b/g,a=/[^-+\dA-Z]/g,m=<span class="fstat-no" title="function not covered" >function(t,e){<span class="cstat-no" title="statement not covered" ></span>for(t=String(t),e=e||2;t.length&lt;e;)<span class="cstat-no" title="statement not covered" >t="0"+t;<span class="cstat-no" title="statement not covered" >r</span></span>eturn t}</span>;<span class="cstat-no" title="statement not covered" >r</span>eturn <span class="fstat-no" title="function not covered" >function(d,n,r){<span class="cstat-no" title="statement not covered" ></span>var y=dateFormat;<span class="cstat-no" title="statement not covered" >i</span>f(1!=arguments.length||"[object String]"!=Object.prototype.toString.call(d)||/\d/.test(d)||(n=d,d=void 0),d=d?new Date(d):new Date,isNaN(d))<span class="cstat-no" title="statement not covered" >throw SyntaxError("invalid date");<span class="cstat-no" title="statement not covered" >n</span></span>=String(y.masks[n]||n||y.masks["default"]),"UTC:"==n.slice(0,4)&amp;&amp;(n=n.slice(4),r=!0);<span class="cstat-no" title="statement not covered" >v</span>ar s=r?"getUTC":"get",i=d[s+"Date"](),o=d[s+"Day"](),u=d[s+"Month"](),M=d[s+"FullYear"](),l=d[s+"Hours"](),T=d[s+"Minutes"](),h=d[s+"Seconds"](),c=d[s+"Milliseconds"](),g=r?0:d.getTimezoneOffset(),S={d:i,dd:m(i),ddd:y.i18n.dayNames[o],dddd:y.i18n.dayNames[o+7],m:u+1,mm:m(u+1),mmm:y.i18n.monthNames[u],mmmm:y.i18n.monthNames[u+12],yy:String(M).slice(2),yyyy:M,h:l%12||12,hh:m(l%12||12),H:l,HH:m(l),M:T,MM:m(T),s:h,ss:m(h),l:m(c,3),L:m(c&gt;99?Math.round(c/10):c),t:12&gt;l?"a":"p",tt:12&gt;l?"am":"pm",T:12&gt;l?"A":"P",TT:12&gt;l?"AM":"PM",Z:r?"UTC":(String(d).match(e)||[""]).pop().replace(a,""),o:(g&gt;0?"-":"+")+m(100*Math.floor(Math.abs(g)/60)+Math.abs(g)%60,4),S:["th","st","nd","rd"][i%10&gt;3?0:(i%100-i%10!=10)*i%10]};<span class="cstat-no" title="statement not covered" >r</span>eturn n.replace(t,<span class="fstat-no" title="function not covered" >function(t){<span class="cstat-no" title="statement not covered" ></span>return t in S?S[t]:t.slice(1,t.length-1)}</span>)}</span>}</span>();<span class="cstat-no" title="statement not covered" >d</span>ateFormat.masks={"default":"ddd mmm dd yyyy HH:MM:ss",shortDate:"m/d/yy",mediumDate:"mmm d, yyyy",longDate:"mmmm d, yyyy",fullDate:"dddd, mmmm d, yyyy",shortTime:"h:MM TT",mediumTime:"h:MM:ss TT",longTime:"h:MM:ss TT Z",isoDate:"yyyy-mm-dd",isoTime:"HH:MM:ss",isoDateTime:"yyyy-mm-dd'T'HH:MM:ss",isoUtcDateTime:"UTC:yyyy-mm-dd'T'HH:MM:ss'Z'"},dateFormat.i18n={dayNames:["Sun","Mon","Tue","Wed","Thu","Fri","Sat","Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],monthNames:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec","January","February","March","April","May","June","July","August","September","October","November","December"]},Date.prototype.format=<span class="fstat-no" title="function not covered" >function(t,e){<span class="cstat-no" title="statement not covered" ></span>return dateFormat(this,t,e)}</span>;</span>
+<span class="cstat-no" title="statement not covered" >app.config([</span>
+  '$locationProvider',
+  '$urlRouterProvider',
+  '$stateProvider',
+  'ngMdIconServiceProvider',
+  '$routerProvider',
+  'calendarConfig',
+  '$breadcrumbProvider',
+  'CacheFactoryProvider',
+  '$provide',
+<span class="fstat-no" title="function not covered" >  function ($locationProvider,$urlRouterProvider, $stateProvider, ngMdIconServiceProvider, $routerProvider, calendarConfig, $breadcrumbProvider, CacheFactoryProvider, $provide) {</span>
+<span class="cstat-no" title="statement not covered" >    angular.extend(CacheFactoryProvider.defaults, { maxAge: 15 * 60 * 1000 });</span>
+<span class="cstat-no" title="statement not covered" >    $breadcrumbProvider.setOptions({ templateUrl: 'app/components/breadcrumbs.html' });</span>
+<span class="cstat-no" title="statement not covered" >    for (var e in icons) {</span>
+<span class="cstat-no" title="statement not covered" >      ngMdIconServiceProvider.addShape(e, icons[e]);</span>
+    }
+<span class="cstat-no" title="statement not covered" >    $urlRouterProvider.otherwise('/FKP');</span>
+<span class="cstat-no" title="statement not covered" >    for (var e in $routerProvider.$get.routes) {</span>
+<span class="cstat-no" title="statement not covered" >      $stateProvider.state(e, $routerProvider.$get.routes[e]);</span>
+    }
+<span class="cstat-no" title="statement not covered" >    calendarConfig.dateFormatter = 'moment'; </span> // use moment to format dates
+  }
+]);
+<span class="cstat-no" title="statement not covered" >app.run(<span class="fstat-no" title="function not covered" >function ($rootScope, $state, $cacheRunner, $errorDialogService, $errorHandler) {</span></span>
+<span class="cstat-no" title="statement not covered" >  if($(window).width() &lt; 1370) {</span>
+<span class="cstat-no" title="statement not covered" >    $('body').addClass('smallScreen');</span>
+  }
+<span class="cstat-no" title="statement not covered" >  $cacheRunner.setOptions({</span>
+    checkRate: 4000,
+    cacheRate: 1000
+  });
+<span class="cstat-no" title="statement not covered" >  $cacheRunner.startCacheRunner();</span>
+<span class="cstat-no" title="statement not covered" >  $cacheRunner.runCacheProcess();</span>
+<span class="cstat-no" title="statement not covered" >  $rootScope.$state = $state;</span>
+<span class="cstat-no" title="statement not covered" >  $rootScope.getHref = $state.href.bind($state);</span>
+<span class="cstat-no" title="statement not covered" >  $rootScope.sectionCutFunction = <span class="fstat-no" title="function not covered" >function sectionCutFunction(section) {</span></span>
+<span class="cstat-no" title="statement not covered" >    if (section &amp;&amp; section.length &gt; 30) {</span>
+<span class="cstat-no" title="statement not covered" >      var p = section;</span>
+<span class="cstat-no" title="statement not covered" >      p = p.slice(0, p.indexOf('.'));</span>
+<span class="cstat-no" title="statement not covered" >      return p;</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      return section;</span>
+    }
+  };
+<span class="cstat-no" title="statement not covered" >  $rootScope.subsectionCutFunction = <span class="fstat-no" title="function not covered" >function subsectionCutFunction(subsection) {</span></span>
+<span class="cstat-no" title="statement not covered" >    if (subsection &amp;&amp; subsection.length &gt; 30) {</span>
+<span class="cstat-no" title="statement not covered" >      var s = subsection;</span>
+<span class="cstat-no" title="statement not covered" >      s = s.slice(0, 30).concat('...');</span>
+<span class="cstat-no" title="statement not covered" >      return s;</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      return subsection;</span>
+    }
+  };
+<span class="cstat-no" title="statement not covered" >  $rootScope.projectCutFunction = <span class="fstat-no" title="function not covered" >function projectCutFunction(project) {</span></span>
+<span class="cstat-no" title="statement not covered" >    if (project &amp;&amp; project.length &gt; 30) {</span>
+<span class="cstat-no" title="statement not covered" >      return project.slice(0, 30).concat('...');</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      return project;</span>
+    }
+  };
+<span class="cstat-no" title="statement not covered" >  window.getHref = $rootScope.getHref;</span>
+<span class="cstat-no" title="statement not covered" >  $rootScope.getCurrentState = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >    return $state.current.name;</span>
+  };
+<span class="cstat-no" title="statement not covered" >  $rootScope.getCurrentHref = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >    return $rootScope.getHref($rootScope.getCurrentState());</span>
+  };
+<span class="cstat-no" title="statement not covered" >  $rootScope.$on('$stateChangeSuccess', <span class="fstat-no" title="function not covered" >function (event, toState, toParams, fromState, fromParams) {</span></span>
+<span class="cstat-no" title="statement not covered" >    activateDir(toState.name);</span>
+<span class="cstat-no" title="statement not covered" >      $rootScope.isLoading=false;</span>
+  });
+<span class="cstat-no" title="statement not covered" >  $rootScope.$on('$stateChangeStart', <span class="fstat-no" title="function not covered" >function (event, toState, toParams, fromState, fromParams, options) {</span></span>
+<span class="cstat-no" title="statement not covered" >      $rootScope.isLoading=true;</span>
+  });
+<span class="cstat-no" title="statement not covered" >  $rootScope.$on('$stateChangeError', <span class="fstat-no" title="function not covered" >function (event, toState, toParams, fromState, fromParams, error) {</span></span>
+<span class="cstat-no" title="statement not covered" >    $rootScope.isLoading=false;</span>
+<span class="cstat-no" title="statement not covered" >    debugger;</span>
+<span class="cstat-no" title="statement not covered" >    if (error &amp;&amp; error.config &amp;&amp; error.config.url) {</span>
+<span class="cstat-no" title="statement not covered" >      $errorHandler.handleError(event.name, 'Ошибка перехода по пути ' + error.config.url + '. Обратитесь к системному администратору.');</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      $errorHandler.handleError(event.name, 'Неизвестная ошибка. Обратитесь к системному администратору.');</span>
+    }
+  });
+<span class="cstat-no" title="statement not covered" >  $rootScope.$on('$stateNotFound', <span class="fstat-no" title="function not covered" >function (event, unfoundState, fromState, fromParams) {</span></span>
+<span class="cstat-no" title="statement not covered" >    $rootScope.isLoading=false;</span>
+  });
+});
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Aug 08 2016 16:16:48 GMT+0300 (RTZ 2 (зима))
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

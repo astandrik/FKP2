@@ -1,0 +1,12 @@
+<div  ng-show="!complexFull.groups[0].name">
+  <div class="relatedProjects-text">
+      <p>Общая информация для данного комплекса отсутствует</p>
+      <p>Если нашли ошибку - свяжитесь с разработчиками.</p>
+  </div>
+</div>
+<md-content flex layout-padding>
+		      <div  ng-show="complexFull.groups[0].name" layout="row">
+		      <div flex="30" class="space-header-name">Назначение </div>
+		      <div flex="70" class="space-info-name">{{complexFull.groups[0].name}}</div>
+	    </div>
+  </md-content>
